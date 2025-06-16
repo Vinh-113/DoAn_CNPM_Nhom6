@@ -350,117 +350,123 @@ body {
             <span id="successMessage"></span>
         </div>
     </div>
-
-    <form class="needs-validation" novalidate>
-        <!-- Phần 1: Thông tin cá nhân -->
-        <div id="accountInfo" class="form-section active">
-            <label for="nameCus" style="margin-left: -4px; font-weight: bold;">Tên bạn</label>
-            <div class="form-group">
-                <div class="input-wrapper">
-                    <input type="text" class="form-control" id="nameCus" name="NameCus" required placeholder="Nhập tên bạn vào" />
-                    <i class="fas fa-user input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Vui lòng nhập tên của bạn.</div>
-            </div>
-            <label for="phoneCus" style="margin-left: -4px; font-weight: bold;">Số điện thoại</label>
-            <div class="form-group">
-
-                <div class="input-wrapper">
-                    <input type="tel" class="form-control" id="phoneCus" name="PhoneCus" required placeholder="Nhập số điện thoại" pattern="^\d{10}$" />
-                    <i class="fas fa-phone input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Số của bạn phải đủ 10 số.</div>
-            </div>
-            <label for="emailCus" style="margin-left: -4px; font-weight: bold;">Email của bạn</label>
-            <div class="form-group">
-
-                <div class="input-wrapper">
-                    <input type="email" class="form-control" id="emailCus" name="EmailCus" required placeholder="Nhập email" />
-                    <i class="fas fa-envelope input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
-            </div>
-            <label for="passCus" style="margin-left: -4px; font-weight: bold;">Mật khẩu</label>
-            <div class="form-group">
-
-                <div class="input-wrapper">
-                    <input type="password" class="form-control" id="passCus" name="PassCus" required placeholder="Nhập mật khẩu" />
-                    <i class="fas fa-lock input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Mật khẩu ít nhất 8 ký tự, gồm số và chữ.</div>
-                <div class="password-strength">
-                    <div class="strength-bar">
-                        <div class="strength-fill" id="strengthFill"></div>
+    @using (Html.BeginForm("DangKy", "User", FormMethod.Post))
+    {
+        @Html.ValidationSummary(true)
+        <form class="needs-validation" novalidate>
+            <!-- Phần 1: Thông tin cá nhân -->
+            <div id="accountInfo" class="form-section active">
+                <label for="nameCus" style="margin-left: -4px; font-weight: bold;">Tên bạn</label>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control" id="nameCus" name="NameCus" required placeholder="Nhập tên bạn vào" />
+                        <i class="fas fa-user input-icon"></i>
                     </div>
-                    <div class="strength-text" id="strengthText">Độ mạnh mật khẩu</div>
+                    <div class="invalid-feedback">Vui lòng nhập tên của bạn.</div>
+                </div>
+                <label for="phoneCus" style="margin-left: -4px; font-weight: bold;">Số điện thoại</label>
+                <div class="form-group">
+
+                    <div class="input-wrapper">
+                        <input type="tel" class="form-control" id="phoneCus" name="PhoneCus" required placeholder="Nhập số điện thoại" pattern="^\d{10}$" />
+                        <i class="fas fa-phone input-icon"></i>
+                    </div>
+                    <div class="invalid-feedback">Số của bạn phải đủ 10 số.</div>
+                </div>
+                <label for="emailCus" style="margin-left: -4px; font-weight: bold;">Email của bạn</label>
+                <div class="form-group">
+
+                    <div class="input-wrapper">
+                        <input type="email" class="form-control" id="emailCus" name="EmailCus" required placeholder="Nhập email" />
+                        <i class="fas fa-envelope input-icon"></i>
+                    </div>
+                    <div class="invalid-feedback">Vui lòng nhập email hợp lệ.</div>
+                </div>
+                <label for="passCus" style="margin-left: -4px; font-weight: bold;">Mật khẩu</label>
+                <div class="form-group">
+
+                    <div class="input-wrapper">
+                        <input type="password" class="form-control" id="passCus" name="PassCus" required placeholder="Nhập mật khẩu" />
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
+                    <div class="invalid-feedback">Mật khẩu ít nhất 8 ký tự, gồm số và chữ.</div>
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <div class="strength-text" id="strengthText">Độ mạnh mật khẩu</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateOfBirth" class="label-fix">Sinh nhật</label>
+                    <div class="input-wrapper">
+                        <input type="date" class="form-control" id="dateOfBirth" name="DateOfBirth" required />
+                        <i class="fas fa-calendar input-icon"></i>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary" onclick="showAddressInfo()">
+                    Tiếp theo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
+                </button>
+            </div>
+
+            <!-- Phần 2: Thông tin địa chỉ -->
+            <div id="addressInfo" class="form-section">
+                <div class="form-group">
+                    <label for="streetAddress">Địa chỉ nhà</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control" id="streetAddress" name="StreetAddress" required placeholder="Nhập địa chỉ nhà" />
+                        <i class="fas fa-home input-icon"></i>
+                    </div>
+                    <div class="invalid-feedback">Vui lòng nhập địa chỉ.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ward">Phường, xã</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control" id="ward" name="Ward" required placeholder="Nhập phường, xã" />
+                        <i class="fas fa-map-marker-alt input-icon"></i>
+                    </div>
+                    <div class="invalid-feedback">Vui lòng nhập phường, xã.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="district">Quận, huyện</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control" id="district" name="District" required placeholder="Nhập quận, huyện" />
+                        <i class="fas fa-map-marker-alt input-icon"></i>
+                    </div>
+                    <div class="invalid-feedback">Vui lòng nhập quận, huyện.</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">Thành phố, tỉnh</label>
+                    <div class="input-wrapper">
+                        <input type="text" class="form-control" id="city" name="City" required placeholder="Nhập thành phố" />
+                        <i class="fas fa-city input-icon"></i>
+                    </div>
+                    <div class="invalid-feedback">Vui lòng nhập thành phố, tỉnh.</div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="showAccountInfo()">
+                        <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Quay lại
+                    </button>
+                    <input type="submit" class="btn btn-primary" value="Xác nhận" />
                 </div>
             </div>
             
-            <div class="form-group">
-                <label for="dateOfBirth" class="label-fix">Sinh nhật</label>
-                <div class="input-wrapper">
-                    <input type="date" class="form-control" id="dateOfBirth" name="DateOfBirth" required />
-                    <i class="fas fa-calendar input-icon"></i>
-                </div>
-            </div>
+        </form>
 
-            <button type="button" class="btn btn-primary" onclick="showAddressInfo()">
-                Tiếp theo <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
-            </button>
+
+        <div class="login-link">
+            <p>Đã có tài khoản?</p>
+            <a href="/User/DangNhap">Đăng nhập ngay</a>
         </div>
-
-        <!-- Phần 2: Thông tin địa chỉ -->
-        <div id="addressInfo" class="form-section">
-            <div class="form-group">
-                <label for="streetAddress">Địa chỉ nhà</label>
-                <div class="input-wrapper">
-                    <input type="text" class="form-control" id="streetAddress" name="StreetAddress" required placeholder="Nhập địa chỉ nhà" />
-                    <i class="fas fa-home input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Vui lòng nhập địa chỉ.</div>
-            </div>
-
-            <div class="form-group">
-                <label for="ward">Phường, xã</label>
-                <div class="input-wrapper">
-                    <input type="text" class="form-control" id="ward" name="Ward" required placeholder="Nhập phường, xã" />
-                    <i class="fas fa-map-marker-alt input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Vui lòng nhập phường, xã.</div>
-            </div>
-
-            <div class="form-group">
-                <label for="district">Quận, huyện</label>
-                <div class="input-wrapper">
-                    <input type="text" class="form-control" id="district" name="District" required placeholder="Nhập quận, huyện" />
-                    <i class="fas fa-map-marker-alt input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Vui lòng nhập quận, huyện.</div>
-            </div>
-
-            <div class="form-group">
-                <label for="city">Thành phố, tỉnh</label>
-                <div class="input-wrapper">
-                    <input type="text" class="form-control" id="city" name="City" required placeholder="Nhập thành phố" />
-                    <i class="fas fa-city input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Vui lòng nhập thành phố, tỉnh.</div>
-            </div>
-
-            <div class="btn-group">
-                <button type="button" class="btn btn-secondary" onclick="showAccountInfo()">
-                    <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Quay lại
-                </button>
-                <input type="submit" class="btn btn-primary" value="Xác nhận" />
-            </div>
-        </div>
-    </form>
-
-    <div class="login-link">
-        <p>Đã có tài khoản?</p>
-        <a href="/User/DangNhap">Đăng nhập ngay</a>
+    }
     </div>
-</div>
+    
 
 <script>
     let currentStep = 1;
