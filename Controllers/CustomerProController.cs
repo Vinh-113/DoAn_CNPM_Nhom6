@@ -23,7 +23,7 @@ namespace TechStore.Controllers
                 var product = _context.Products.FirstOrDefault(s => s.ProductID == id);
                 var relatedProducts = _context.Products.Where(s => s.Category1.IDCate == product.Category1.IDCate).ToList();//Tìm sản phẩm tương tự nhưng có mã Catrgory giống như sản phẩm hồi nãy
                /* var reviews = _context.Reviews.Where(s => s.ProductID == id).ToList();*/
-                
+               
                 var relatedPro = new RelatedPro
                 {
                     
