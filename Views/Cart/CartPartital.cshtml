@@ -1,0 +1,24 @@
+﻿<a href="@Url.Action("ShowCart", "Cart")" style="text-decoration:
+none; color: white;">
+    <div style="margin:auto; display: flex; flex-direction: row">
+        <img src="~/Images/cart.png" alt="techstore" style="width: 70px">
+        <span id="cartQuantity" style="margin:auto 10px">@ViewBag.TongSoLuong</span>
+    </div>
+</a>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function updateCartQuantity() {
+        $.ajax({
+            url: '@Url.Action("GetCartQuantity", "Cart")',
+            type: 'GET',
+            success: function (data) {
+                $('#cartQuantity').text(data.quantity);
+            }
+        });
+    }
+
+    // Cập nhật số lượng sản phẩm trong giỏ hàng khi trang được tải
+    $(document).ready(function () {
+        updateCartQuantity();
+    });
+</script>

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TechStore.Models.OrderPro>
+
+@{
+    ViewBag.Title = "Order History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Lịch sử mua hàng</h2>
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-info">
+            @ViewBag.Error
+        </div>
+    }
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.ID)</th>
+                <th>@Html.DisplayNameFor(model => model.DateOrder)</th>
+                <th>@Html.DisplayNameFor(model => model.AddressDelivery)</th>
+                <th>@Html.DisplayNameFor(model => model.Status)</th>
+                <th>@Html.DisplayNameFor(model => model.TotalAmount)</th>
+                <th>@Html.DisplayNameFor(model => model.PaymentMethod)</th>
+                <th>@Html.DisplayNameFor(model => model.DeliveryDate)</th>
+                <th>@Html.DisplayNameFor(model => model.TrackingNumber)</th>
+                <th>@Html.DisplayNameFor(model => model.PaymentStatus)</th>
+                <th>@Html.DisplayNameFor(model => model.ShippingCost)</th>
+                <th>@Html.DisplayNameFor(model => model.Customer.NameCus)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ID)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DateOrder)</td>
+                    <td>@Html.DisplayFor(modelItem => item.AddressDelivery)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Status)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PaymentMethod)</td>
+                    <td>@Html.DisplayFor(modelItem => item.DeliveryDate)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TrackingNumber)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PaymentStatus)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ShippingCost)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Customer.NameCus)</td>
+                    <td>
+                        @Html.ActionLink("Hủy đơn", "Delete_KH", new { id = item.ID }, new { @class = "btn btn-danger btn-sm" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

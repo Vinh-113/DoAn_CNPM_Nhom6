@@ -1,0 +1,42 @@
+﻿@model IEnumerable<TechStore.Models.Category>
+
+@{
+    ViewBag.Title = "Categories";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <h2 class="text-center">Danh mục sản phẩm</h2>
+    @if (ViewBag.Loi != null)
+    {
+        <div class="alert alert-info text-center">
+            @ViewBag.Loi
+        </div>
+    }
+    <div class="text-right mb-3">
+        @Html.ActionLink("Tạo mới", "Create", "", new { @class = "btn btn-success" })
+    </div>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Id)</th>
+                <th>@Html.DisplayNameFor(model => model.NameCate)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NameCate)</td>
+                    <td>
+                        @Html.ActionLink("Chỉnh sửa", "Edit", new { id = item.Id }, new { @class = "btn btn-success btn-sm" }) |
+                        @Html.ActionLink("Chi tiết", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-sm" }) |
+                        @Html.ActionLink("Xóa", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

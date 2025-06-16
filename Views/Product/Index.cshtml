@@ -1,0 +1,70 @@
+﻿@model IEnumerable<TechStore.Models.Product>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+    
+
+    
+<div class="container mt-4">
+    <p class="text-center">Danh sách những sản phẩm</p>
+<table class="table table-striped table-bordered" style="width:90%;margin:auto">
+    @Html.ActionLink("Tạo sản phẩm mới", "Create", "", htmlAttributes: new { @class = "btn btn-success" })
+    <thead class="thead-dark">
+        <tr>
+            <th>
+                Tên sản phẩm
+            </th>
+            <th>
+                Mô tả sản phẩm
+            </th>
+            <th>
+                Gía sản phẩm
+            </th>
+            <th>
+                Hình ảnh
+            </th>
+            <th>
+                Phân loại sản phẩm
+            </th>
+            <th>
+                Giảm giá sản phẩm
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NamePro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DecriptionPro)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    <img src="~/Images/@item.ImagePro" style="width: 100px" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category1.NameCate)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductID }, htmlAttributes: new { @class = "btn btn-success" }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ProductID }, htmlAttributes: new { @class = "btn btn-info" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductID }, htmlAttributes: new { @class = "btn btn-danger" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Discount)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+</div>
+

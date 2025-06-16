@@ -1,0 +1,50 @@
+﻿<div style="margin: 20px auto; width: 80%; padding: 20px; background-color: #f9f9f9; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <h2 style="text-align: center; color: #333; margin-bottom: 30px;">Giỏ hàng</h2>
+    @if (Session["currentProduct"] != null)
+    {
+        @Html.ActionLink("<- Quay lại", "RebackDetails", "Cart", new { id = (int)Session["currentProduct"] }, htmlAttributes: new { @class = "btn btn-outline-success mb-3" })
+    }
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="thead-dark">
+                <tr>
+                    <th style="text-align: center;">Tên sản phẩm</th>
+                    <th style="text-align: center;">Hình ảnh</th>
+                    <th style="text-align: center;">Số lượng</th>
+                    <th style="text-align: center;">Giá</th>
+                    <th style="text-align: center;">Xóa</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td style="vertical-align: middle; text-align: center;">
+                            <p>@item.NamePro</p>
+                        </td>
+                        <td style="text-align: center;">
+                            <img src="~/Images/@item.ImagePro" style="width: 100px; height: auto; border-radius: 8px;" />
+                        </td>
+                        <td style="vertical-align: middle; text-align: center;">
+                            <div class="quantity-control">
+                                @Html.ActionLink("-", "RemoveSubtractionCart", new { id = item.ProductID }, htmlAttributes: new { @class = "btn btn-outline-danger btn-sm quantity-btn" })
+                                <span class="quantity-display">@item.Number</span>
+                                @Html.ActionLink("+", "UpdateCart", new { id = item.ProductID }, htmlAttributes: new { @class = "btn btn-outline-success btn-sm quantity-btn" })
+                            </div>
+                        </td>
+                        <td style="vertical-align: middle; text-align: center;">
+                            <p style="font-weight: bold;">@item.Price <span style="font-size: 14px;">/ sản phẩm</span></p>
+                        </td>
+                        <td style="text-align: center;">
+                            @Html.ActionLink("Remove", "RemoveFromCart", new { id = item.ProductID }, htmlAttributes: new { @class = "btn btn-danger btn-sm" })
+                        </td>
+                    </tr>
+                 }
+            </tbody>
+        </table>
+    </div>
+    <div style="text-align: right; margin-top: 20px;">
+        <p style="font-size: 20px; font-weight: bold;">Tổng số tiền thanh toán: <span style="color: red;">@ViewBag.Total VNĐ</span></p>
+        @Html.ActionLink("Thanh toán", "PaymentCart", "Cart", htmlAttributes: new { @class = "btn btn-success btn-lg" })
+    </div>
+</div>

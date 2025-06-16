@@ -1,0 +1,529 @@
+﻿@{
+    ViewBag.Title = "DangNhap";
+    Layout = "~/Views/Shared/_LogSignLayout.cshtml";
+}
+<link rel="stylesheet" href="~/Content/styleLogSign.css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+    /* Modern Login Page Styles - Optimized for Razor View */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.6s ease;
+}
+
+.container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.header h1 {
+    color: #1a202c;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: #718096;
+    font-size: 16px;
+}
+
+/* Alert Styles */
+#alertContainer {
+    margin-bottom: 24px;
+}
+
+.alert {
+    padding: 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.alert-info {
+    background: #ebf8ff;
+    color: #2a4365;
+    border: 1px solid #bee3f8;
+}
+
+.alert-danger {
+    background: #fed7d7;
+    color: #742a2a;
+    border: 1px solid #feb2b2;
+}
+
+.alert i {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-group label {
+    display: block;
+    color: #2d3748;
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.form-control {
+    width: 100%;
+    padding: 16px 48px 16px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #ffffff;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-control.is-invalid {
+    border-color: #e53e3e;
+    animation: shake 0.5s ease-in-out;
+}
+
+.form-control.is-valid {
+    border-color: #38a169;
+}
+
+.input-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a0aec0;
+    transition: color 0.3s ease;
+}
+
+.form-control:focus + .input-icon {
+    color: #667eea;
+}
+
+.invalid-feedback {
+    color: #e53e3e;
+    font-size: 14px;
+    margin-top: 6px;
+    display: none;
+}
+
+.invalid-feedback.show {
+    display: block;
+    animation: slideDown 0.3s ease;
+}
+
+/* Button Styles */
+.btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn i {
+    margin-right: 8px;
+}
+
+/* Login Links */
+.login-link {
+    text-align: center;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.login-link p {
+    color: #718096;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.login-link p:last-child {
+    margin-bottom: 0;
+}
+
+.login-link a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+    margin: 4px 0;
+}
+
+.login-link a:hover {
+    color: #764ba2;
+    transform: translateY(-1px);
+}
+
+/* Animations */
+@@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+    20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+@@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading State */
+.btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid transparent;
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+
+    .container {
+        padding: 32px 24px;
+        max-width: 380px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .form-control {
+        padding: 14px 44px 14px 14px;
+        font-size: 15px;
+    }
+
+    .btn {
+        padding: 14px;
+        font-size: 15px;
+    }
+}
+
+@@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 24px 20px;
+        border-radius: 20px;
+    }
+
+    .header h1 {
+        font-size: 22px;
+    }
+
+    .header p {
+        font-size: 14px;
+    }
+
+    .form-control {
+        padding: 12px 40px 12px 12px;
+        font-size: 14px;
+    }
+
+    .btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    .input-icon {
+        right: 12px;
+    }
+}
+</style>
+
+<div class="container">
+    <div class="header">
+        <h1>Đăng nhập tài khoản</h1>
+        <p>Chào mừng bạn quay trở lại</p>
+    </div>
+
+    <!-- Alert Messages -->
+    <div id="alertContainer">
+        <div class="alert alert-info" id="infoAlert" style="display: none;">
+            <i class="fas fa-info-circle" style="margin-right: 8px;"></i>
+            <span id="infoMessage"></span>
+        </div>
+        <div class="alert alert-danger" id="errorAlert" style="display: none;">
+            <i class="fas fa-exclamation-circle" style="margin-right: 8px;"></i>
+            <span id="errorMessage"></span>
+        </div>
+    </div>
+
+    <form class="needs-validation" novalidate method="post" action="/User/DangNhap">
+        <div class="form-group">
+            <label for="nameCus">Tên đăng nhập</label>
+            <div class="input-wrapper">
+                <input type="text" class="form-control" id="nameCus" name="NameCus" required placeholder="Nhập tên bạn vào" />
+                <i class="fas fa-user input-icon"></i>
+            </div>
+            <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
+        </div>
+
+        <div class="form-group">
+            <label for="passCus">Mật khẩu</label>
+            <div class="input-wrapper">
+                <input type="password" class="form-control" id="passCus" name="PassCus" required placeholder="Nhập mật khẩu bạn vào" />
+                <i class="fas fa-lock input-icon"></i>
+            </div>
+            <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+            Đăng nhập
+        </button>
+    </form>
+
+    <div class="login-link">
+        <p><a href="/User/ResetPassword">Quên mật khẩu?</a></p>
+        <p>Không có tài khoản? <a href="/User/DangKy">Đăng ký ngay</a></p>
+    </div>
+</div>
+
+<style>
+/* Thêm style cho alert danger */
+.alert-danger {
+    background: #fed7d7;
+    color: #742a2a;
+    border: 1px solid #feb2b2;
+}
+
+/* Điều chỉnh container cho trang đăng nhập */
+.container {
+    max-width: 400px;
+}
+
+/* Style cho forgot password và register links */
+.login-link p {
+    margin-bottom: 12px;
+}
+
+.login-link p:last-child {
+    margin-bottom: 0;
+}
+
+.login-link a {
+    display: inline-block;
+    margin: 4px 0;
+}
+
+/* Hover effect cho button */
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+/* Focus effect cho inputs */
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Animation cho form */
+@@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container {
+    animation: fadeInUp 0.6s ease;
+}
+</style>
+
+<script>
+// Form validation
+document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", function () {
+        if (this.checkValidity()) {
+            this.classList.remove("is-invalid");
+            this.classList.add("is-valid");
+            const feedback = this.parentElement.nextElementSibling;
+            if (feedback && feedback.classList.contains("invalid-feedback")) {
+                feedback.classList.remove("show");
+            }
+        } else {
+            this.classList.add("is-invalid");
+            this.classList.remove("is-valid");
+            const feedback = this.parentElement.nextElementSibling;
+            if (feedback && feedback.classList.contains("invalid-feedback")) {
+                feedback.classList.add("show");
+            }
+        }
+    });
+});
+
+// Form submission validation
+document.querySelector("form").addEventListener("submit", function (e) {
+    const inputs = this.querySelectorAll("input[required]");
+    let isValid = true;
+
+    inputs.forEach(input => {
+        if (!input.checkValidity()) {
+            input.classList.add("is-invalid");
+            const feedback = input.parentElement.nextElementSibling;
+            if (feedback && feedback.classList.contains("invalid-feedback")) {
+                feedback.classList.add("show");
+            }
+            isValid = false;
+        } else {
+            input.classList.remove("is-invalid");
+            input.classList.add("is-valid");
+            const feedback = input.parentElement.nextElementSibling;
+            if (feedback && feedback.classList.contains("invalid-feedback")) {
+                feedback.classList.remove("show");
+            }
+        }
+    });
+
+    if (!isValid) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+});
+
+// Hiển thị thông báo (có thể được gọi từ server-side)
+function showAlert(type, message) {
+    const alertContainer = document.getElementById(type + "Alert");
+    const messageElement = document.getElementById(type + "Message");
+
+    if (alertContainer && messageElement) {
+        messageElement.textContent = message;
+        alertContainer.style.display = "block";
+
+        // Ẩn các alert khác
+        const allAlerts = document.querySelectorAll('[id$="Alert"]');
+        allAlerts.forEach(alert => {
+            if (alert.id !== type + "Alert") {
+                alert.style.display = "none";
+            }
+        });
+    }
+}
+
+// Kiểm tra ViewBag messages (nếu có)
+window.addEventListener('DOMContentLoaded', function() {
+    // Giả lập hiển thị thông báo từ ViewBag
+    // Trong thực tế, bạn có thể render này từ server-side
+
+    // Ví dụ: showAlert('info', 'Thông báo từ ViewBag.ThongBao');
+    // Ví dụ: showAlert('error', 'Lỗi từ TempData["ThongBaoLoi"]');
+});
+</script>

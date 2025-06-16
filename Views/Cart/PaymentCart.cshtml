@@ -1,0 +1,101 @@
+﻿@model TechStore.Models.Payment
+@{
+    ViewBag.Title = "PaymentCart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+@using (Html.BeginForm("PaymentCart", "Cart", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Thông tin khách hàng</h4>
+                    </div>
+                    <div class="card-body">
+                        @Html.HiddenFor(model => model.Customers.IDCus)
+                        <p><strong>Tên người dùng:</strong> @Session["DaDangNhap"]</p>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Customers.NameCus, "Tên khách hàng")
+                            @Html.TextBoxFor(model => model.Customers.NameCus, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Customers.PhoneCus, "Số điện thoại")
+                            @Html.TextBoxFor(model => model.Customers.PhoneCus, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Customers.EmailCus, "Email")
+                            @Html.TextBoxFor(model => model.Customers.EmailCus, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label>Địa chỉ giao hàng</label>
+                            <div class="form-row">
+                                <div class="col">
+                                    @Html.TextBoxFor(model => model.Customers.StreetAddress, new { @class = "form-control", placeholder = "Số nhà, đường" })
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(model => model.Customers.Ward, new { @class = "form-control", placeholder = "Phường" })
+                                </div>
+                            </div>
+                            <div class="form-row mt-2">
+                                <div class="col">
+                                    @Html.TextBoxFor(model => model.Customers.District, new { @class = "form-control", placeholder = "Quận" })
+                                </div>
+                                <div class="col">
+                                    @Html.TextBoxFor(model => model.Customers.City, new { @class = "form-control", placeholder = "Thành phố" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Thanh toán</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá sản phẩm</th>
+                                    <th>Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.mycart)
+                                {
+                                    <tr>
+                                        <td>@item.NamePro</td>
+                                        <td>@item.Number</td>
+                                        <td>@item.Price <span>/1 sản phẩm</span></td>
+                                        <td>@Html.ActionLink("Delete", "RemoveFromCart", new { id = @item.ProductID }, new { @class = "btn btn-danger btn-sm" })</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <p class="text-right"><strong>Tổng số tiền phải thanh toán là: @ViewBag.Total</strong></p>
+                        <div class="form-group">
+                            <label for="PaymentMethod">Chọn phương thức thanh toán</label>
+                            @Html.DropDownListFor(model => model.Order.PaymentMethod, new SelectList(new List<SelectListItem>
+                                        {
+                                new SelectListItem { Text = "Thanh toán khi nhận hàng", Value = "2" },
+                                new SelectListItem { Text = "Thanh toán qua thẻ", Value = "1" }
+                            }, "Value", "Text"), new { @class = "form-control" })
+                        </div>
+                        <input type="submit" value="Thanh toán" class="btn btn-success btn-block" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

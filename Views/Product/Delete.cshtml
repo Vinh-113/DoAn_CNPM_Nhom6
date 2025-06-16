@@ -1,0 +1,73 @@
+﻿@model TechStore.Models.Product
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.Loi != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.Loi
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+        <h3 class="text-center">Bạn có muốn xóa sản phẩm này không?</h3>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h4>Product</h4>
+                <hr />
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="~/Images/@Model.ImagePro" class="img-fluid" />
+                    </div>
+                    <div class="col-md-8">
+                        <dl class="dl-horizontal">
+                            @Html.HiddenFor(model => model.ProductID)
+                            <div class="row" style="font-size: 20px">
+                                <dt class="col-sm-4">
+                                    @Html.DisplayNameFor(model => model.NamePro)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    @Html.DisplayFor(model => model.NamePro)
+                                </dd>
+
+                                <dt class="col-sm-4">
+                                    @Html.DisplayNameFor(model => model.DecriptionPro)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    @Html.DisplayFor(model => model.DecriptionPro)
+                                </dd>
+
+                                <dt class="col-sm-4">
+                                    @Html.DisplayNameFor(model => model.Price)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    @Html.DisplayFor(model => model.Price)
+                                </dd>
+
+                                <dt class="col-sm-4">
+                                    @Html.DisplayNameFor(model => model.Category1.NameCate)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    @Html.DisplayFor(model => model.Category1.NameCate)
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+                @using (Html.BeginForm("Delete", "Product", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(model => model.ProductID)
+                    <div class="form-actions no-color text-center mt-4">
+                        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+                        @Html.ActionLink("Quay lại trang trước", "Index", "", htmlAttributes: new { @class = "btn btn-secondary" })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

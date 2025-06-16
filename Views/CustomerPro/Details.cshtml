@@ -1,0 +1,194 @@
+﻿@model TechStore.Models.RelatedPro
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .popup_re {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        overflow: auto;
+        background-color: rgb(241 227 227);
+        @*Tạo khung popup*@
+        width: 90%;
+        height: 90%;
+        margin: auto;
+        justify-content: center; @*Căn theo hàng ngang*@
+        align-items: center;
+        @*Căn theo hàng dọc*@
+    }
+
+    .review_body {
+        margin: 5% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        background-color: white;
+    }
+    .checked {
+        color: orange;
+    }
+
+    .rating {
+        display: flex;
+        flex-direction: row;
+    }
+</style>
+<link rel="stylesheet" href="~/Content/stylepro.css" />
+<div style="margin: 10px auto; width: 70%;">
+    <h2 style="text-align: center">CHI TIẾT SẢN PHẨM</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <img style="width: 100%;" src="~/Images/@Model.Product.ImagePro">
+        </div>
+        <div class="col-md-6">
+            <h4>Tên sản phẩm: @Model.Product.NamePro</h4>
+            <p style="text-align: justify">
+                <span style="font-weight: bold">Mô tả:</span> @Model.Product.DecriptionPro
+            </p>
+            <p>
+                Giá bán: <span style="color:red; font-size:24px;">
+                    @Model.Product.Price VNĐ
+                </span>
+            </p>
+            <div style="display: flex; flex-direction: row">
+                <a class="btn btn-primary" style="margin-right: 10px;" href="@Url.Action("AddToCart", "Cart", new { id = @Model.Product.ProductID })">
+                    &#x1F6CD; ĐẶT MUA
+                </a>
+                <hr />
+                <a class="btn btn-info" style="margin-left: 10px;" href="@Url.Action("AddToShowCart", "Cart", new { id = @Model.Product.ProductID })">
+                    &#x1F6D2;  THÊM VÀO GIỎ HÀNG
+                </a>
+            </div>
+        </div>
+        <div class="review-container">
+            <h1 style="text-align: center">Đánh giá sản phẩm</h1>
+            <hr />
+            <div id="review-list">
+                @foreach (var review in Model.RelatedReviews.Take(3))
+                {
+                    <div class="review-item">
+                        <h5>@review.ReviewerName</h5>
+                        <h6>@review.ReviewDate</h6>
+                        <div class="rating">
+                            @for (int i = 0; i < review.Rating; i++)
+                            {
+                                <span class="fa fa-star checked"></span>
+                            }
+                            @for (decimal i = review.Rating; i < 5; i++)
+                            {
+                                <span class="fa fa-star"></span>
+                            }
+                        </div>
+                        <p>@review.ReviewContent</p>
+                    </div>
+                }
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                Review
+            </button>
+            <button class="show-more-btn" id="showMoreReviews">Xem thêm</button>
+        </div>
+
+        <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reviewModalLabel">Write a Review</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Nội dung modal -->
+                        <textarea class="form-control" rows="5" placeholder="Write your review here..."></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="div-pro-list" style="width: 80%; margin: auto">
+            @foreach (var rePro in Model.RelatedProducts)
+            {
+                <div class="card">
+                    <img src="~/Images/@rePro.ImagePro" alt="tech-pro" style="width:100%">
+                    <h1>@rePro.NamePro</h1>
+                    <p class="price">@rePro.Price</p>
+                    <p>@rePro.DecriptionPro</p>
+                    <p>@Html.ActionLink("Chi tiết", "Details", "CustomerPro", new { id = rePro.ProductID }, new { @class = "btn btn-success" })  </p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    function showPopup() {
+        document.getElementById("reviewPopup").style.display = "block";
+    }
+    window.onclick = function (event) {
+        if (event == popup) {
+            document.getElementById("reviewPopup").style.display = 'none';
+        }
+    }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const showMoreBtn = document.getElementById('showMoreReviews');
+        const reviewList = document.getElementById('review-list');
+        let expanded = false;
+
+        showMoreBtn.addEventListener('click', () => {
+            expanded = !expanded;
+            if (expanded) {
+                reviewList.innerHTML = `
+                    @foreach (var review in Model.RelatedReviews)
+                    {
+                        <div class="review-item">
+                            <h5>@review.ReviewerName</h5>
+                            <h6>@review.ReviewDate</h6>
+                            <div class="rating">
+                                @for (decimal i = 0; i < review.Rating; i++)
+                                {
+                                    <span class="fa fa-star checked"></span>
+                                }
+                                @for (decimal i = review.Rating; i < 5; i++)
+                                {
+                                    <span class="fa fa-star"></span>
+                                }
+                            </div>
+                            <p>@review.ReviewContent</p>
+                        </div>
+                    }
+                `;
+                showMoreBtn.innerText = "Ẩn bớt";
+            } else {
+                reviewList.innerHTML = `
+                    @foreach (var review in Model.RelatedReviews.Take(3))
+                    {
+                        <div class="review-item">
+                            <h5>@review.ReviewerName</h5>
+                            <h6>@review.ReviewDate</h6>
+                            <div class="rating">
+                                @for (decimal i = 0; i < review.Rating; i++)
+                                {
+                                    <span class="fa fa-star checked"></span>
+                                }
+                                @for (decimal i = review.Rating; i < 5; i++)
+                                {
+                                    <span class="fa fa-star"></span>
+                                }
+                            </div>
+                            <p>@review.ReviewContent</p>
+                        </div>
+                    }
+                `;
+                showMoreBtn.innerText = "Xem thêm";
+            }
+        });
+    });
+</script>

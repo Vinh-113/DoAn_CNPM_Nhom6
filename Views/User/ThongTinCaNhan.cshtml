@@ -1,0 +1,86 @@
+﻿@model TechStore.Models.Customer
+
+@{
+    ViewBag.Title = "Thông tin cá nhân";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.Error
+    </div>
+}
+
+<div style="width: 80%; margin: auto">
+    <div class="row">
+        <!-- Phần Avatar và Tên -->
+        <div class="col-md-4 text-center">
+            <!-- Avatar -->
+            <img src="~/Images/avatar-blank.jpg" alt="Avatar" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #ddd; margin-bottom: 20px;">
+
+            <!-- Tên khách hàng -->
+            
+            <div>
+                <h2>@Model.NameCus</h2>
+            </div>
+            
+            <p class="text-muted">@Model.MembershipLevel</p>
+
+            <!-- Nút chỉnh sửa thông tin -->
+            <div>
+                @Html.ActionLink("Chỉnh sửa thông tin", "Edit_KH", "Customer", new { id = Model.IDCus }, htmlAttributes: new { @class = "btn btn-info" })
+                <a href="@Url.Action("DangXuat", "User")" class="btn btn-danger">Đăng xuất</a>
+            </div>
+        </div>
+
+        <!-- Phần thông tin chi tiết -->
+        <div class="col-md-8">
+            <h3>Thông tin cá nhân</h3>
+            <table class="table">
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.PhoneCus)</th>
+                    <td>@Model.PhoneCus</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.EmailCus)</th>
+                    <td>@Model.EmailCus</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.StreetAddress)</th>
+                    <td>@Model.StreetAddress</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.Ward)</th>
+                    <td>@Model.Ward</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.District)</th>
+                    <td>@Model.District</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.City)</th>
+                    <td>@Model.City</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.DateOfBirth)</th>
+                    <td>@Model.DateOfBirth.("dd/MM/yyyy")</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.RegisteredDate)</th>
+                    <td>@Model.RegisteredDate.("dd/MM/yyyy")</td>
+                </tr>
+                <tr>
+                    <th>@Html.DisplayNameFor(model => model.IsVIP)</th>
+                    <td>@Model.IsVIP ? "Yes" : "No"</td>
+                </tr>
+            </table>
+
+            <!-- Lịch sử đơn hàng -->
+            <div class="mt-4">
+                <h3>Lịch sử đơn hàng</h3>
+                <p><a href="@Url.Action("Index_KH", "OrderPro", new { id = Model.IDCus })" class="btn btn-info">Xem lịch sử đơn hàng</a></p>
+            </div>
+        </div>
+    </div>
+</div>

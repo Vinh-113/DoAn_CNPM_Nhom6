@@ -1,0 +1,160 @@
+﻿
+@{
+    ViewBag.Title = "Thống kê ";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/styleLogSign.css" />
+<link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Thống kê doanh thu</h2>
+                </div>
+                <div class="card-body">
+                    <canvas id="revenueChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h2>Thống kê đánh giá</h2>
+                </div>
+                <div class="card-body">
+                    <canvas id="reviewChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('revenueChart').getContext('2d');
+        var revenueChart = new Chart(ctx, {
+            type: 'line', // Use 'line' for area chart
+            data: {
+                labels: @Html.Raw(Json.Encode(ViewBag.Labels)), // X-axis labels
+                datasets: [{
+                    label: 'Doanh thu',
+                    data: @Html.Raw(Json.Encode(ViewBag.Data)), // Revenue data
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: true // Fill the area under the line
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+        document.addEventListener('DOMContentLoaded', function () {
+        // Review Chart
+        var reviewCtx = document.getElementById('reviewChart').getContext('2d');
+        var reviewChart = new Chart(reviewCtx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Encode(ViewBag.ReviewLabels)), // X-axis labels
+                datasets: [{
+                    label: 'Số lượng đánh giá',
+                    data: @Html.Raw(Json.Encode(ViewBag.ReviewData)), // Review data
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }
+                , {
+                    label: 'Điểm trung bình',
+                    data: @Html.Raw(Json.Encode(ViewBag.AverageRating)), // Average rating data
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y1'
+                }]
+
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    },
+                    y: {
+                        beginAtZero: true
+                    },
+                    y1: {
+                        beginAtZero: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Điểm trung bình'
+                        },
+                        grid: {
+                            drawOnChartData: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Best Selling Products Chart
+        var bestSellingCtx = document.getElementById('bestSellingChart').getContext('2d');
+        var bestSellingChart = new Chart(bestSellingCtx, {
+            type: 'pie',
+            data: {
+                labels: @Html.Raw(Json.Encode(ViewBag.BestSellingLabels)), // X-axis labels
+                datasets: [{
+                    label: 'Số lượng bán',
+                    data: @Html.Raw(Json.Encode(ViewBag.BestSellingData)), // Best selling data
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
+            }
+        });
+
+        // Clock
+        function updateClock() {
+            var now = new Date();
+            var second = now.getSeconds() * 6;
+            var minute = now.getMinutes() * 6 + second / 60;
+            var hour = ((now.getHours() % 12) / 12) * 360 + 90 + minute / 12;
+
+            document.querySelector('.hour').style.transform = 'rotate(' + hour + 'deg)';
+            document.querySelector('.minute').style.transform = 'rotate(' + minute + 'deg)';
+            document.querySelector('.second').style.transform = 'rotate(' + second + 'deg)';
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+    });
+</script>
+

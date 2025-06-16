@@ -1,0 +1,48 @@
+﻿@model TechStore.Models.Category
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";}
+
+<div style="width: 80%; margin: auto">
+    @if (ViewBag.Loi != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.Loi
+        </div>
+
+    }
+    <h3>Bạn có muốn xóa nó không</h3>
+    <div>
+        <h4>Category</h4>
+        <hr />
+        <dl class="dl-horizontal justify-content-center">
+            <dt>
+                @Html.DisplayNameFor(model => model.Id)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Id)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NameCate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.NameCate)
+            </dd>
+
+        </dl>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+                <input type="submit" value="Delete" class="btn btn-success" /> |
+                @Html.ActionLink("Quay lại trang trước", "Index", "", htmlAttributes: new { @class = "btn btn-info" })
+            </div>
+        }
+    </div>
+</div>
