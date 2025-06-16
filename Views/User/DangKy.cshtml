@@ -318,14 +318,14 @@ body {
         padding: 14px;
         font-size: 14px;
     }
-    .label-fix {
-        display: block;
-        width: 100%;
-        text-align: left !important;
-        font-weight: bold;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+    /*.label-fix {
+        display: flex;*/
+       /* width: 100%;*/
+        /*text-align: left;*/
+        /*font-weight: bold;
+        margin: 0 ;
+        padding: 0 ;*/
+    /*}*/
 }
 </style>
 
@@ -395,7 +395,7 @@ body {
                     <div class="strength-text" id="strengthText">Độ mạnh mật khẩu</div>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="dateOfBirth" class="label-fix">Sinh nhật</label>
                 <div class="input-wrapper">
@@ -410,27 +410,28 @@ body {
         </div>
 
         <!-- Phần 2: Thông tin địa chỉ -->
+        <label for="streetAddress" style="margin-left: -4px; font-weight: bold;">Địa chỉ nhà</label>
         <div id="addressInfo" class="form-section">
             <div class="form-group">
-                <label for="streetAddress">Địa chỉ nhà</label>
+
                 <div class="input-wrapper">
                     <input type="text" class="form-control" id="streetAddress" name="StreetAddress" required placeholder="Nhập địa chỉ nhà" />
                     <i class="fas fa-home input-icon"></i>
                 </div>
                 <div class="invalid-feedback">Vui lòng nhập địa chỉ.</div>
             </div>
-
+            <label for="ward" style="margin-left: -4px; font-weight: bold;">Phường,xã</label>
             <div class="form-group">
-                <label for="ward">Phường, xã</label>
+
                 <div class="input-wrapper">
                     <input type="text" class="form-control" id="ward" name="Ward" required placeholder="Nhập phường, xã" />
                     <i class="fas fa-map-marker-alt input-icon"></i>
                 </div>
                 <div class="invalid-feedback">Vui lòng nhập phường, xã.</div>
             </div>
-
+            <label for="district" style="margin-left: -4px; font-weight: bold;">Quận,huyện</label>
             <div class="form-group">
-                <label for="district">Quận, huyện</label>
+               
                 <div class="input-wrapper">
                     <input type="text" class="form-control" id="district" name="District" required placeholder="Nhập quận, huyện" />
                     <i class="fas fa-map-marker-alt input-icon"></i>
@@ -439,7 +440,7 @@ body {
             </div>
 
             <div class="form-group">
-                <label for="city">Thành phố, tỉnh</label>
+                <label for="city">Tỉnh,Thành phố</label>
                 <div class="input-wrapper">
                     <input type="text" class="form-control" id="city" name="City" required placeholder="Nhập thành phố" />
                     <i class="fas fa-city input-icon"></i>
