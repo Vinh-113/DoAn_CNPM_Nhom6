@@ -26,7 +26,7 @@ namespace TechStore.Controllers
                 
                 var relatedPro = new RelatedPro
                 {
-                    /*RelatedReviews = reviews,*/
+                    
                     Product = product,
                     RelatedProducts = relatedProducts
                 };
