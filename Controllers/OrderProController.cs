@@ -101,6 +101,8 @@ namespace TechStore.Controllers
                 ViewBag.Error = (string)TempData["Error"];
             }
             var list = db.OrderProes.Include("Customer").Where(s => s.IDCus == id).ToList();
+            if (list == null)
+                return View();
             return View(list);
         }
         [HttpGet]
