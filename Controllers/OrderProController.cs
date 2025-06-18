@@ -1,9 +1,7 @@
-﻿ using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using TechStore.Models;
 
@@ -46,7 +44,7 @@ namespace TechStore.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var orderPro = db.OrderProes.Where(s=> s.ID == id).FirstOrDefault();
+            var orderPro = db.OrderProes.Where(s => s.ID == id).FirstOrDefault();
             if (orderPro == null)
             {
                 return HttpNotFound();
@@ -79,9 +77,9 @@ namespace TechStore.Controllers
                 TempData["Error"] = "Không thể hủy đơn được";
                 return RedirectToAction("Index");
             }
-                var item = db.OrderProes.Find(id);
-                return View(item);
-            
+            var item = db.OrderProes.Find(id);
+            return View(item);
+
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -90,7 +88,7 @@ namespace TechStore.Controllers
             var item = db.OrderProes.Where(s => s.ID == id).FirstOrDefault();
             db.OrderProes.Remove(item);
             db.SaveChanges();
-            return RedirectToAction("Index","OrderPro");
+            return RedirectToAction("Index", "OrderPro");
         }
         //Khách hàng xem hay hủy đơn hàng
         [HttpGet]
@@ -130,7 +128,7 @@ namespace TechStore.Controllers
             catch (Exception)
             {
                 TempData["Error"] = "Không thể hủy đơn được";
-                
+
             }
             return RedirectToAction("Index_KH", "OrderPro");
         }

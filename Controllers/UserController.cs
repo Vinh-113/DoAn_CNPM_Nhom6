@@ -1,10 +1,8 @@
-﻿using TechStore.Models;
+﻿using System;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web.Mvc;
-using System;
-using System.Security.Cryptography;
-using System.Text;
-using System.Data.Entity.Infrastructure;
+using TechStore.Models;
 
 namespace TechStore.Controllers
 {
@@ -100,26 +98,26 @@ namespace TechStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ResetPassword(Customer cus)
         {
-                var user = dbO_Cus.Customers.FirstOrDefault(u => u.NameCus == cus.NameCus);
+            var user = dbO_Cus.Customers.FirstOrDefault(u => u.NameCus == cus.NameCus);
 
-                if (user != null) 
+            if (user != null)
+            {
+                try
                 {
-                    try
-                    {
-                        user.PassCus = cus.PassCus;
-                        dbO_Cus.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                        dbO_Cus.SaveChanges();
-                        ViewBag.Success = "Đã reset password thành công.";
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        ViewBag.Error = "Reset không thành công. Có thể bị một vấn đề gì đó nên là có gì thử lại sao";
-                    }
+                    user.PassCus = cus.PassCus;
+                    dbO_Cus.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                    dbO_Cus.SaveChanges();
+                    ViewBag.Success = "Đã reset password thành công.";
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    ViewBag.Error = "Không reset được, vì không tồn tại người dùng này";
+                    ViewBag.Error = "Reset không thành công. Có thể bị một vấn đề gì đó nên là có gì thử lại sao";
                 }
+            }
+            else
+            {
+                ViewBag.Error = "Không reset được, vì không tồn tại người dùng này";
+            }
             return View(); //Quay lại view cũ để nhập lại
         }
 

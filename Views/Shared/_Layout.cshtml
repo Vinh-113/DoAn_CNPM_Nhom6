@@ -812,7 +812,7 @@
                 <p>
                     <i class="fas fa-copyright me-1"></i>
                     <span>@DateTime.Now.Year TechStoreVN.</span>
-                    <span id="idHoldCopy">Powered by Advanced Technology </span>
+                    <a id="idHoldCopy">Powered by Advanced Technology </a>
                 </p>
             </div>
         </div>
@@ -877,32 +877,31 @@
         });
     </script>
     <script>
-        // Long press utility
-        let timer = null;
-        function longPressListener(element, call, duaration) {
-            element.addEventListener('mousedown', start)
-            element.addEventListener('mouseup', cancel);
-            element.addEventListener('mouseleave', cancel);
-            function start(e) {
-                timer =  setTimeout(() => {
-                    call(e)
-                },duration);
+        document.addEventListener('DOMContentLoaded', function () {
+            let timer = null;
+            const id_hold = document.getElementById('idHoldCopy');
+            id_hold.addEventListener('mousedown', start)
+            id_hold.addEventListener('mouseup', cancel);
+            id_hold.addEventListener('mouseleave', cancel);
+            function start() {
+                timer = setTimeout(() => {
+                    window.location.href = '@Url.Action("Index","Admins")'
+                }, 1000);
+                fetch('@Url.Action("LogToOutput", "Home")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: 'Đã nhấn giữ vào Powered By!' })
+                });
             }
-            function cancel(e) {
+            function cancel() {
                 if (timer) {
                     clearTimeout(timer);
                     timer = null;
                 }
             }
         }
-        // Example: Long press on the "Powered by" link in the footer
-        document.addEventListener('DOMContentLoaded', function () {
-            const id_hold = document.getElementById('idHoldCopy');
-            longPressListener (id_hold,function(e){
-                if (e) {
-                    alert('Đã nhấn giữ');
-                    window.location.href = '@Url.Action("Index","Admins")';
-                }
-            }
-        ,1000);
+        );
     </script>
+</html>

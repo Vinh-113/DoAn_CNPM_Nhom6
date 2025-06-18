@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace TechStore.Models
 {
@@ -11,6 +8,6 @@ namespace TechStore.Models
         public OrderPro Order { get; set; }
         public Customer Customers { get; set; }
         public List<CartItem> mycart { get; set; }
-        
+
     }
 }

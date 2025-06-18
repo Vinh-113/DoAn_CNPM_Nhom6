@@ -1,7 +1,7 @@
-﻿using TechStore.Models;
+﻿using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web.Mvc;
-using System.Data.Entity.Infrastructure;
+using TechStore.Models;
 
 namespace TechStore.Controllers
 {
@@ -33,7 +33,7 @@ namespace TechStore.Controllers
             var item = dBO.Customers.FirstOrDefault(s => s.IDCus == id);
             return View(item);
         }
-        [HttpPost,ActionName("Delete")]
+        [HttpPost, ActionName("Delete")]
         public ActionResult ActionDelete(int id)
         {
             var item = dBO.Customers.Where(s => s.IDCus == id).FirstOrDefault();
@@ -48,7 +48,7 @@ namespace TechStore.Controllers
             var item = dBO.Customers.FirstOrDefault(s => s.IDCus == id);
             return View(item);
         }
-        [HttpPost,ActionName("Edit")]
+        [HttpPost, ActionName("Edit")]
         public ActionResult Edit_UP(Customer customer)
         {
 
@@ -83,7 +83,7 @@ namespace TechStore.Controllers
             var item = dBO.Customers.FirstOrDefault(s => s.IDCus == id);
             return View(item);
         }
-        [HttpPost,ActionName("Edit_KH")]
+        [HttpPost, ActionName("Edit_KH")]
         public ActionResult EditKH(Customer customer)
         {
             if (ModelState.IsValid)
@@ -107,7 +107,7 @@ namespace TechStore.Controllers
                     TempData["Loi"] = "Không tồn tại, có vẻ như người này chưa từng đăng ký tài khoản";
                 }
             }
-            return RedirectToAction("ThongTinCaNhan","User");
+            return RedirectToAction("ThongTinCaNhan", "User");
         }
     }
 }
