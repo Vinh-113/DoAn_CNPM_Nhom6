@@ -12,75 +12,545 @@
     </div>
 }
 
-<div style="width: 80%; margin: auto">
-    <div class="row">
-        <!-- Phần Avatar và Tên -->
-        <div class="col-md-4 text-center">
-            <!-- Avatar -->
-            <img src="~/Images/avatar-blank.jpg" alt="Avatar" class="img-fluid rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #ddd; margin-bottom: 20px;">
+<style>
+    /* Reset và thiết lập cơ bản */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-            <!-- Tên khách hàng -->
-            
-            <div>
-                <h2>@Model.NameCus</h2>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
+    }
+
+    /* Header hiện đại */
+    .modern-header {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .modern-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"><animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite"/></circle><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.1)"><animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite"/></circle></svg>');
+        animation: float 10s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    @@keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .logo {
+        font-size: 2rem;
+        font-weight: bold;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .header-nav {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .header-nav a {
+        color: white;
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .header-nav a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.2);
+        transition: left 0.3s ease;
+    }
+
+    .header-nav a:hover::before {
+        left: 0;
+    }
+
+    .header-nav a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    /* Container chính */
+    .main-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 20px;
+        position: relative;
+    }
+
+    /* Card profile chính */
+    .profile-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 2rem;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .profile-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #fcc468);
+        background-size: 300% 100%;
+        animation: gradient 3s ease infinite;
+    }
+
+    @@keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Avatar section */
+    .avatar-section {
+        text-align: center;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .avatar-container {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 1.5rem;
+    }
+
+    .avatar-img {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid #fff;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 1;
+    }
+
+    .avatar-container::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1);
+        animation: rotate 3s linear infinite;
+        z-index: 0;
+    }
+
+    @@keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .avatar-img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    }
+
+    .customer-name {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 0.5rem;
+    }
+
+    .membership-level {
+        display: inline-block;
+        background: linear-gradient(45deg, #ffd700, #ffed4e);
+        color: #333;
+        padding: 0.5rem 1.5rem;
+        border-radius: 25px;
+        font-weight: 600;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        margin-bottom: 1.5rem;
+    }
+
+    /* Action buttons */
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+
+    .btn-modern {
+        padding: 0.8rem 2rem;
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary-modern {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-danger-modern {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+    }
+
+    .btn-modern::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255,255,255,0.2);
+        transition: left 0.3s ease;
+    }
+
+    .btn-modern:hover::before {
+        left: 0;
+    }
+
+    .btn-modern:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    /* Info grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-item {
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(10px);
+        padding: 1.5rem;
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.2);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .info-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(to bottom, #667eea, #764ba2);
+        transition: width 0.3s ease;
+    }
+
+    .info-item:hover::before {
+        width: 100%;
+        opacity: 0.1;
+    }
+
+    .info-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .info-label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+        color: #333;
+        font-weight: 500;
+    }
+
+    /* History section */
+    .history-section {
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(10px);
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .history-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #667eea;
+        margin-bottom: 1rem;
+    }
+
+    .btn-info-modern {
+        background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        color: white;
+        box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+    }
+
+    /* Footer hiện đại */
+    .modern-footer {
+        background: linear-gradient(45deg, #2c3e50, #34495e);
+        color: white;
+        padding: 3rem 0 1rem;
+        margin-top: 4rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .modern-footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #fcc468);
+        background-size: 300% 100%;
+        animation: gradient 3s ease infinite;
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .footer-section h3 {
+        color: #4ecdc4;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+
+    .footer-section p, .footer-section a {
+        color: #bdc3c7;
+        text-decoration: none;
+        line-height: 1.6;
+        transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+        color: #4ecdc4;
+    }
+
+    .footer-bottom {
+        text-align: center;
+        padding-top: 2rem;
+        border-top: 1px solid #34495e;
+        color: #7f8c8d;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .customer-name {
+            font-size: 2rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .header-nav {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .header-content {
+            flex-direction: column;
+            gap: 1rem;
+        }
+    }
+
+    /* Animation loading */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .profile-card {
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .info-item {
+        animation: fadeInUp 0.8s ease-out;
+    }
+
+    .info-item:nth-child(even) {
+        animation-delay: 0.1s;
+    }
+
+    .info-item:nth-child(odd) {
+        animation-delay: 0.2s;
+    }
+</style>
+
+<!-- Header hiện đại -->
+@*<header class="modern-header">
+    <div class="header-content">
+        <div class="logo">TechStore</div>
+        <nav class="header-nav">
+            <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+            <a href="@Url.Action("Index", "Product")">Sản phẩm</a>
+            <a href="@Url.Action("Index_KH", "OrderPro", new { id = Model.IDCus })">Đơn hàng</a>
+            <a href="@Url.Action("Contact", "Home")">Liên hệ</a>
+        </nav>
+    </div>
+</header>*@
+
+<!-- Nội dung chính -->
+<div class="main-container">
+    <div class="profile-card">
+        <!-- Avatar và thông tin cơ bản -->
+        <div class="avatar-section">
+            <div class="avatar-container">
+                <img src="~/Images/avatar-blank.jpg" alt="Avatar" class="avatar-img">
             </div>
-            
-            <p class="text-muted">@Model.MembershipLevel</p>
+            <h1 class="customer-name">@Model.NameCus</h1>
+            <div class="membership-level">@Model.MembershipLevel</div>
 
-            <!-- Nút chỉnh sửa thông tin -->
-            <div>
-                @Html.ActionLink("Chỉnh sửa thông tin", "Edit_KH", "Customer", new { id = Model.IDCus }, htmlAttributes: new { @class = "btn btn-info" })
-                <a href="@Url.Action("DangXuat", "User")" class="btn btn-danger">Đăng xuất</a>
+            <!-- Nút hành động -->
+            <div class="action-buttons">
+                @Html.ActionLink("Chỉnh sửa thông tin", "Edit_KH", "Customer", new { id = Model.IDCus }, htmlAttributes: new { @class = "btn-modern btn-primary-modern" })
+                <a href="@Url.Action("DangXuat", "User")" class="btn-modern btn-danger-modern">Đăng xuất</a>
             </div>
         </div>
 
-        <!-- Phần thông tin chi tiết -->
-        <div class="col-md-8">
-            <h3>Thông tin cá nhân</h3>
-            <table class="table">
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.PhoneCus)</th>
-                    <td>@Model.PhoneCus</td>
-                </tr>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.EmailCus)</th>
-                    <td>@Model.EmailCus</td>
-                </tr>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.StreetAddress)</th>
-                    <td>@Model.StreetAddress</td>
-                </tr>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.Ward)</th>
-                    <td>@Model.Ward</td>
-                </tr>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.District)</th>
-                    <td>@Model.District</td>
-                </tr>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.City)</th>
-                    <td>@Model.City</td>
-                </tr>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.DateOfBirth)</th>
-                    <td>@Model.DateOfBirth.("dd/MM/yyyy")</td>
-                </tr>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.RegisteredDate)</th>
-                    <td>@Model.RegisteredDate.("dd/MM/yyyy")</td>
-                </tr>
-                <tr>
-                    <th>@Html.DisplayNameFor(model => model.IsVIP)</th>
-                    <td>@Model.IsVIP ? "Yes" : "No"</td>
-                </tr>
-            </table>
-
-            <!-- Lịch sử đơn hàng -->
-            <div class="mt-4">
-                <h3>Lịch sử đơn hàng</h3>
-                <p><a href="@Url.Action("Index_KH", "OrderPro", new { id = Model.IDCus })" class="btn btn-info">Xem lịch sử đơn hàng</a></p>
+        <!-- Thông tin chi tiết -->
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="info-label">Số điện thoại</div>
+                <div class="info-value">@Model.PhoneCus</div>
             </div>
+            <div class="info-item">
+                <div class="info-label">Email</div>
+                <div class="info-value">@Model.EmailCus</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Địa chỉ</div>
+                <div class="info-value">@Model.StreetAddress, @Model.Ward, @Model.District, @Model.City</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Ngày sinh</div>
+                <div class="info-value">@Model.DateOfBirth</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Ngày đăng ký</div>
+                <div class="info-value">@Model.RegisteredDate</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Thành viên VIP</div>
+                <div class="info-value">@(Model.IsVIP.HasValue && Model.IsVIP.Value ? "Có" : "Không")</div>
+            </div>
+        </div>
+
+        <!-- Lịch sử đơn hàng -->
+        <div class="history-section">
+            <h3 class="history-title">Lịch sử đơn hàng</h3>
+            <p>Xem tất cả các đơn hàng bạn đã đặt tại TechStore</p>
+            <a href="@Url.Action("Index_KH", "OrderPro", new { id = Model.IDCus })" class="btn-modern btn-info-modern">Xem lịch sử đơn hàng</a>
         </div>
     </div>
 </div>
+
+<!-- Footer hiện đại -->
+<!--<footer class="modern-footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>TechStore</h3>
+            <p>Cửa hàng công nghệ hàng đầu với các sản phẩm chất lượng cao và dịch vụ tốt nhất.</p>
+        </div>
+        <div class="footer-section">
+            <h3>Liên hệ</h3>
+            <p>Email: info@techstore.com</p>
+            <p>Hotline: 1900-1234</p>
+            <p>Địa chỉ: 123 Đường ABC, Quận XYZ, TP.HCM</p>
+        </div>
+        <div class="footer-section">
+            <h3>Hỗ trợ</h3>
+            <p><a href="#">Chính sách bảo hành</a></p>
+            <p><a href="#">Hướng dẫn mua hàng</a></p>
+            <p><a href="#">Câu hỏi thường gặp</a></p>
+        </div>
+        <div class="footer-section">
+            <h3>Theo dõi chúng tôi</h3>
+            <p><a href="#">Facebook</a></p>
+            <p><a href="#">Instagram</a></p>
+            <p><a href="#">YouTube</a></p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 TechStore. Tất cả quyền được bảo lưu.</p>
+    </div>
+</footer>-->
