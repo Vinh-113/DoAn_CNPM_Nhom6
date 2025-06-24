@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using TechStore.Models;
 
@@ -21,7 +17,7 @@ namespace TechStore.Controllers
         }
 
         // GET: Categories/Details/5
-        public ActionResult Details(int ? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -90,8 +86,8 @@ namespace TechStore.Controllers
                 ViewBag.Loi = "Không thể cập nhật danh mục này";
                 return View();
             }
-                return RedirectToAction("Index");
-            
+            return RedirectToAction("Index");
+
         }
 
         // GET: Categories/Delete/5
@@ -101,7 +97,7 @@ namespace TechStore.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var category = db.Categories.Where(s=> s.Id == id).FirstOrDefault();
+            var category = db.Categories.Where(s => s.Id == id).FirstOrDefault();
             if (category == null)
             {
                 return HttpNotFound();
@@ -113,11 +109,11 @@ namespace TechStore.Controllers
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id)
         {
-            var item= db.Categories.Where(s => s.Id == id).FirstOrDefault();
-            
+            var item = db.Categories.Where(s => s.Id == id).FirstOrDefault();
+
             if (item != null)
             {
-                
+
                 try
                 {
                     db.Categories.Remove(item);
@@ -128,7 +124,7 @@ namespace TechStore.Controllers
                     ViewBag.Loi = "Không thể xóa danh mục này vì có sản phẩm dùng danh mục này";
                     return View();
                 }
-                
+
             }
             return RedirectToAction("Index");
         }

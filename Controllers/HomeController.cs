@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using TechStore.Models;
 
@@ -19,6 +16,13 @@ namespace TechStore.Controllers
             }
             var pro = dB.Products.ToList();
             return View(pro);
+        }
+        [HttpPost]
+        public ActionResult LogToOutput(string message)
+        {
+            // Log the message to the output (e.g., console, debug output, etc.)
+            System.Diagnostics.Debug.WriteLine(message);
+            return new EmptyResult(); // Return an empty result since this is a logging action
         }
         [HttpPost]
         public ActionResult Search(string keyword)

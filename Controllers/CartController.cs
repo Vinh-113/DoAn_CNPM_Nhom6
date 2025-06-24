@@ -1,9 +1,8 @@
-﻿using TechStore.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
+using TechStore.Models;
 
 namespace TechStore.Controllers
 {
@@ -28,14 +27,15 @@ namespace TechStore.Controllers
         }
 
         [HttpGet]
-        public ActionResult PaymentCart() {
+        public ActionResult PaymentCart()
+        {
             List<CartItem> myCart = GetCart();
-            ViewBag.Total = TotalMoney();  
+            ViewBag.Total = TotalMoney();
             string usermodel = (string)Session["DaDangNhap"];
-            var cus= dBO.Customers.Where(s=> s.NameCus == usermodel).FirstOrDefault();
+            var cus = dBO.Customers.Where(s => s.NameCus == usermodel).FirstOrDefault();
             var checkout = new Payment
             {
-                mycart = myCart ,
+                mycart = myCart,
                 Customers = cus
 
             };
@@ -73,7 +73,7 @@ namespace TechStore.Controllers
                     ShippingCost = sum,
                     PaymentStatus = paymentstat
                 };
-                
+
                 dBO.OrderProes.Add(order);
                 dBO.SaveChanges();
                 // Save order details
@@ -99,7 +99,7 @@ namespace TechStore.Controllers
                 ViewBag.Error = "Đặt hàng không thành công";
                 return View(model);
             }
-            
+
         }
         public ActionResult PaymentSuccess()
         {
@@ -118,10 +118,10 @@ namespace TechStore.Controllers
 
         public ActionResult ShowCart()
         {
-            if (Session["DaDangNhap"]  == null)
+            if (Session["DaDangNhap"] == null)
             {
                 return RedirectToAction("DangNhap", "User");
-            }    
+            }
             List<CartItem> myCart = GetCart();
             ViewBag.Total = TotalMoney();
             return View(myCart);
@@ -153,7 +153,7 @@ namespace TechStore.Controllers
             {
                 currentProduct.Number++; //Sản phẩm đã có trong giỏ thì
             }
-            return RedirectToAction("Details","CustomerPro", new {id = currentProduct.ProductID});
+            return RedirectToAction("Details", "CustomerPro", new { id = currentProduct.ProductID });
         }
         public ActionResult AddToCart(int id) //Dùng cho chức năng đặt mua
         {

@@ -1,7 +1,7 @@
-﻿using TechStore.Models;
-using System;
+﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using TechStore.Models;
 
 namespace TechStore.Controllers
 {
@@ -22,12 +22,13 @@ namespace TechStore.Controllers
             {
                 var product = _context.Products.FirstOrDefault(s => s.ProductID == id);
                 var relatedProducts = _context.Products.Where(s => s.Category1.IDCate == product.Category1.IDCate).ToList();//Tìm sản phẩm tương tự nhưng có mã Catrgory giống như sản phẩm hồi nãy
-                var reviews = _context.Reviews.Where(s => s.ProductID == id).ToList();
+                /* var reviews = _context.Reviews.Where(s => s.ProductID == id).ToList();*/
+
                 var relatedPro = new RelatedPro
                 {
-                    RelatedReviews = reviews,
+
                     Product = product,
-                    RelatedProducts = relatedProducts,
+                    RelatedProducts = relatedProducts
                 };
                 return View(relatedPro);
             }
@@ -42,7 +43,7 @@ namespace TechStore.Controllers
             var re = new Review()
             {
                 ProductID = pro.Product.ProductID,
-                CustomerID = cus.IDCus ,
+                CustomerID = cus.IDCus,
                 Rating = pro.Review.Rating,
                 ReviewContent = pro.Review.ReviewContent,
                 ReviewDate = DateTime.Now,
@@ -50,7 +51,7 @@ namespace TechStore.Controllers
             };
             db.Reviews.Add(re);
             db.SaveChanges();
-            return RedirectToAction("Details","CustomerPro", new {id = pro.Product.ProductID});
+            return RedirectToAction("Details", "CustomerPro", new { id = pro.Product.ProductID });
 
         }
     }

@@ -15,7 +15,7 @@ namespace TechStore.Models
         public virtual DbSet<OrderDetail> OrderDetails { get; set; }
         public virtual DbSet<OrderPro> OrderProes { get; set; }
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<Review> Reviews { get; set; }  
+        public virtual DbSet<Review> Reviews { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

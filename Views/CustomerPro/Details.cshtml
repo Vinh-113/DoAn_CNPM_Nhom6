@@ -64,11 +64,11 @@
                 </a>
             </div>
         </div>
-        <div class="review-container">
+        <!--<div class="review-container">
             <h1 style="text-align: center">Đánh giá sản phẩm</h1>
             <hr />
-            <div id="review-list">
-                @foreach (var review in Model.RelatedReviews.Take(3))
+            <div id="review-list">-->
+                @*@foreach (var review in Model.RelatedReviews.Take(3))
                 {
                     <div class="review-item">
                         <h5>@review.ReviewerName</h5>
@@ -85,8 +85,8 @@
                         </div>
                         <p>@review.ReviewContent</p>
                     </div>
-                }
-            </div>
+                }*@
+            <!--</div>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
                 Review
             </button>
@@ -100,9 +100,9 @@
                         <h5 class="modal-title" id="reviewModalLabel">Write a Review</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body">-->
                         <!-- Nội dung modal -->
-                        <textarea class="form-control" rows="5" placeholder="Write your review here..."></textarea>
+                        <!--<textarea class="form-control" rows="5" placeholder="Write your review here..."></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <div id="div-pro-list" style="width: 80%; margin: auto">
             @foreach (var rePro in Model.RelatedProducts)
             {
@@ -136,7 +136,7 @@
     }
 </script>
 
-<script>
+@*<script>
     document.addEventListener('DOMContentLoaded', () => {
         const showMoreBtn = document.getElementById('showMoreReviews');
         const reviewList = document.getElementById('review-list');
@@ -191,4 +191,4 @@
             }
         });
     });
-</script>
+</script>*@

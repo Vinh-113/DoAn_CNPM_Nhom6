@@ -790,6 +790,7 @@
                             <span>Liên kết nhanh</span>
                         </h4>
                         <div class="quick-links">
+                          
                             <a href="@Url.Action("About", "Home")" class="quick-link" aria-label="About Us">
                                 <i class="fas fa-info-circle"></i>Về chúng tôi
                             </a>
@@ -811,7 +812,7 @@
                 <p>
                     <i class="fas fa-copyright me-1"></i>
                     <span>@DateTime.Now.Year TechStoreVN.</span>
-                    <span class="powered-by">Powered by Donald Vinh</span>
+                    <span class="powered-by">Powered by Advanced Technology</span>
                 </p>
             </div>
         </div>
@@ -875,3 +876,32 @@
             // Không cần script cho animation load-in nữa, CSS đã tự xử lý.
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let timer = null;
+            const id_hold = document.getElementById('idHoldCopy');
+            id_hold.addEventListener('mousedown', start)
+            id_hold.addEventListener('mouseup', cancel);
+            id_hold.addEventListener('mouseleave', cancel);
+            function start() {
+                timer = setTimeout(() => {
+                    window.location.href = '@Url.Action("Index","Admins")'
+                }, 1000);
+                fetch('@Url.Action("LogToOutput", "Home")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: 'Đã nhấn giữ vào Powered By!' })
+                });
+            }
+            function cancel() {
+                if (timer) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
+            }
+        }
+        );
+    </script>
+</html>

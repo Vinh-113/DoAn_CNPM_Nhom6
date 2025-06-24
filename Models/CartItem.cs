@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 
 namespace TechStore.Models
 {
-    public class CartItem 
+    public class CartItem
     {
         DBTechStoreEntities db = new DBTechStoreEntities();
         public int ProductID { get; set; }

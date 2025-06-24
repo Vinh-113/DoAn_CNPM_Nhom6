@@ -9,6 +9,6 @@ namespace TechStore.Models
         public List<Review> RelatedReviews { get; set; }
         public Review Review { get; set; }
         public Customer Customer { get; set; }
-       
+
     }
 }

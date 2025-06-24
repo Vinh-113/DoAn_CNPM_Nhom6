@@ -1,8 +1,8 @@
-﻿using TechStore.Models;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using TechStore.Models;
 
 namespace TechStore.Controllers
 {
@@ -15,7 +15,7 @@ namespace TechStore.Controllers
             var item = db.Products.ToList();
             return View(item);
         }
-        
+
         [HttpGet]
         public ActionResult Create()
         {
@@ -31,18 +31,18 @@ namespace TechStore.Controllers
 
                 //Lưu về server
                 var filename = Path.GetFileName(ImagePro.FileName);
-                var path = Path.Combine(Server.MapPath("~/Images/"),filename);
+                var path = Path.Combine(Server.MapPath("~/Images/"), filename);
                 ImagePro.SaveAs(path);
                 //Gán giá trị về cho bảng ImagePro
                 pro.ImagePro = ImagePro.FileName;
             }
             pro.CreatedDate = System.DateTime.Now;
-            pro.Price -= pro.Price*(pro.Discount/100);
+            pro.Price -= pro.Price * (pro.Discount / 100);
             db.Products.Add(pro);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-        
+
         public ActionResult Details(int id)
         {
             var item = db.Products.Where(s => s.ProductID == id).FirstOrDefault();
@@ -80,7 +80,7 @@ namespace TechStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var item = db.Products.Where(s=> s.ProductID == id).FirstOrDefault();
+            var item = db.Products.Where(s => s.ProductID == id).FirstOrDefault();
             if (item != null)
             {
                 try
