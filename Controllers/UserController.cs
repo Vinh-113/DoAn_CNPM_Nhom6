@@ -64,9 +64,6 @@ namespace TechStore.Controllers
 
             if (user != null)
             {
-
-
-                ViewBag.ThongBao = "Chúc mừng đăng nhập thành công ";
                 Session["DaDangNhap"] = customer.NameCus;
                 return RedirectToAction("Index", "Home");
             }
