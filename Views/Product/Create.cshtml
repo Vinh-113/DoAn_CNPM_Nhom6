@@ -2,72 +2,58 @@
 
 @{
     ViewBag.Title = "Create";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";}
-<div style="margin : 10px auto; width: 80%">
-@using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
-{
-    @Html.AntiForgeryToken()
-    
-<div class="form-horizontal">
-    <h4 style="justify-content:center">Tạo sản phẩm mới</h4>
-    <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.NamePro, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.NamePro, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.NamePro, "", new { @class = "text-danger" })
-            </div>
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container" style="max-width: 700px; margin: 40px auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05);">
+    <h2 style="text-align: center; font-weight: 700; margin-bottom: 30px; color: #4f46e5;">Tạo sản phẩm mới</h2>
+    @using (Html.BeginForm("Create", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.NamePro, htmlAttributes: new { @class = "form-label fw-bold" })
+            @Html.EditorFor(model => model.NamePro, new { htmlAttributes = new { @class = "form-control rounded-pill px-4 py-2" } })
+            @Html.ValidationMessageFor(model => model.NamePro, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DecriptionPro, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DecriptionPro, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DecriptionPro, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.DecriptionPro, htmlAttributes: new { @class = "form-label fw-bold" })
+            @Html.TextAreaFor(model => model.DecriptionPro, new { @class = "form-control rounded-4 px-4 py-2", rows = "4" })
+            @Html.ValidationMessageFor(model => model.DecriptionPro, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Category, "Category", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("Category", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "form-label fw-bold" })
+            @Html.DropDownList("Category", null, htmlAttributes: new { @class = "form-control rounded-pill px-4 py-2" })
+            @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "form-label fw-bold" })
+            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control rounded-pill px-4 py-2" } })
+            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ImagePro, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <input type="file" name="ImagePro" />
-                @Html.ValidationMessageFor(model => model.ImagePro, "", new { @class = "text-danger" })
-            </div>
+        <div class="form-group mb-3">
+            @Html.LabelFor(model => model.Discount, htmlAttributes: new { @class = "form-label fw-bold" })
+            @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control rounded-pill px-4 py-2" } })
+            @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+        <div class="form-group mb-4">
+            @Html.LabelFor(model => model.ImagePro, htmlAttributes: new { @class = "form-label fw-bold" })
+            <input type="file" name="ImagePro" class="form-control rounded-pill px-4 py-2" />
+            @Html.ValidationMessageFor(model => model.ImagePro, "", new { @class = "text-danger" })
         </div>
-    </div>
-    
+
+        <div class="d-grid gap-2">
+            <input type="submit" value="Tạo sản phẩm" class="btn btn-primary rounded-pill px-4 py-2" style="background: #4f46e5; border: none;" />
+        </div>
     }
-</div>
-<div>
-    @Html.ActionLink("Quay lại trang trước", "Index", "Product", htmlAttributes: new { @class = "btn btn-success" })
+    <div class="mt-3 text-center">
+        @Html.ActionLink("Quay lại", "Index", "Product", htmlAttributes: new { @class = "btn btn-outline-secondary rounded-pill px-4 py-2" })
+    </div>
 </div>
