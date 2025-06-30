@@ -637,6 +637,152 @@
         outline: 3px solid #667eea;
         outline-offset: 2px;
     }
+     /* ===== WISHLIST BUTTON ===== */
+    .wishlist-btn {
+        position: absolute;
+        bottom: 15px;
+        right: 15px;
+        background: rgba(255, 255, 255, 0.95);
+        border: none;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        backdrop-filter: blur(15px);
+        border: 2px solid rgba(255,255,255,0.8);
+        box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+    }
+
+        .wishlist-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: scale(1.15);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .wishlist-btn.active {
+            background: var(--secondary-gradient);
+            color: white;
+            border-color: rgba(245, 87, 108, 0.5);
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(245, 87, 108, 0.4);
+        }
+
+            .wishlist-btn.active:hover {
+                background: var(--secondary-gradient);
+                transform: scale(1.2);
+                box-shadow: 0 10px 35px rgba(245, 87, 108, 0.5);
+            }
+
+    .wishlist-icon {
+        font-size: 22px;
+        transition: all 0.3s ease;
+        color: #ff6b9d;
+    }
+
+    .wishlist-btn.active .wishlist-icon {
+        color: white;
+        animation: heartBeat 0.6s ease-in-out;
+    }
+
+    .wishlist-count {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: var(--accent-gradient);
+        color: white;
+        font-size: 12px;
+        font-weight: 800;
+        padding: 4px 8px;
+        border-radius: 15px;
+        min-width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+        border: 2px solid white;
+        transform: scale(1);
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    /* ===== RATING STARS ===== */
+    .product-rating {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .rating-stars {
+        display: flex;
+        gap: 2px;
+    }
+
+    .star {
+        font-size: 14px;
+        color: #ddd;
+        transition: color 0.2s ease;
+    }
+
+        .star.filled {
+            color: #ffd700;
+        }
+
+        .star.half-filled {
+            background: linear-gradient(90deg, #ffd700 50%, #ddd 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+    .rating-value {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .rating-count {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+
+/* ===== ANIMATIONS ===== */
+ @@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    50% { transform: scale(1.1); }
+    75% { transform: scale(1.15); }
+}
+
+@@keyframes wishlistPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.wishlist-btn.pulse {
+    animation: wishlistPulse 0.6s ease-in-out;
+}
+
+
+/* ===== RESPONSIVE ===== */
+ @@media (max-width: 768px) {
+    .wishlist-btn {
+        width: 40px;
+        height: 40px;
+    }
+
+    .wishlist-icon {
+        font-size: 16px;
+    }
+
+  }
 </style>
 
 <main class="homepage-container">
@@ -711,6 +857,14 @@
                      role="button"
                      onkeypress="handleCardKeyPress(event, '@Url.Action("Details", "CustomerPro", new { id = 1 })')">
                 <div class="product-image-wrapper">
+                    <!-- Nút Yêu Thích -->
+                    <button class="favorite-btn"
+                            onclick="event.stopPropagation(); toggleFavorite(1, this)"
+                            aria-label="Thêm vào yêu thích">
+                        <i class="fas fa-heart heart-icon"></i>
+                        <span class="favorite-count" id="fav-count-1">0</span>
+                    </button>
+
                     <img src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=300&fit=crop" alt="iPad Pro - Tablet cao cấp" class="product-image" loading="lazy" />
                     <div class="product-overlay">
                         <span class="view-details">
@@ -720,6 +874,19 @@
                     </div>
                 </div>
                 <div class="product-info">
+                    <!-- Đánh giá sao -->
+                    <div class="product-rating">
+                        <div class="stars-container" data-rating="4.8">
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                        </div>
+                        <span class="rating-text">4.8</span>
+                        <span class="rating-count">(89 đánh giá)</span>
+                    </div>
+
                     <h3 class="product-name">iPad Pro</h3>
                     <p class="product-price">
                         <span class="price-value">8.000.000</span>
@@ -729,12 +896,20 @@
             </article>
 
             <article class="product-card featured-card"
-                     onclick="navigateToProduct('@Url.Action("Details", "CustomerPro", new { id = 2 })')"
+                     onclick="navigateToProduct('@Url.Action("Details", "CustomerPro", new { id = 1 })')"
                      tabindex="0"
                      role="button"
-                     onkeypress="handleCardKeyPress(event, '@Url.Action("Details", "CustomerPro", new { id = 2 })')">
+                     onkeypress="handleCardKeyPress(event, '@Url.Action("Details", "CustomerPro", new { id = 1 })')">
                 <div class="product-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop" alt="Tai nghe không dây cao cấp" class="product-image" loading="lazy" />
+                    <!-- Nút Yêu Thích -->
+                    <button class="favorite-btn"
+                            onclick="event.stopPropagation(); toggleFavorite(1, this)"
+                            aria-label="Thêm vào yêu thích">
+                        <i class="fas fa-heart heart-icon"></i>
+                        <span class="favorite-count" id="fav-count-1">0</span>
+                    </button>
+
+                    <img src="~/Images/tainghe18.jpg" alt="iPad Pro - Tablet cao cấp" class="product-image" loading="lazy" />
                     <div class="product-overlay">
                         <span class="view-details">
                             <i class="fas fa-eye"></i>
@@ -743,21 +918,42 @@
                     </div>
                 </div>
                 <div class="product-info">
-                    <h3 class="product-name">Tai nghe Premium</h3>
+                    <!-- Đánh giá sao -->
+                    <div class="product-rating">
+                        <div class="stars-container" data-rating="4.8">
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                        </div>
+                        <span class="rating-text">4.8</span>
+                        <span class="rating-count">(89 đánh giá)</span>
+                    </div>
+
+                    <h3 class="product-name">Tai Nghe Siêu Bass</h3>
                     <p class="product-price">
-                        <span class="price-value">400.000</span>
+                        <span class="price-value">1.000.000</span>
                         <span class="currency">₫</span>
                     </p>
                 </div>
             </article>
 
             <article class="product-card featured-card"
-                     onclick="navigateToProduct('@Url.Action("Details", "CustomerPro", new { id = 3 })')"
+                     onclick="navigateToProduct('@Url.Action("Details", "CustomerPro", new { id = 1 })')"
                      tabindex="0"
                      role="button"
-                     onkeypress="handleCardKeyPress(event, '@Url.Action("Details", "CustomerPro", new { id = 3 })')">
+                     onkeypress="handleCardKeyPress(event, '@Url.Action("Details", "CustomerPro", new { id = 1 })')">
                 <div class="product-image-wrapper">
-                    <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" alt="Smartphone Android mới nhất" class="product-image" loading="lazy" />
+                    <!-- Nút Yêu Thích -->
+                    <button class="favorite-btn"
+                            onclick="event.stopPropagation(); toggleFavorite(1, this)"
+                            aria-label="Thêm vào yêu thích">
+                        <i class="fas fa-heart heart-icon"></i>
+                        <span class="favorite-count" id="fav-count-1">0</span>
+                    </button>
+
+                    <img src="~/Images/trumpphone.png" alt="iPad Pro - Tablet cao cấp" class="product-image" loading="lazy" />
                     <div class="product-overlay">
                         <span class="view-details">
                             <i class="fas fa-eye"></i>
@@ -766,9 +962,22 @@
                     </div>
                 </div>
                 <div class="product-info">
-                    <h3 class="product-name">Smartphone Pro</h3>
+                    <!-- Đánh giá sao -->
+                    <div class="product-rating">
+                        <div class="stars-container" data-rating="4.8">
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                            <i class="fas fa-star star filled"></i>
+                        </div>
+                        <span class="rating-text">4.8</span>
+                        <span class="rating-count">(89 đánh giá)</span>
+                    </div>
+
+                    <h3 class="product-name">Trump Phone</h3>
                     <p class="product-price">
-                        <span class="price-value">3.000.000</span>
+                        <span class="price-value">5.000.000</span>
                         <span class="currency">₫</span>
                     </p>
                 </div>
@@ -789,52 +998,76 @@
             <div class="products-grid">
                 @foreach (var item in Model)
                 {
-                    <article class="product-card"
-                             onclick="navigateToProduct('@Url.Action("Details", "CustomerPro", new { id = item.ProductID })')"
-                             tabindex="0"
-                             role="button"
-                             onkeypress="handleCardKeyPress(event, '@Url.Action("Details", "CustomerPro", new { id = item.ProductID })')">
+                   <article class="product-card"
+                            onclick="navigateToProduct('@Url.Action("Details", "CustomerPro", new { id = item.ProductID })')"
+                            tabindex="0"
+                            role="button"
+                            onkeypress="handleCardKeyPress(event, '@Url.Action("Details", "CustomerPro", new { id = item.ProductID })')">
 
-                        <div class="product-image-wrapper">
-                            @if (item.Discount > 0)
-                            {
-                                <div class="discount-badge">
-                                    <span class="discount-percent">-@item.Discount%</span>
-                                    <span class="discount-text">GIẢM GIÁ</span>
-                                </div>
-                            }
-                            <img src="~/Images/@item.ImagePro"
-                                 alt="@item.NamePro - Sản phẩm công nghệ"
-                                 class="product-image"
-                                 loading="lazy" />
-                            <div class="product-overlay">
-                                <span class="view-details">
-                                    <i class="fas fa-eye"></i>
-                                    Xem chi tiết
-                                </span>
-                            </div>
-                        </div>
+                       <div class="product-image-wrapper">
+                           <!-- Discount badge (nếu có) -->
+                           @if (item.Discount > 0)
+                           {
+                               <div class="discount-badge">
+                                   <span class="discount-percent">-@item.Discount%</span>
+                                   <span class="discount-text">GIẢM GIÁ</span>
+                               </div>
+                           }
 
-                        <div class="product-info">
-                            <h3 class="product-name">@item.NamePro</h3>
-                            <div class="price-container">
-                                @if (item.Discount > 0)
-                                {
-                                    var originalPrice = item.Price / (1 - (decimal)item.Discount / 100);
-                                    <p class="product-price">
-                                        <span class="price-original">@((decimal)originalPrice).ToString("N0")₫</span>
-                                        <span class="price-current">@((decimal)item.Price).ToString("N0")₫</span>
-                                    </p>
-                                }
-                                else
-                                {
-                                    <p class="product-price">
-                                        <span class="price-current">@(decimal.TryParse(item.Price.ToString(), out decimal price) ? price.ToString("N0") : item.Price) ₫</span>
-                                    </p>
-                                }
-                            </div>
-                        </div>
-                    </article>
+                           <img src="~/Images/@item.ImagePro"
+                                alt="@item.NamePro - Sản phẩm công nghệ"
+                                class="product-image"
+                                loading="lazy" />
+                           <div class="product-overlay">
+                               <span class="view-details">
+                                   <i class="fas fa-eye"></i>
+                                   Xem chi tiết
+                               </span>
+                           </div>
+
+                           <!-- Nút yêu thích ở góc phải dưới -->
+                           <button class="wishlist-btn"
+                                   onclick="event.stopPropagation(); addToWishlist(@item.ProductID, this)"
+                                   aria-label="Thả tim">
+                               <i class="wishlist-icon fas fa-heart"></i>
+                               <span class="wishlist-count" id="wishlist-count-@item.ProductID">0</span>
+                           </button>
+                       </div>
+
+                       <div class="product-info">
+                           <h3 class="product-name">@item.NamePro</h3>
+
+                           <!-- Rating stars - Thêm phần này -->
+                           <div class="product-rating">
+                               <div class="rating-stars" data-rating="4.5">
+                                   <span class="star filled">★</span>
+                                   <span class="star filled">★</span>
+                                   <span class="star filled">★</span>
+                                   <span class="star filled">★</span>
+                                   <span class="star half-filled">★</span>
+                               </div>
+                               <span class="rating-value">4.5</span>
+                               <span class="rating-count">(127 đánh giá)</span>
+                           </div>
+
+                           <div class="price-container">
+                               @if (item.Discount > 0)
+                               {
+                                   var originalPrice = item.Price / (1 - (decimal)item.Discount / 100);
+                                   <p class="product-price">
+                                       <span class="price-original">@((decimal)originalPrice).ToString("N0")₫</span>
+                                       <span class="price-current">@((decimal)item.Price).ToString("N0")₫</span>
+                                   </p>
+                               }
+                               else
+                               {
+                                   <p class="product-price">
+                                       <span class="price-current">@(decimal.TryParse(item.Price.ToString(), out decimal price) ? price.ToString("N0") : item.Price) ₫</span>
+                                   </p>
+                               }
+                           </div>
+                       </div>
+                   </article>
                 }
             </div>
         }
@@ -1162,4 +1395,212 @@
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = carouselController;
     }
+    //Thêm vô đánh giá sao
+    // ===== WISHLIST FUNCTIONALITY - PHIÊN BẢN CẬP NHẬT =====
+    const wishlistController = {
+        likeCounts: JSON.parse(localStorage.getItem('likeCounts') || '{}'),
+        likedProducts: JSON.parse(localStorage.getItem('likedProducts') || '{}'), // Thêm mới: theo dõi sản phẩm đã like
+
+        init() {
+            this.updateAllWishlistUI();
+            this.initializeRatings();
+        },
+
+        // HÀM MỚI: Toggle wishlist thay vì chỉ thêm
+        toggleWishlist(productId, buttonElement) {
+            const isCurrentlyLiked = this.likedProducts[productId] || false;
+
+            if (isCurrentlyLiked) {
+                // Nếu đã like thì bỏ like (giảm xuống)
+                this.removeFromWishlist(productId, buttonElement);
+            } else {
+                // Nếu chưa like thì thêm like (tăng lên)
+                this.addToWishlist(productId, buttonElement);
+            }
+        },
+
+        addToWishlist(productId, buttonElement) {
+            // Đánh dấu sản phẩm đã được like
+            this.likedProducts[productId] = true;
+
+            // Tăng số lượng like
+            if (!this.likeCounts[productId]) {
+                this.likeCounts[productId] = 0;
+            }
+            this.likeCounts[productId]++;
+
+            // Animation effect khi thêm
+            buttonElement.classList.add('pulse');
+            setTimeout(() => {
+                buttonElement.classList.remove('pulse');
+            }, 600);
+
+            // Cập nhật UI
+            this.updateWishlistUI(productId, buttonElement);
+            this.saveLikeCounts();
+
+            // Show notification
+            this.showNotification(`Đã thả tim! ❤️ (${this.likeCounts[productId]} lượt thích)`, 'success');
+        },
+
+        // HÀM MỚI: Xóa khỏi wishlist
+        removeFromWishlist(productId, buttonElement) {
+            // Bỏ đánh dấu sản phẩm đã like
+            this.likedProducts[productId] = false;
+
+            // Giảm số lượng like (không cho xuống dưới 0)
+            if (this.likeCounts[productId] && this.likeCounts[productId] > 0) {
+                this.likeCounts[productId]--;
+            }
+
+            // Animation effect khi xóa
+            buttonElement.classList.add('pulse');
+            setTimeout(() => {
+                buttonElement.classList.remove('pulse');
+            }, 600);
+
+            // Cập nhật UI
+            this.updateWishlistUI(productId, buttonElement);
+            this.saveLikeCounts();
+
+            // Show notification
+            this.showNotification(`Đã bỏ tim! 💔 (${this.likeCounts[productId]} lượt thích)`, 'info');
+        },
+
+        updateWishlistUI(productId, buttonElement) {
+            const countElement = buttonElement.querySelector('.wishlist-count');
+            const currentCount = this.likeCounts[productId] || 0;
+            const isLiked = this.likedProducts[productId] || false;
+
+            // Cập nhật số lượng hiển thị
+            countElement.textContent = currentCount;
+
+            // Cập nhật trạng thái nút dựa trên việc user đã like hay chưa
+            if (isLiked) {
+                buttonElement.classList.add('active');
+                buttonElement.setAttribute('aria-label', `Đã thích - ${currentCount} lượt thích`);
+            } else {
+                buttonElement.classList.remove('active');
+                buttonElement.setAttribute('aria-label', `Thả tim - ${currentCount} lượt thích`);
+            }
+
+            // Hiển thị số đếm nếu > 0
+            if (currentCount > 0) {
+                countElement.style.display = 'flex';
+            } else {
+                countElement.style.display = 'none';
+            }
+        },
+
+        updateAllWishlistUI() {
+            // Cập nhật tất cả các nút wishlist khi tải trang
+            document.querySelectorAll('[id^="wishlist-count-"]').forEach(countElement => {
+                const productId = countElement.id.replace('wishlist-count-', '');
+                const buttonElement = countElement.closest('.wishlist-btn');
+                const currentCount = this.likeCounts[productId] || 0;
+                const isLiked = this.likedProducts[productId] || false;
+
+                countElement.textContent = currentCount;
+
+                // Cập nhật trạng thái nút
+                if (isLiked) {
+                    buttonElement.classList.add('active');
+                    buttonElement.setAttribute('aria-label', `Đã thích - ${currentCount} lượt thích`);
+                } else {
+                    buttonElement.classList.remove('active');
+                    buttonElement.setAttribute('aria-label', `Thả tim - ${currentCount} lượt thích`);
+                }
+
+                // Hiển thị số đếm
+                if (currentCount > 0) {
+                    countElement.style.display = 'flex';
+                } else {
+                    countElement.style.display = 'none';
+                }
+            });
+        },
+
+        saveLikeCounts() {
+            localStorage.setItem('likeCounts', JSON.stringify(this.likeCounts));
+            localStorage.setItem('likedProducts', JSON.stringify(this.likedProducts)); // Lưu trạng thái like
+        },
+
+        initializeRatings() {
+            document.querySelectorAll('.rating-stars').forEach(container => {
+                const rating = parseFloat(container.dataset.rating);
+                this.renderStars(container, rating);
+            });
+        },
+
+        renderStars(container, rating) {
+            const stars = container.querySelectorAll('.star');
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+
+            stars.forEach((star, index) => {
+                star.classList.remove('filled', 'half-filled');
+
+                if (index < fullStars) {
+                    star.classList.add('filled');
+                } else if (index === fullStars && hasHalfStar) {
+                    star.classList.add('half-filled');
+                }
+            });
+        },
+
+        showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#10b981' : type === 'info' ? '#3b82f6' : '#ef4444'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 1000;
+            font-weight: 600;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        `;
+            notification.textContent = message;
+
+            document.body.appendChild(notification);
+
+            // Show notification
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+
+            // Hide notification
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+    };
+
+    // HÀM GLOBAL MỚI: Sử dụng toggle thay vì add
+    function addToWishlist(productId, buttonElement) {
+        if (isUserLogged()) {
+            wishlistController.toggleWishlist(productId, buttonElement);
+        }
+        else { 
+            window.location.href='@Url.Action("DangNhap","User")'
+        }
+            
+    }
+    //Kiểm tra phần đăng nhập
+    function isUserLogged() {
+        return window.userIsLoggedIn = @(Session["DaDangNhap"] != null ? "true" : "false");
+    }
+    // Initialize wishlist when DOM is ready
+    document.addEventListener('DOMContentLoaded', () => {
+        wishlistController.init();
+    });
 </script>

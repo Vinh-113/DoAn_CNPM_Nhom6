@@ -289,6 +289,7 @@
     <Content Include="Images\tainghe7.jpg" />
     <Content Include="Images\tainghe8.jpg" />
     <Content Include="Images\tainghe9.jpg" />
+    <Content Include="Images\trumpphone.png" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
