@@ -50,6 +50,19 @@ namespace TechStore.Controllers
             ViewBag.AverageRating = JsonConvert.SerializeObject(reviewData.Select(r => r.ReviewAverage).ToList());
             // Fetch best-selling product data
 
+        var bestSelling = dbO.OrderDetails
+        .GroupBy(od => od.IDProduct)
+        .Select(g => new {
+        ProductID = g.Key,
+        QuantitySold = g.Sum(x => x.Quantity)
+    })
+    .OrderByDescending(g => g.QuantitySold)
+    .Take(5) // Optional: Top 5 bestsellers
+    .ToList();
+
+            ViewBag.BestSellingLabels = bestSelling.Select(x => x.ProductID).ToList();
+            ViewBag.BestSellingData = bestSelling.Select(x => x.QuantitySold).ToList();
+
             return View();
         }
 
