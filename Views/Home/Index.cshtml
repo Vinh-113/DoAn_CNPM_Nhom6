@@ -1587,9 +1587,18 @@
 
     // HÀM GLOBAL MỚI: Sử dụng toggle thay vì add
     function addToWishlist(productId, buttonElement) {
-        wishlistController.toggleWishlist(productId, buttonElement);
+        if (isUserLogged()) {
+            wishlistController.toggleWishlist(productId, buttonElement);
+        }
+        else { 
+            window.location.href='@Url.Action("DangNhap","User")'
+        }
+            
     }
-
+    //Kiểm tra phần đăng nhập
+    function isUserLogged() {
+        return window.userIsLoggedIn = @(Session["DaDangNhap"] != null ? "true" : "false");
+    }
     // Initialize wishlist when DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
         wishlistController.init();
