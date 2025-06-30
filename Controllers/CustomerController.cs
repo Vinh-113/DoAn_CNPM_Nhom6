@@ -89,13 +89,23 @@ namespace TechStore.Controllers
             if (ModelState.IsValid)
             {
                 var existingCustomer = dBO.Customers.FirstOrDefault(s => s.IDCus == customer.IDCus);
+              
                 if (existingCustomer != null)
                 {
                     dBO.Entry(existingCustomer).CurrentValues.SetValues(customer);
                     try
                     {
                         dBO.SaveChanges();
-                        return RedirectToAction("ThongTinCaNhan", "User");
+                        //Nếu đổi tên đăng nhập hay mật khẩu thì bắt buộc đăng nhập lại 
+                        if (customer.NameCus != (string)Session["DaDangNhap"] || customer.PassCus != existingCustomer.PassCus)
+                        {
+                            return RedirectToAction("DangNhap", "User");
+                        }
+                        else
+                        {
+                            return RedirectToAction("ThongTinCaNhan", "User"); //Nếu ko thì thôi 
+                        }
+
                     }
                     catch (DbUpdateConcurrencyException)
                     {
@@ -107,7 +117,7 @@ namespace TechStore.Controllers
                     TempData["Loi"] = "Không tồn tại, có vẻ như người này chưa từng đăng ký tài khoản";
                 }
             }
-            return RedirectToAction("ThongTinCaNhan", "User");
+            return View();
         }
     }
 }
