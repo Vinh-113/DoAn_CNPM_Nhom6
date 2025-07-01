@@ -1055,8 +1055,12 @@
                                {
                                    var originalPrice = item.Price / (1 - (decimal)item.Discount / 100);
                                    <p class="product-price">
-                                       <span class="price-original">@((decimal)originalPrice).ToString("N0")₫</span>
-                                       <span class="price-current">@((decimal)item.Price).ToString("N0")₫</span>
+                                       <span class="price-original">
+                                           @((decimal)originalPrice).ToString("n2", System.Globalization.CultureInfo.GetCultureInfo("vi-VN")) ₫
+                                       </span>
+                                       <span class="price-current">
+                                           @((decimal)item.Price).ToString("n2", System.Globalization.CultureInfo.GetCultureInfo("vi-VN")) ₫
+                                       </span>
                                    </p>
                                }
                                else

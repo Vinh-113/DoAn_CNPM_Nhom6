@@ -66,12 +66,21 @@
         }
 
         /* Enhanced Navbar Styles */
-        .navbar {
+/*        .navbar {
             background: rgba(10, 10, 10, 0.95) !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0.8rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }*/
+        .navbar {
+            background: rgba(255, 255, 255, 0.1) !important; /* Lighten background for higher translucency */
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.4s ease;
             padding: 0.8rem 0;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
@@ -198,18 +207,18 @@
 
         /* Enhanced Dropdown Styles */
         .dropdown-menu {
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.1) !important;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-            padding: 0.5rem;
+            padding: 0.8rem 0;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             margin-top: 0.5rem;
             min-width: 220px;
             opacity: 0;
             transform: translateY(-10px) scale(0.95);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
         }
 
@@ -346,7 +355,7 @@
         }
 
         .user-btn:hover::before {
-            left: 0;
+            left: 0; 
         }
 
         .user-btn:hover {
@@ -646,41 +655,41 @@
                 <!-- Category Menu Button -->
                 <div class="dropdown">
                     <button class="category-menu-btn" type="button" id="categoryDropdown">
-                        <div class="hamburger-icon">
+                        <div class="hamburger-icon" style="color: black">
                             <div class="hamburger-line"></div>
                             <div class="hamburger-line"></div>
                             <div class="hamburger-line"></div>
                         </div>
-                        <span>Danh mục</span>
+                        <span style="color: black">Danh mục</span>
                     </button>
                     <ul class="dropdown-menu" id="categoryDropdownMenu">
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial", "Home")">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial", "Home")" style="color:#000 !important;">
                                 <i class="fas fa-laptop"></i>Laptop
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_dt", "Home")">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_dt", "Home")" style="color:#000 !important;">
                                 <i class="fas fa-mobile-alt"></i>Điện thoại
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_ipad", "Home")">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_ipad", "Home")" style="color:#000 !important;">
                                 <i class="fas fa-tablet-alt"></i>Máy tính bảng
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_PC", "Home")">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_PC", "Home")" style="color:#000 !important;">
                                 <i class="fas fa-desktop"></i>PC & Workstation
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_Sounds", "Home")">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_Sounds", "Home")" style="color:#000 !important;">
                                 <i class="fas fa-headphones"></i>Âm thanh
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_pk", "Home")">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_pk", "Home")" style="color:#000 !important;">
                                 <i class="fas fa-plug"></i>Phụ kiện
                             </a>
                         </li>
@@ -709,8 +718,8 @@
                     @if (Session["DaDangNhap"] != null)
                     {
                         <a href="@Url.Action("ThongTinCaNhan","User")" class="user-btn">
-                            <i class="fas fa-user-circle"></i>
-                            <span>@Session["DaDangNhap"]</span>
+                            <i class="fas fa-user-circle" style="color: black" ></i>
+                            <span style="color: black">@Session["DaDangNhap"]</span>
                         </a>
                     }
                     else if (Session["Admin"] != null)
@@ -723,11 +732,11 @@
                     else
                     {
                         <a href="@Url.Action("DangNhap","User")" class="user-btn">
-                            <i class="fas fa-sign-in-alt"></i>
-                            <span>Đăng nhập</span>
+                            <i class="fas fa-sign-in-alt" style="color: black"></i>
+                            <span style="color: black">Đăng nhập</span>
                         </a>
                     }
-                    @Html.Partial("~/Views/Cart/CartPartital.cshtml");
+                    @Html.Partial("~/Views/Cart/CartPartital.cshtml")
                 </div>
             </div>
         </div>
