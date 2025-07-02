@@ -54,7 +54,7 @@ namespace TechStore.Controllers
         [HttpGet]
         public ActionResult DangNhap()
         {
-            ViewBag.ThongBaoLoi = (string)TempData["ThongBaoLoi"];
+    
             return View();
         }
         [HttpPost, ActionName("DangNhap")]

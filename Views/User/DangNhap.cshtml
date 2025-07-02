@@ -348,19 +348,13 @@ body {
         <p>Chào mừng bạn quay trở lại</p>
     </div>
 
-    <!-- Alert Messages -->
-    <div id="alertContainer">
-        <div class="alert alert-info" id="infoAlert" style="display: none;">
-            <i class="fas fa-info-circle" style="margin-right: 8px;"></i>
-            <span id="infoMessage"></span>
-        </div>
-        <div class="alert alert-danger" id="errorAlert" style="display: none;">
-            <i class="fas fa-exclamation-circle" style="margin-right: 8px;"></i>
-            <span id="errorMessage"></span>
-        </div>
-    </div>
-
     <form class="needs-validation" novalidate method="post" action="/User/DangNhap">
+@*        Thông báo đăng nhập thành công hay ko thành công 
+*@        @if (ViewBag.ThongBao != null)
+        {
+            <i class="fas fa-exclamation-circle" style="margin-right: 8px;"></i>
+            <span id="errorMessage">@ViewBag.ThongBao</span>
+        }
         <div class="form-group">
             <label for="nameCus">Tên đăng nhập</label>
             <div class="input-wrapper">
