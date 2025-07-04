@@ -21,6 +21,8 @@ namespace TechStore.Models
         public string ReviewContent { get; set; }
         public Nullable<System.DateTime> ReviewDate { get; set; }
         public string ReviewerName { get; set; }
-       
+    
+        public virtual Customer Customer { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

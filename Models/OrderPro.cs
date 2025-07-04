@@ -23,7 +23,7 @@ namespace TechStore.Models
         public int ID { get; set; }
         public Nullable<System.DateTime> DateOrder { get; set; }
         public Nullable<int> IDCus { get; set; }
-        public string AddressDelivery { get; set; }
+        public string AddressDeliverry { get; set; }
         public string Status { get; set; }
         public Nullable<decimal> TotalAmount { get; set; }
         public string PaymentMethod { get; set; }

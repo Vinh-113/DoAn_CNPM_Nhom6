@@ -68,7 +68,7 @@ namespace TechStore.Controllers
                     Status = "Đã tiếp nhận thành công, đang xử lý",
                     PaymentMethod = paymentmethod,
                     TrackingNumber = GenerateTrackingNumber(),
-                    AddressDelivery = model.Customers.StreetAddress + "," + model.Customers.Ward + "," + model.Customers.District + "," + model.Customers.City,
+                    AddressDeliverry = model.Customers.StreetAddress + "," + model.Customers.Ward + "," + model.Customers.District + "," + model.Customers.City,
                     DeliveryDate = DateTime.Now.AddDays(8),
                     ShippingCost = sum,
                     PaymentStatus = paymentstat

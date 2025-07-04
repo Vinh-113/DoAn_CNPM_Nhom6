@@ -9,7 +9,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="NameUser" Type="nvarchar(max)" />
           <Property Name="RoleUser" Type="nvarchar(max)" />
           <Property Name="PasswordUser" Type="nchar" MaxLength="50" />
@@ -23,7 +23,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IDCate" Type="nchar" MaxLength="20" Nullable="false" />
-          <Property Name="NameCate" Type="nvarchar(max)" />
+          <Property Name="NameCate" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Customer">
           <Key>
@@ -63,7 +63,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DateOrder" Type="date" />
           <Property Name="IDCus" Type="int" />
-          <Property Name="AddressDelivery" Type="nvarchar(max)" />
+          <Property Name="AddressDeliverry" Type="nvarchar(max)" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="2" />
           <Property Name="PaymentMethod" Type="nvarchar" MaxLength="50" />
@@ -95,7 +95,7 @@
           <Property Name="Rating" Type="decimal" Precision="2" Scale="1" Nullable="false" />
           <Property Name="ReviewContent" Type="nvarchar(max)" />
           <Property Name="ReviewDate" Type="datetime" />
-          <Property Name="ReviewerName" Type="nvarchar(max)" />
+          <Property Name="ReviewerName" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <Association Name="FK__OrderDeta__IDOrd__5DCAEF64">
           <End Role="OrderPro" Type="Self.OrderPro" Multiplicity="0..1" />
@@ -133,6 +133,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Reviews__Custome__628FA481">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Reviews" Type="Self.Reviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="IDCus" />
+            </Principal>
+            <Dependent Role="Reviews">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reviews__Product__619B8048">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Reviews" Type="Self.Reviews" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Reviews">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Pro_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
@@ -165,6 +189,14 @@
             <End Role="Customer" EntitySet="Customer" />
             <End Role="OrderPro" EntitySet="OrderPro" />
           </AssociationSet>
+          <AssociationSet Name="FK__Reviews__Custome__628FA481" Association="Self.FK__Reviews__Custome__628FA481">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="Reviews" EntitySet="Reviews" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reviews__Product__619B8048" Association="Self.FK__Reviews__Product__619B8048">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Reviews" EntitySet="Reviews" />
+          </AssociationSet>
           <AssociationSet Name="FK_Pro_Category" Association="Self.FK_Pro_Category">
             <End Role="Category" EntitySet="Category" />
             <End Role="Products" EntitySet="Products" />
@@ -178,7 +210,7 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="NameUser" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="RoleUser" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PasswordUser" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
@@ -192,7 +224,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IDCate" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
-          <Property Name="NameCate" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="NameCate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Pro_Category" FromRole="Category" ToRole="Products" />
         </EntityType>
         <EntityType Name="Customer">
@@ -213,6 +245,7 @@
           <Property Name="IsVIP" Type="Boolean" />
           <Property Name="MembershipLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="OrderProes" Relationship="Self.FK__OrderPro__IDCus__59063A47" FromRole="Customer" ToRole="OrderPro" />
+          <NavigationProperty Name="Reviews" Relationship="Self.FK__Reviews__Custome__628FA481" FromRole="Customer" ToRole="Reviews" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -236,7 +269,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="DateOrder" Type="DateTime" Precision="0" />
           <Property Name="IDCus" Type="Int32" />
-          <Property Name="AddressDelivery" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AddressDeliverry" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="2" />
           <Property Name="PaymentMethod" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -261,6 +294,7 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Category1" Relationship="Self.FK_Pro_Category" FromRole="Products" ToRole="Category" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__IDPro__5CD6CB2B" FromRole="Products" ToRole="OrderDetail" />
+          <NavigationProperty Name="Reviews" Relationship="Self.FK__Reviews__Product__619B8048" FromRole="Products" ToRole="Reviews" />
         </EntityType>
         <EntityType Name="Review">
           <Key>
@@ -272,7 +306,9 @@
           <Property Name="Rating" Type="Decimal" Precision="2" Scale="1" Nullable="false" />
           <Property Name="ReviewContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ReviewDate" Type="DateTime" Precision="3" />
-          <Property Name="ReviewerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__Reviews__Custome__628FA481" FromRole="Reviews" ToRole="Customer" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Reviews__Product__619B8048" FromRole="Reviews" ToRole="Products" />
+          <Property Name="ReviewerName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Pro_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
@@ -295,6 +331,18 @@
             </Principal>
             <Dependent Role="OrderPro">
               <PropertyRef Name="IDCus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Reviews__Custome__628FA481">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="Reviews" Type="Self.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="IDCus" />
+            </Principal>
+            <Dependent Role="Reviews">
+              <PropertyRef Name="CustomerID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -322,6 +370,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__Reviews__Product__619B8048">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="Reviews" Type="Self.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Reviews">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DBTechStoreEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AdminUsers" EntityType="Self.AdminUser" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
@@ -338,6 +398,10 @@
             <End Role="Customer" EntitySet="Customers" />
             <End Role="OrderPro" EntitySet="OrderProes" />
           </AssociationSet>
+          <AssociationSet Name="FK__Reviews__Custome__628FA481" Association="Self.FK__Reviews__Custome__628FA481">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="Reviews" EntitySet="Reviews" />
+          </AssociationSet>
           <AssociationSet Name="FK__OrderDeta__IDOrd__5DCAEF64" Association="Self.FK__OrderDeta__IDOrd__5DCAEF64">
             <End Role="OrderPro" EntitySet="OrderProes" />
             <End Role="OrderDetail" EntitySet="OrderDetails" />
@@ -345,6 +409,10 @@
           <AssociationSet Name="FK__OrderDeta__IDPro__5CD6CB2B" Association="Self.FK__OrderDeta__IDPro__5CD6CB2B">
             <End Role="Products" EntitySet="Products" />
             <End Role="OrderDetail" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Reviews__Product__619B8048" Association="Self.FK__Reviews__Product__619B8048">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Reviews" EntitySet="Reviews" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -414,7 +482,7 @@
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="DateOrder" ColumnName="DateOrder" />
                 <ScalarProperty Name="IDCus" ColumnName="IDCus" />
-                <ScalarProperty Name="AddressDelivery" ColumnName="AddressDelivery" />
+                <ScalarProperty Name="AddressDeliverry" ColumnName="AddressDeliverry" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
                 <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />

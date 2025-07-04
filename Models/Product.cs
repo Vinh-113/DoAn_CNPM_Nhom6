@@ -18,6 +18,7 @@ namespace TechStore.Models
         public Product()
         {
             this.OrderDetails = new HashSet<OrderDetail>();
+            this.Reviews = new HashSet<Review>();
         }
     
         public int ProductID { get; set; }
@@ -32,5 +33,7 @@ namespace TechStore.Models
         public virtual Category Category1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

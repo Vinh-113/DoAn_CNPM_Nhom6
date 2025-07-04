@@ -48,8 +48,20 @@ namespace TechStore.Controllers
             }
             string name = Session["DaDangNhap"].ToString();
             ViewBag.Error = (string)TempData["Loi"];
-            var item = dbO_Cus.Customers.Where(s => s.NameCus == name).FirstOrDefault();
-            return View(item);
+            var customer = dbO_Cus.Customers.FirstOrDefault(s => s.NameCus == name);
+            //Đếm số đơn hàng của khách hàng
+            
+            if (customer != null)
+            {
+                ViewBag.SoDonHang = dbO_Cus.OrderProes.Where(s => s.IDCus == customer.IDCus).Count();
+                ViewBag.TongTien = dbO_Cus.OrderProes.Where(s => s.IDCus == customer.IDCus).Sum(s => s. TotalAmount);
+            }
+            else
+            {
+                ViewBag.SoDonHang = 0;
+                ViewBag.TongTien = 0;
+            }
+            return View(customer);
         }
         [HttpGet]
         public ActionResult DangNhap()

@@ -4,18 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f89e0383678a483f9f62a2adb847d15d" Name="Diagram1" ZoomLevel="64">
-        <EntityTypeShape EntityType="DBTechStoreModel.AdminUser" Width="1.5" PointX="5.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTechStoreModel.Category" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTechStoreModel.Customer" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTechStoreModel.OrderDetail" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTechStoreModel.OrderPro" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTechStoreModel.Product" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="DBTechStoreModel.Review" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+      <Diagram DiagramId="94041fc9174248dfaef8b6c790f98e76" Name="Diagram1">
+        <EntityTypeShape EntityType="DBTechStoreModel.AdminUser" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTechStoreModel.Category" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTechStoreModel.Customer" Width="1.5" PointX="0.75" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTechStoreModel.OrderDetail" Width="1.5" PointX="5.25" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTechStoreModel.OrderPro" Width="1.5" PointX="3" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTechStoreModel.Product" Width="1.5" PointX="3" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DBTechStoreModel.Review" Width="1.5" PointX="8.25" PointY="3" IsExpanded="true" />
         <AssociationConnector Association="DBTechStoreModel.FK_Pro_Category" ManuallyRouted="false" />
         <AssociationConnector Association="DBTechStoreModel.FK__OrderPro__IDCus__59063A47" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTechStoreModel.FK__Reviews__Custome__628FA481" ManuallyRouted="false" />
         <AssociationConnector Association="DBTechStoreModel.FK__OrderDeta__IDOrd__5DCAEF64" ManuallyRouted="false" />
         <AssociationConnector Association="DBTechStoreModel.FK__OrderDeta__IDPro__5CD6CB2B" ManuallyRouted="false" />
+        <AssociationConnector Association="DBTechStoreModel.FK__Reviews__Product__619B8048" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
