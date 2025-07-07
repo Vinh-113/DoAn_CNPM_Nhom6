@@ -51,12 +51,18 @@ namespace TechStore.Controllers
             var customer = dbO_Cus.Customers.FirstOrDefault(s => s.NameCus == name);
             //Đếm số đơn hàng của khách hàng
             
-            if (customer != null)
+           switch (customer)
             {
-                ViewBag.SoDonHang = dbO_Cus.OrderProes.Where(s => s.IDCus == customer.IDCus).Count();
-                ViewBag.TongTien = dbO_Cus.OrderProes.Where(s => s.IDCus == customer.IDCus).Sum(s => s. TotalAmount);
+                case null:
+                    ViewBag.Error = "Không tìm thấy thông tin khách hàng.";
+                    return RedirectToAction("DangNhap");
+                default:
+                    ViewBag.SoDonHang = dbO_Cus.OrderProes.Where(s => s.IDCus == customer.IDCus).Count();
+                    ViewBag.TongTien = dbO_Cus.OrderProes.Where(s => s.IDCus == customer.IDCus).Sum(s => s.TotalAmount);
+                    break;
             }
-            else
+            //Nếu không chưa có mua gì hết
+            if ((int)ViewBag.SoDonHang == 0 || ViewBag.SoDonHang == null)
             {
                 ViewBag.SoDonHang = 0;
                 ViewBag.TongTien = 0;

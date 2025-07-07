@@ -3,99 +3,501 @@
     ViewBag.Title = "PaymentCart";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@if (ViewBag.Error != null)
-{
-    <div class="alert alert-danger">
-        @ViewBag.Error
-    </div>
-}
-@using (Html.BeginForm("PaymentCart", "Cart", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Thông tin khách hàng</h4>
-                    </div>
-                    <div class="card-body">
-                        @Html.HiddenFor(model => model.Customers.IDCus)
-                        <p><strong>Tên người dùng:</strong> @Session["DaDangNhap"]</p>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Customers.NameCus, "Tên khách hàng")
-                            @Html.TextBoxFor(model => model.Customers.NameCus, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Customers.PhoneCus, "Số điện thoại")
-                            @Html.TextBoxFor(model => model.Customers.PhoneCus, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Customers.EmailCus, "Email")
-                            @Html.TextBoxFor(model => model.Customers.EmailCus, new { @class = "form-control" })
-                        </div>
-                        <div class="form-group">
-                            <label>Địa chỉ giao hàng</label>
-                            <div class="form-row">
-                                <div class="col">
-                                    @Html.TextBoxFor(model => model.Customers.StreetAddress, new { @class = "form-control", placeholder = "Số nhà, đường" })
-                                </div>
-                                <div class="col">
-                                    @Html.TextBoxFor(model => model.Customers.Ward, new { @class = "form-control", placeholder = "Phường" })
-                                </div>
-                            </div>
-                            <div class="form-row mt-2">
-                                <div class="col">
-                                    @Html.TextBoxFor(model => model.Customers.District, new { @class = "form-control", placeholder = "Quận" })
-                                </div>
-                                <div class="col">
-                                    @Html.TextBoxFor(model => model.Customers.City, new { @class = "form-control", placeholder = "Thành phố" })
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+    .payment-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        width: 100%;
+        margin: 0;
+        padding: 50px 0;
+        box-sizing: border-box;
+    }
+
+    .payment-wrapper {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 25px;
+    }
+
+    .payment-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .payment-title {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .payment-subtitle {
+        color: rgba(255,255,255,0.8);
+        font-size: 1.1rem;
+        margin-bottom: 0;
+    }
+
+    .modern-card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+        border: none;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        margin-bottom: 35px;
+    }
+
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+    .card-header-modern {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px 35px;
+        border: none;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .card-header-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .card-header-modern h4 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-header-modern .icon {
+            position: absolute;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+
+    .card-body-modern {
+        padding: 40px 35px;
+    }
+
+    .form-group-modern {
+        margin-bottom: 30px;
+        position: relative;
+    }
+
+    .form-control-modern {
+        border: 2px solid #e8ecf4;
+        border-radius: 12px;
+        padding: 15px 20px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #f8f9fc;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+        .form-control-modern:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            background: white;
+            outline: none;
+        }
+
+    .form-label-modern {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .user-info-display {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+        .user-info-display strong {
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+    .address-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .address-grid-full {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .product-table {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        margin-bottom: 25px;
+    }
+
+        .product-table table {
+            width: 100%;
+            margin: 0;
+        }
+
+        .product-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .product-table th {
+            padding: 20px 15px;
+            font-weight: 600;
+            text-align: left;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .product-table td {
+            padding: 20px 15px;
+            border: none;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+            color: #2d3748;
+        }
+
+        .product-table tbody tr:hover {
+            background: #f8f9fc;
+        }
+
+        .product-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+
+        .btn-delete:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+    .total-amount {
+        background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 1.3rem;
+        font-weight: 700;
+    }
+
+    .payment-method-select {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+        .payment-method-select select {
+            appearance: none;
+            background: white url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6,9 12,15 18,9"/></svg>') no-repeat right 20px center;
+            background-size: 20px;
+            padding-right: 50px;
+        }
+
+    .btn-payment {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 18px 40px;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        width: 100%;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .btn-payment::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-payment:hover::before {
+            left: 100%;
+        }
+
+        .btn-payment:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+    .alert-danger {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 30px;
+        font-weight: 500;
+    }
+
+    .progress-steps {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 50px;
+    }
+
+    .step {
+        display: flex;
+        align-items: center;
+        color: rgba(255,255,255,0.6);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+        .step.active {
+            color: white;
+        }
+
+    .step-number {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 10px;
+        font-weight: 600;
+    }
+
+    .step.active .step-number {
+        background: white;
+        color: #667eea;
+    }
+
+    .step-divider {
+        width: 50px;
+        height: 2px;
+        background: rgba(255,255,255,0.2);
+        margin: 0 20px;
+    }
+
+    @@media (max-width: 768px) {
+        .address-grid,
+        .address-grid-full {
+            grid-template-columns: 1fr;
+        }
+
+        .payment-title {
+            font-size: 2rem;
+        }
+
+        .card-body-modern {
+            padding: 25px 20px;
+        }
+
+        .progress-steps {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .step-divider {
+            width: 2px;
+            height: 30px;
+            margin: 10px 0;
+        }
+    }
+</style>
+
+<div class="payment-container">
+    <div class="payment-wrapper">
+        <div class="payment-header">
+            <h1 class="payment-title">Thanh Toán</h1>
+            <p class="payment-subtitle">Hoàn tất đơn hàng của bạn</p>
+        </div>
+
+        <div class="progress-steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <span>Giỏ hàng</span>
             </div>
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Thanh toán</h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Số lượng</th>
-                                    <th>Giá sản phẩm</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var item in Model.mycart)
-                                {
-                                    <tr>
-                                        <td>@item.NamePro</td>
-                                        <td>@item.Number</td>
-                                        <td>@item.Price <span>/1 sản phẩm</span></td>
-                                        <td>@Html.ActionLink("Delete", "RemoveFromCart", new { id = @item.ProductID }, new { @class = "btn btn-danger btn-sm" })</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                        <p class="text-right"><strong>Tổng số tiền phải thanh toán là: @ViewBag.Total</strong></p>
-                        <div class="form-group">
-                            <label for="PaymentMethod">Chọn phương thức thanh toán</label>
-                            @Html.DropDownListFor(model => model.Order.PaymentMethod, new SelectList(new List<SelectListItem>
-                                        {
-                                new SelectListItem { Text = "Thanh toán khi nhận hàng", Value = "2" },
-                                new SelectListItem { Text = "Thanh toán qua thẻ", Value = "1" }
-                            }, "Value", "Text"), new { @class = "form-control" })
-                        </div>
-                        <input type="submit" value="Thanh toán" class="btn btn-success btn-block" />
-                    </div>
-                </div>
+            <div class="step-divider"></div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <span>Thanh toán</span>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <span>Hoàn tất</span>
             </div>
         </div>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">
+                @ViewBag.Error
+            </div>
+        }
+
+        @using (Html.BeginForm("PaymentCart", "Cart", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-lg-7">
+                    <div class="modern-card">
+                        <div class="card-header-modern">
+                            <h4>Thông tin khách hàng</h4>
+                            <div class="icon">👤</div>
+                        </div>
+                        <div class="card-body-modern">
+                            @Html.HiddenFor(model => model.Customers.IDCus)
+
+                            <div class="user-info-display">
+                                <strong>Người dùng đăng nhập</strong>
+                                @Session["DaDangNhap"]
+                            </div>
+
+                            <div class="form-group-modern">
+                                @Html.LabelFor(model => model.Customers.NameCus, "Tên khách hàng", new { @class = "form-label-modern" })
+                                @Html.TextBoxFor(model => model.Customers.NameCus, new { @class = "form-control-modern", placeholder = "Nhập tên đầy đủ" })
+                            </div>
+
+                            <div class="form-group-modern">
+                                @Html.LabelFor(model => model.Customers.PhoneCus, "Số điện thoại", new { @class = "form-label-modern" })
+                                @Html.TextBoxFor(model => model.Customers.PhoneCus, new { @class = "form-control-modern", placeholder = "Nhập số điện thoại" })
+                            </div>
+
+                            <div class="form-group-modern">
+                                @Html.LabelFor(model => model.Customers.EmailCus, "Email", new { @class = "form-label-modern" })
+                                @Html.TextBoxFor(model => model.Customers.EmailCus, new { @class = "form-control-modern", placeholder = "Nhập địa chỉ email" })
+                            </div>
+
+                            <div class="form-group-modern">
+                                <label class="form-label-modern">Địa chỉ giao hàng</label>
+                                <div class="address-grid">
+                                    @Html.TextBoxFor(model => model.Customers.StreetAddress, new { @class = "form-control-modern", placeholder = "Số nhà, tên đường" })
+                                    @Html.TextBoxFor(model => model.Customers.Ward, new { @class = "form-control-modern", placeholder = "Phường/Xã" })
+                                </div>
+                                <div class="address-grid-full">
+                                    @Html.TextBoxFor(model => model.Customers.District, new { @class = "form-control-modern", placeholder = "Quận/Huyện" })
+                                    @Html.TextBoxFor(model => model.Customers.City, new { @class = "form-control-modern", placeholder = "Thành phố/Tỉnh" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="modern-card">
+                        <div class="card-header-modern">
+                            <h4>Đơn hàng của bạn</h4>
+                            <div class="icon">🛒</div>
+                        </div>
+                        <div class="card-body-modern">
+                            <div class="product-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Sản phẩm</th>
+                                            <th>SL</th>
+                                            <th>Giá</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.mycart)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>@item.NamePro</strong>
+                                                </td>
+                                                <td>@item.Number</td>
+                                                <td>
+                                                    <strong>@item.Price</strong>
+                                                    <br><small style="color: #666;">/ sản phẩm</small>
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink("Xóa", "RemoveFromCart", new { id = @item.ProductID }, new { @class = "btn-delete" })
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="total-amount">
+                                <div>Tổng thanh toán</div>
+                                <div>@ViewBag.Total</div>
+                            </div>
+
+                            <div class="payment-method-select">
+                                <label class="form-label-modern">Phương thức thanh toán</label>
+                                @Html.DropDownListFor(model => model.Order.PaymentMethod, new SelectList(new List<SelectListItem>
+                                {
+                                    new SelectListItem { Text = "💵 Thanh toán khi nhận hàng", Value = "2" },
+                                    new SelectListItem { Text = "💳 Thanh toán qua thẻ", Value = "1" }
+                                }, "Value", "Text"), new { @class = "form-control-modern" })
+                            </div>
+
+                            <input type="submit" value="Xác nhận thanh toán" class="btn-payment" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-}
+</div>S
