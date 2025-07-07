@@ -7,6 +7,11 @@
 
 <div class="container mt-4">
     <h3 class="text-center">Chỉnh sửa sản phẩm</h3>
+    <!--Thông báo lỗi-->
+    @if (ViewBag.Loi != null)
+            {
+                <span>@ViewBag.Loi</span>
+            }
     <div class="card mt-4">
         <div class="card-body">
             <h4>Product</h4>

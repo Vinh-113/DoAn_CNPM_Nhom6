@@ -573,29 +573,40 @@
                 string membershipClass = "";
                 string memberShip = "";
 
-                // Ngưỡng tiếp theo để lên hạng mới là 5 triệu (hạng đồng).
-                if (totalSpent <= 5000000)
+                switch (Model.MembershipLevel)
                 {
-                    muctoida = Convert.ToDecimal(5 * Math.Pow(10, 6));
-                    ViewBag.Color = "vip-progress-bar-inner-bronze";
-                    membershipClass = "membership-bronze";
-                    memberShip = "Đồng";
-                }
-                else if (totalSpent <= 15000000)
-                {
-                    //Hạng bạc
-                    muctoida = Convert.ToDecimal(155 * Math.Pow(10, 6));
-                    ViewBag.Color = "vip-progress-bar-inner-sliver";
-                    membershipClass = "membership-sliver";
-                    memberShip = "Bạc";
-                }
-                else
-                { //Hạng vàn
-                    muctoida = Convert.ToDecimal(5 * Math.Pow(10, 9));
-                    ViewBag.Color = "vip-progress-bar-inner-gold";
-                    membershipClass = "membership-gold";
-                    memberShip = "Vàng";
+                    case not null: //Có vip
+                        // Ngưỡng tiếp theo để lên hạng mới là 5 triệu(hạng đồng).
+                        if (totalSpent <= 5000000)
+                        {
+                            muctoida = Convert.ToDecimal(5 * Math.Pow(10, 6));
+                            ViewBag.Color = "vip-progress-bar-inner-bronze";
+                            membershipClass = "membership-bronze";
+                            memberShip = Model.MembershipLevel;
+                        }
+                        else if (totalSpent <= 15000000)
+                        {
+                            //Hạng bạc
+                            muctoida = Convert.ToDecimal(15 * Math.Pow(10, 6));
+                            ViewBag.Color = "vip-progress-bar-inner-sliver";
+                            membershipClass = "membership-sliver";
+                            memberShip = Model.MembershipLevel;
+                        }
+                        else
+                        { //Hạng vàn
+                            muctoida = Convert.ToDecimal(5 * Math.Pow(10, 9));
+                            ViewBag.Color = "vip-progress-bar-inner-gold";
+                            membershipClass = "membership-gold";
+                            memberShip = Model.MembershipLevel;
 
+                        }
+                        break;
+                    default: //Không có vip
+                        muctoida = Convert.ToDecimal(Math.Pow(10, 6));
+                        ViewBag.Color = "vip-progress-bar-inner-bronze";
+                        membershipClass = "membership-bronze";
+                        memberShip = "Chưa phải là VIP";
+                        break;
                 }
 
                 decimal progressPercent = totalSpent >= muctoida
@@ -656,4 +667,39 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var progressPercent = @progressPercent;
+        var customerId = @Model.IDCus;
+        var totalSpent = @totalSpent; // đảm bảo @totalSpent là số
+        let memberShip_set = "";
+
+        if (totalSpent > 1000000 && totalSpent < 15000000) {
+            memberShip_set = "Đồng";
+        } else if (totalSpent >= 15000000 && totalSpent < 5000000000) {
+            memberShip_set = "Bạc";
+        } else {
+            memberShip_set = "Vàng";
+        }
+
+        if (progressPercent >= 100) {
+            // Gọi AJAX để set VIP
+            fetch('@Url.Action("SetVIP", "Customer")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() // Nếu có AntiForgeryToken
+                },
+                body: JSON.stringify({ id: customerId }, { membership: memberShip_set })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Có thể reload hoặc hiển thị thông báo
+                    console.log("Đã cập nhật VIP thành công!");
+                }
+            });
+        }
+    });
+</script>
 

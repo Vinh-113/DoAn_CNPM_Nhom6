@@ -69,6 +69,19 @@ namespace TechStore.Controllers
             }
             return View(customer);
         }
+        [HttpPost]
+        public ActionResult SetVIP(int id, String membership)
+        {
+            var customer = dbO_Cus.Customers.FirstOrDefault(c => c.IDCus == id);
+            if (customer != null)
+            {
+                customer.IsVIP = true;
+                customer.MembershipLevel = membership != null ? membership : "Thường";
+                dbO_Cus.SaveChanges();
+                return Json(new { success = true });
+            }
+            return Json(new { success = false });
+        }
         [HttpGet]
         public ActionResult DangNhap()
         {

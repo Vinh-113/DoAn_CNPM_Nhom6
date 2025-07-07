@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -56,17 +57,32 @@ namespace TechStore.Controllers
             return View(item);
         }
         [HttpPost, ActionName("Edit")]
-        public ActionResult Edit_Up(int id, Product pro)
+        public ActionResult Edit_Up(Product pro)
         {
-            try
+            var existPro = db.Products.FirstOrDefault(s => s.ProductID == pro.ProductID);
+            if (existPro == null)
             {
-                db.Entry(pro).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
+                //Thông báo lỗi 
+                ViewBag.Loi = "Không thể thay đổi vì có lỗi ID";
+                return View(pro);
             }
-            catch
+            else
             {
-                ViewBag.Loi = "Không thể thay đổi vì đã có sản phẩm dùng danh mục đó";
-                return View();
+                try
+                {
+                    // Cập nhật từng trường
+                    existPro.NamePro = pro.NamePro;
+                    existPro.DecriptionPro = pro.DecriptionPro;
+                    existPro.Price = pro.Price;
+                    existPro.Discount = pro.Discount;
+                    existPro.ImagePro = pro.ImagePro;
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Loi = "Không thể thay đổi vì có lỗi " + ex.Message;
+                    return View(pro);
+                }
             }
             return RedirectToAction("Index");
         }

@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using System.Linq;
+using System;
 using System.Net;
 using System.Web.Mvc;
 using TechStore.Models;
@@ -81,10 +82,10 @@ namespace TechStore.Controllers
                 db.Entry(category).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-            catch
+            catch(Exception ex)
             {
-                ViewBag.Loi = "Không thể cập nhật danh mục này";
-                return View();
+                ViewBag.Loi = "Không thể cập nhật danh mục này" + ex.Message;
+                return View(category);
             }
             return RedirectToAction("Index");
 
@@ -119,10 +120,10 @@ namespace TechStore.Controllers
                     db.Categories.Remove(item);
                     db.SaveChanges();
                 }
-                catch
+                catch(Exception ex)
                 {
-                    ViewBag.Loi = "Không thể xóa danh mục này vì có sản phẩm dùng danh mục này";
-                    return View();
+                    ViewBag.Loi = "Không thể xóa danh mục này vì có sản phẩm dùng danh mục này" + ex.Message;
+                    return View(id);
                 }
 
             }
