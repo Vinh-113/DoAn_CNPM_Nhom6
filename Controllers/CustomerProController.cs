@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Web.Mvc;
 using TechStore.Models;
 
@@ -29,22 +30,29 @@ namespace TechStore.Controllers
 
 
         [HttpPost]
-        public ActionResult CreateReview(RelatedPro pro)
+        public ActionResult CreateReview(decimal score , string content, int productID)
         {
             var user = (string)Session["DaDangNhap"];
             var cus = _context.Customers.FirstOrDefault(s => s.NameCus == user);
+            try { 
             var re = new Review()
             {
-                ProductID = pro.Product.ProductID,
+                ProductID =productID,
                 CustomerID = cus.IDCus,
-                Rating = pro.Review.Rating,
-                ReviewContent = pro.Review.ReviewContent,
+                Rating = score,
+                ReviewContent = content,
                 ReviewDate = DateTime.Now,
                 ReviewerName = cus.NameCus
             };
-            db.Reviews.Add(re);
-            db.SaveChanges();
-            return RedirectToAction("Details", "CustomerPro", new { id = pro.Product.ProductID });
+                db.Reviews.Add(re);
+                db.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Bị lỗi khi up review " + ex);
+                return Json(new { success = false});
+            }
+            return Json(new { success = true });
 
         }
     }

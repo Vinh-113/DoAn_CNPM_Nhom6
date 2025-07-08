@@ -383,7 +383,6 @@
                                 <th><i class="fas fa-dollar-sign me-1"></i>Tổng tiền</th>
                                 <th><i class="fas fa-credit-card me-1"></i>Thanh toán</th>
                                 <th><i class="fas fa-truck me-1"></i>Giao hàng</th>
-                                <th><i class="fas fa-barcode me-1"></i>Mã vận đơn</th>
                                 <th><i class="fas fa-check-circle me-1"></i>TT Thanh toán</th>
                                 <th><i class="fas fa-shipping-fast me-1"></i>Phí ship</th>
                                 <th><i class="fas fa-user me-1"></i>Khách hàng</th>
@@ -394,19 +393,19 @@
                             @foreach (var item in Model)
                             {
                                 <tr>
-                                    <td><strong>#@item.ID</strong></td>
+                                    @Html.HiddenFor(modelItem => item.ID);
+                                    <td>@Html.DisplayFor(modelItem => item.TrackingNumber)</td>
                                     <td>@Html.DisplayFor(modelItem => item.DateOrder)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.AddressDelivery)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.AddressDeliverry)</td>
                                     <td>
                                         <span class="status-badge @(item.Status == "Completed" ? "status-completed" :
-                                                                   item.Status == "Cancelled" ? "status-cancelled" : "status-pending")">
+             item.Status == "Cancelled" ? "status-cancelled" : "status-pending")">
                                             @Html.DisplayFor(modelItem => item.Status)
                                         </span>
                                     </td>
                                     <td class="amount-cell">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
                                     <td>@Html.DisplayFor(modelItem => item.PaymentMethod)</td>
                                     <td>@Html.DisplayFor(modelItem => item.DeliveryDate)</td>
-                                    <td>@Html.DisplayFor(modelItem => item.TrackingNumber)</td>
                                     <td>
                                         <span class="payment-badge @(item.PaymentStatus == "Paid" ? "payment-paid" : "payment-unpaid")">
                                             @Html.DisplayFor(modelItem => item.PaymentStatus)
@@ -415,12 +414,7 @@
                                     <td>@Html.DisplayFor(modelItem => item.ShippingCost)</td>
                                     <td class="customer-name">@Html.DisplayFor(modelItem => item.Customer.NameCus)</td>
                                     <td>
-                                        @Html.ActionLink("Hủy đơn", "Delete_KH", new { id = item.ID },
-                                            new
-                                                 {
-                                                     @class = "cancel-btn",
-                                                 onclick = "return confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?');"
-                                                 })
+                                        <span class="cancel-btn" data-tracking="@item.TrackingNumber">Hủy đơn</span>
                                     </td>
                                 </tr>
                             }
@@ -451,20 +445,51 @@
         const cancelBtns = document.querySelectorAll('.cancel-btn');
         cancelBtns.forEach(btn => {
             btn.addEventListener('click', function (e) {
-                const originalText = this.innerHTML;
-                this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Đang xử lý...';
-                this.style.pointerEvents = 'none';
+                const trackingNumber = this.dataset.tracking;
+                if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?: ' + trackingNumber)) {
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Đang xử lý...';
+                    this.style.pointerEvents = 'none';
+                    setTimeout(() => {
+                        fetch('@Url.Action("Delete_KH", "OrderPro")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ id: trackingNumber })
+                        }).then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                if (confirm('Đã hủy thành công, nhấn ok để reset trang lại')) {
+                                    window.location.href = "@Url.Action("ThongTinCaNhan", "User")";
+                                }
+                                else
+                                    return;
+                            }
+                            else {
+                                if (confirm('Hủy đơn không thành công, nhấn ok để reload lại trang và hủy lại')) {
+                                    window.location.href = "@Url.Action("ThongTinCaNhan", "User")";
+                                }
+                                else {
+                                    this.innerHTML = originalText;
+                                    this.style.pointerEvents = 'auto';
+                                    return;
 
-                // If user cancels the confirm dialog, restore button
-                setTimeout(() => {
-                    if (!confirm('Bạn có chắc chắn muốn hủy đơn hàng này không?')) {
-                        this.innerHTML = originalText;
-                        this.style.pointerEvents = 'auto';
-                    }
-                }, 100);
+                                }
+                            }
+                        }
+                        );
+                    }, 100);
+                }
+                else {
+                    this.innerHTML = originalText;
+                    this.style.pointerEvents = 'auto';
+                }
             });
         });
+        function AjaxCancel_order() {
 
+        }
         // Smooth horizontal scroll for table
         const tableContainer = document.querySelector('.table-responsive');
         if (tableContainer) {

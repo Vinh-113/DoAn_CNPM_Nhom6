@@ -920,8 +920,11 @@
                         <label class="form-label" for="reviewContent">Nội dung đánh giá</label>
                         <textarea id="reviewContent" class="form-input form-textarea" placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..." required></textarea>
                     </div>
+                    @{ 
+                        var reviewerName = (string)Session["DaDangNhap"];
+                    }
 
-                    <button type="submit" class="btn-submit-review">
+                    <button type="submit" class="btn-submit-review" data-name="@reviewerName">
                         <i class="fas fa-paper-plane"></i> Gửi đánh giá
                     </button>
                 </form>
@@ -933,99 +936,40 @@
                     <i class="fas fa-comments"></i> Đánh giá từ khách hàng
                 </h4>
 
-                <!-- Review Item 1 -->
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">A</div>
-                            <div class="reviewer-details">
-                                <h6>Anh Tuấn</h6>
-                                <span class="review-date">15/06/2024</span>
+                <!-- Review Item -->
+                @foreach (var item in Model.RelatedReviews)
+                {
+                    <div class="review-item">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar">@item.ReviewerName.ToCharArray()[0]</div>
+                                <div class="reviewer-details">
+                                    <h6>@item.ReviewerName</h6>
+                                    <span class="review-date">@item.ReviewDate</span>
+                                </div>
+                            </div>
+                            <div class="review-rating">
+                                @for (decimal i = 0; i < item.Rating; i++)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
                             </div>
                         </div>
-                        <div class="review-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
+                        <div class="review-content">
+                            @item.ReviewContent
+                        </div>
+                        <div class="review-actions">
+                            <button class="review-action-btn">
+                                <i class="fas fa-thumbs-up"></i> Hữu ích (12)
+                            </button>
+                            <button class="review-action-btn">
+                                <i class="fas fa-reply"></i> Trả lời
+                            </button>
                         </div>
                     </div>
-                    <div class="review-content">
-                        Sản phẩm rất tốt, chất lượng ổn định. Giao hàng nhanh, đóng gói cẩn thận. Mình đã sử dụng được 2 tuần và cảm thấy rất hài lòng. Sẽ tiếp tục ủng hộ shop!
-                    </div>
-                    <div class="review-actions">
-                        <button class="review-action-btn">
-                            <i class="fas fa-thumbs-up"></i> Hữu ích (12)
-                        </button>
-                        <button class="review-action-btn">
-                            <i class="fas fa-reply"></i> Trả lời
-                        </button>
-                    </div>
-                </div>
+                }
 
                 <!-- Review Item 2 -->
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">M</div>
-                            <div class="reviewer-details">
-                                <h6>Minh Hương</h6>
-                                <span class="review-date">10/06/2024</span>
-                            </div>
-                        </div>
-                        <div class="review-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="far fa-star"></i>
-                        </div>
-                    </div>
-                    <div class="review-content">
-                        Chất lượng sản phẩm khá tốt, đúng như mô tả. Tuy nhiên thời gian giao hàng hơi chậm. Nhưng nhìn chung mình vẫn hài lòng với sản phẩm này.
-                    </div>
-                    <div class="review-actions">
-                        <button class="review-action-btn">
-                            <i class="fas fa-thumbs-up"></i> Hữu ích (8)
-                        </button>
-                        <button class="review-action-btn">
-                            <i class="fas fa-reply"></i> Trả lời
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Review Item 3 -->
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="reviewer-info">
-                            <div class="reviewer-avatar">Q</div>
-                            <div class="reviewer-details">
-                                <h6>Quang Minh</h6>
-                                <span class="review-date">05/06/2024</span>
-                            </div>
-                        </div>
-                        <div class="review-rating">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <div class="review-content">
-                        Tuyệt vời! Sản phẩm chất lượng cao, đúng như mong đợi. Dịch vụ khách hàng tốt, nhân viên nhiệt tình tư vấn. Sẽ giới thiệu cho bạn bè.
-                    </div>
-                    <div class="review-actions">
-                        <button class="review-action-btn">
-                            <i class="fas fa-thumbs-up"></i> Hữu ích (15)
-                        </button>
-                        <button class="review-action-btn">
-                            <i class="fas fa-reply"></i> Trả lời
-                        </button>
-                    </div>
-                </div>
-
                 <!-- Load more button -->
                 <div class="text-center" style="margin-top: 30px;">
                     <button class="btn-modern btn-secondary-modern">
@@ -1132,33 +1076,49 @@
         ratingText.textContent = ratingTexts[rating] || 'Chưa chọn';
     }
 
-    // Xử lý form đánh giá
-    document.getElementById('reviewForm').addEventListener('submit', function (e) {
-        e.preventDefault();
+       // Xử lý form đánh giá
+    const btnReview = document.querySelectorAll(".btn-submit-review");
+    btnReview.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            const name = this.dataset.name;
+            const content = document.getElementById('reviewContent').value;
 
-        const name = document.getElementById('reviewerName').value;
-        const content = document.getElementById('reviewContent').value;
-
-        if (selectedRating === 0) {
-            alert('Vui lòng chọn số sao đánh giá!');
-            return;
-        }
-
-        if (!name.trim() || !content.trim()) {
-            alert('Vui lòng điền đầy đủ thông tin!');
-            return;
-        }
-
-        // Hiển thị thông báo thành công
-        alert('Cảm ơn bạn đã đánh giá! Đánh giá của bạn sẽ được xem xét và hiển thị sớm.');
-
-        // Reset form
-        this.reset();
-        selectedRating = 0;
-        updateStarDisplay(0);
-        updateRatingText(0);
+            if (selectedRating === 0) {
+                alert('Vui lòng chọn số sao đánh giá!');
+                return;
+            }
+            else if (!content.trim()) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+            else {
+                fetch('@Url.Action("CreateReview", "CustomerPro")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ score: selectedRating, content: content, productID: @Model.Product.ProductID })
+                }).then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            if (confirm("Đánh giá đã thành công, sẽ được hiện lên sớm nhất")) {
+                            }
+                            else {
+                                return;
+                            }
+                        }
+                        else {
+                            if (confirm("Đánh giá không thành công, nhấn ok để reload và đánh giá lại")) {
+                            }
+                            else {
+                                return;
+                            }
+                        }
+                    }
+                    ).catch(er => alert("Có lỗi khi thực hiện gửi sau khi đã nhấn nút" + ex));
+            }
+        });
     });
-
     // Xử lý nút hữu ích
     document.querySelectorAll('.review-action-btn').forEach(btn => {
         btn.addEventListener('click', function () {

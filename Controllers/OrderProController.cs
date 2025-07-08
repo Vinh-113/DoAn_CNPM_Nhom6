@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
@@ -103,34 +104,48 @@ namespace TechStore.Controllers
                 return View();
             return View(list);
         }
-        [HttpGet]
-        public ActionResult Delete_KH(int? id)
-        {
-            if (id == null)
-            {
-                TempData["Error"] = "Không thể hủy đơn được";
-                return RedirectToAction("Index");
-            }
-            var item = db.OrderProes.Find(id);
-            return View(item);
+        /*  [HttpGet]
+          public ActionResult Delete_KH(int? id)
+          {
+              if (id == null)
+              {
+                  TempData["Error"] = "Không thể hủy đơn được";
+                  return RedirectToAction("Index");
+              }
+              var item = db.OrderProes.Find(id);
+              return View(item);
 
-        }
-        [HttpPost, ActionName("Delete_KH")]
-        [ValidateAntiForgeryToken]
-        public ActionResult ActionDelete_KH(int id)
+          }
+          [HttpPost, ActionName("Delete_KH")]
+          [ValidateAntiForgeryToken]*/
+        [HttpPost]
+        public ActionResult Delete_KH(string id)
         {
+            System.Diagnostics.Debug.WriteLine("Đã tìm thấy " + id);
             try
             {
-                var item = db.OrderProes.Where(s => s.ID == id).FirstOrDefault();
-                db.OrderProes.Remove(item);
-                db.SaveChanges();
+                var item = db.OrderProes.Where(s => s.TrackingNumber == id).FirstOrDefault();
+                var or_detals = db.OrderDetails.FirstOrDefault(s => s.IDOrder == item.ID);
+                if (item != null && or_detals != null)
+                {
+                    //Gỡ OrderDetails trước
+                    db.OrderDetails.Remove(or_detals);
+                    //Mói gỡ thằng này sau
+                    db.OrderProes.Remove(item);
+                    db.SaveChanges();
+                }
+                else
+                    System.Diagnostics.Debug.WriteLine("Không có ID" + id);
+                
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                TempData["Error"] = "Không thể hủy đơn được";
-
+               if (e != null)
+                {
+                    return Json(new { success = false });
+                }
             }
-            return RedirectToAction("Index_KH", "OrderPro");
+            return Json(new { success = true });
         }
 
     }

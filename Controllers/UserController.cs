@@ -70,8 +70,9 @@ namespace TechStore.Controllers
             return View(customer);
         }
         [HttpPost]
-        public ActionResult SetVIP(int id, String membership)
+        public ActionResult SetVIP(int id, String membership, String message)
         {
+            System.Diagnostics.Debug.WriteLine(message);
             var customer = dbO_Cus.Customers.FirstOrDefault(c => c.IDCus == id);
             if (customer != null)
             {
