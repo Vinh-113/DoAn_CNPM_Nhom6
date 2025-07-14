@@ -58,17 +58,48 @@ namespace TechStore.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,IDProduct,IDOrder,Quantity,UnitPrice,Discount,Subtotal,Note")] OrderDetail orderDetail)
+        public ActionResult Edit(OrderPro orderPro)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(orderDetail).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    // Get the existing order from the database
+                    var existingOrder = db.OrderProes.AsNoTracking().FirstOrDefault(o => o.ID == orderPro.ID);
+                    if (existingOrder == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    // Update only the specific fields you want to allow editing
+                    // This prevents other fields from being set to null
+                    var entry = db.Entry(existingOrder);
+                    entry.State = EntityState.Detached; // Detach the existing entity
+
+                    // Attach the new entity but tell EF it's unchanged
+                    db.OrderProes.Attach(orderPro);
+
+                    // Mark only specific properties as modified
+                    var orderEntry = db.Entry(orderPro);
+                    orderEntry.Property(o => o.Status).IsModified = true;
+                    orderEntry.Property(o => o.PaymentStatus).IsModified = true;
+                    orderEntry.Property(o => o.TrackingNumber).IsModified = true;
+                    orderEntry.Property(o => o.DeliveryDate).IsModified = true;
+                    // Add any other properties you want to allow editing
+
+                    db.SaveChanges();
+
+                    TempData["Success"] = "Đơn hàng đã được cập nhật thành công";
+                    return RedirectToAction("Index", "OrderPro");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Lỗi khi cập nhật: " + ex.Message);
+                    TempData["Error"] = "Lỗi khi cập nhật đơn hàng: " + ex.Message;
+                }
             }
-            ViewBag.IDOrder = new SelectList(db.OrderProes, "ID", "AddressDelivery", orderDetail.IDOrder);
-            ViewBag.IDProduct = new SelectList(db.Products, "ProductID", "NamePro", orderDetail.IDProduct);
-            return View(orderDetail);
+
+            return RedirectToAction("Index", "OrderPro");
         }
         [HttpGet]
         public ActionResult Delete(int? id)
@@ -86,9 +117,23 @@ namespace TechStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ActionDelete(int id)
         {
+            System.Diagnostics.Debug.WriteLine("Đã tìm thấy " + id);
+            
             var item = db.OrderProes.Where(s => s.ID == id).FirstOrDefault();
-            db.OrderProes.Remove(item);
-            db.SaveChanges();
+            var or_detals = db.OrderDetails.FirstOrDefault(s => s.IDOrder == item.ID);
+            if (item != null && or_detals != null)
+            {
+                //Gỡ OrderDetails trước
+                db.OrderDetails.Remove(or_detals);
+                //Mói gỡ thằng này sau
+                db.OrderProes.Remove(item);
+                db.SaveChanges();
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("Không có ID" + id);
+            }
+
             return RedirectToAction("Index", "OrderPro");
         }
         //Khách hàng xem hay hủy đơn hàng

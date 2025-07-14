@@ -349,11 +349,14 @@ body {
     </div>
 
     <form class="needs-validation" novalidate method="post" action="/User/DangNhap">
-@*        Thông báo đăng nhập thành công hay ko thành công 
-*@        @if (ViewBag.ThongBao != null)
+        @*        Thông báo đăng nhập thành công hay ko thành công
+        *@       
+        @if (ViewBag.ThongBao != null)
         {
-            <i class="fas fa-exclamation-circle" style="margin-right: 8px;"></i>
-            <span id="errorMessage">@ViewBag.ThongBao</span>
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-circle"></i>
+                <span id="errorMessage">@ViewBag.ThongBao</span>
+            </div>
         }
         <div class="form-group">
             <label for="nameCus">Tên đăng nhập</label>

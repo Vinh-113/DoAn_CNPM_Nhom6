@@ -114,7 +114,6 @@ namespace TechStore.Controllers
 
             if (item != null)
             {
-
                 try
                 {
                     db.Categories.Remove(item);
@@ -123,7 +122,7 @@ namespace TechStore.Controllers
                 catch(Exception ex)
                 {
                     ViewBag.Loi = "Không thể xóa danh mục này vì có sản phẩm dùng danh mục này" + ex.Message;
-                    return View(id);
+                    return View(item);
                 }
 
             }

@@ -34,6 +34,8 @@ namespace TechStore.Models
         public Nullable<System.DateTime> RegisteredDate { get; set; }
         public Nullable<bool> IsVIP { get; set; }
         public string MembershipLevel { get; set; }
+        public Nullable<bool> IsBanned { get; set; }
+        public string ReasonBanned { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderPro> OrderProes { get; set; }

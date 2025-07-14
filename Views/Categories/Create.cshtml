@@ -1,42 +1,60 @@
 ﻿@model TechStore.Models.Category
 
 @{
-    ViewBag.Title = "Create Category";
+    ViewBag.Title = "Tạo danh mục mới";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2 class="text-center">Tạo danh mục mới</h2>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-folder-plus me-2"></i>Tạo danh mục mới
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                @Html.EditorFor(model => model.IDCate, new { htmlAttributes = new { @class = "form-control", placeholder = "Mã danh mục" } })
+                                @Html.LabelFor(model => model.IDCate, "Mã danh mục",new { @class = "control-label" })
+                                @Html.ValidationMessageFor(model => model.IDCate, "", new { @class = "text-danger" })
+                            </div>
+                            <small class="text-muted">Nhập mã danh mục duy nhất</small>
+                        </div>
 
-<div class="form-horizontal" style="width: 80%; margin:auto">
-    <hr />
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="mb-4">
+                            <div class="form-floating">
+                                @Html.EditorFor(model => model.NameCate, new { htmlAttributes = new { @class = "form-control", placeholder = "Tên danh mục" } })
+                                @Html.LabelFor(model => model.NameCate, "Tên danh mục",new { @class = "control-label" })
+                                @Html.ValidationMessageFor(model => model.NameCate, "", new { @class = "text-danger" })
+                            </div>
+                            <small class="text-muted">Nhập tên danh mục sản phẩm</small>
+                        </div>
 
-    <div class="form-group">
-        @Html.LabelFor(model => model.IDCate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.IDCate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.IDCate, "", new { @class = "text-danger" })
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Trở về danh sách
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-1"></i>Tạo danh mục
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(model => model.NameCate, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.EditorFor(model => model.NameCate, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.NameCate, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Tạo" class="btn btn-primary" />
-        </div>
-    </div>
-    <div>
-        @Html.ActionLink("Trở về danh sách", "Index", null, new { @class = "btn btn-secondary" })
     </div>
 </div>
-}
 
+
+    <script>$(document).ready(function() {
+            // Auto focus on first input field when page loads
+            $('form input:first').focus();
+        });</script>

@@ -18,7 +18,7 @@
             <hr />
             <div class="row">
                 <div class="col-md-4">
-                    <img src="~/Images/@Model.ImagePro" class="img-fluid" />
+                    <img id="imagePreview" src="~/Images/@Model.ImagePro" class="img-fluid" />
                 </div>
                 <div class="col-md-8">
                     @using (Html.BeginForm("Edit", "Product", FormMethod.Post))
@@ -26,30 +26,30 @@
                         @Html.AntiForgeryToken()
                         @Html.HiddenFor(model => model.ProductID)
                         <div class="form-group">
-                            @Html.LabelFor(model => model.NamePro)
+                            <p>Tên sản phẩm</p>
                             @Html.EditorFor(model => model.NamePro, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.NamePro, "", new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.DecriptionPro)
+                            <p>Mô tả sản phẩm</p>
                             @Html.TextAreaFor(model => model.DecriptionPro, new { @class = "form-control form-control-lg", rows = 5 })
                             @Html.ValidationMessageFor(model => model.DecriptionPro, "", new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Price)
+                            <p>Gía thành sản phẩm</p>
                             @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(model => model.Category1.NameCate)
+                            <p>Thuộc phân loại</p>
                             @Html.EditorFor(model => model.Category1.NameCate, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Category1.NameCate, "", new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
                             <label>Chọn hình</label>
-                            <input type="file" name="ImagePro" class="form-control" />
+                            <input type="file" name="ImagePro" accept="image/*" class="form-control" onchange="previewImage(event)" />
                         </div>
-                        <hr/>
+                        <hr />
                         <div class="form-actions">
                             <input type="submit" value="Lưu" class="btn btn-success" /> |
                             @Html.ActionLink("Quay lại trang trước", "Index", "", htmlAttributes: new { @class = "btn btn-secondary" })
@@ -60,3 +60,17 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    function previewImage(event) {
+        var input = event.target; 
+        var reader = new FileReader();
+        if (input.files != null && input.files[0]) {
+            reader.readAsDataURL(input.files[0]);// Đọc hình lên
+        }
+        reader.onload = function(){
+            var img = document.getElementById('imagePreview');
+            img.src = reader.result; //Đưa hình vừa đọc được vào biến img
+            img.style.display = 'block'; //Hiện nó lên
+        };
+    }
+</script>

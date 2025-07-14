@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Infrastructure;
+﻿using System;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web.Mvc;
 using TechStore.Models;
@@ -118,6 +119,50 @@ namespace TechStore.Controllers
                 }
             }
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult BanUser(int customerId, string reason)
+        {
+            try
+            {
+                // Find the customer and validate they exist
+                var customer = dBO.Customers.FirstOrDefault(c => c.IDCus == customerId);
+                if (customer == null)
+                {
+                    return Json(new { success = false });
+                }
+
+                // Update customer ban status
+                customer.IsBanned = true;
+                customer.ReasonBanned = reason;
+                // Print to output console
+                System.Diagnostics.Debug.WriteLine(customer.ReasonBanned);
+                // Save changes
+                dBO.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                dBO.SaveChanges();
+
+                return Json(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details for debugging
+                System.Diagnostics.Debug.WriteLine("Error banning user: " + ex.Message);
+                return Json(new { success = false });
+            }
+        }
+
+        public ActionResult UnbanUser(int id)
+        {
+            var customer = dBO.Customers.FirstOrDefault(c => c.IDCus == id);
+            if (customer != null)
+            {
+                customer.IsBanned = false;
+                customer.ReasonBanned = null;
+                dBO.Entry(customer).State = System.Data.Entity.EntityState.Modified;
+                dBO.SaveChanges();
+            }
+            return RedirectToAction("Index");
         }
     }
 }

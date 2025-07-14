@@ -25,7 +25,8 @@ namespace TechStore.Controllers
                               CustomerName = customer.NameCus,
                               Rating = review.Rating,
                               ReviewContent = review.ReviewContent,
-                              ReviewDate = review.ReviewDate
+                              ReviewDate = review.ReviewDate,
+                              IsHidden = review.IsHidden ?? false // Default to false if IsHidden is null
                           };
 
             return View(reviews.ToList());
@@ -126,14 +127,53 @@ namespace TechStore.Controllers
         // POST: Reviews/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult HiddenConfirmed(int id)
         {
-            Review review = db.Reviews.Find(id);
+            if (ModelState.IsValid)
+            {
+                var review = db.Reviews.Find(id);
+                if (review != null)
+                {
+                    // xem ẩn thay vì xóa
+                    review.IsHidden = true; 
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+                db.Entry(review).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            /*Review review = db.Reviews.Find(id);
             db.Reviews.Remove(review);
-            db.SaveChanges();
+            db.SaveChanges();*/
             return RedirectToAction("Index");
         }
-
+        [HttpPost]
+        public ActionResult ShowReview(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                var review = db.Reviews.Find(id);
+                if (review != null)
+                {
+                    // xem ẩn thay vì xóa
+                    review.IsHidden = false;
+                }
+                else
+                {
+                    return Json(new { success = false });
+                }
+                db.Entry(review).State = EntityState.Modified;
+                db.SaveChanges();
+                return Json(new { success = true });  
+            }
+            /*Review review = db.Reviews.Find(id);
+            db.Reviews.Remove(review);
+            db.SaveChanges();*/
+            return RedirectToAction("Index");
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -96,6 +96,11 @@ namespace TechStore.Controllers
 
             if (user != null)
             {
+                if (user.IsBanned == true)
+                {
+                    ViewBag.ThongBao = "Không đăng nhập thành công do bạn đã bị ban, lý do là :  " + user.ReasonBanned;
+                    return View();
+                }
                 Session["DaDangNhap"] = customer.NameCus;
                 return RedirectToAction("Index", "Home");
             }
@@ -116,7 +121,7 @@ namespace TechStore.Controllers
         }
         private Customer ValidateUser(string username, string password)
         {
-            return dbO_Cus.Customers.FirstOrDefault(s => s.NameCus == username && s.PassCus == password);
+            return dbO_Cus.Customers.FirstOrDefault(s => s.NameCus == username && s.PassCus == password );
         }
         [HttpGet]
         public ActionResult ResetPassword()
