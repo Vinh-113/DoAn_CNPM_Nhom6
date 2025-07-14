@@ -65,31 +65,14 @@ namespace TechStore.Controllers
                 try
                 {
                     // Get the existing order from the database
-                    var existingOrder = db.OrderProes.AsNoTracking().FirstOrDefault(o => o.ID == orderPro.ID);
+                    var existingOrder = db.OrderProes.FirstOrDefault(o => o.ID == orderPro.ID);
                     if (existingOrder == null)
                     {
                         return HttpNotFound();
                     }
-
-                    // Update only the specific fields you want to allow editing
-                    // This prevents other fields from being set to null
-                    var entry = db.Entry(existingOrder);
-                    entry.State = EntityState.Detached; // Detach the existing entity
-
-                    // Attach the new entity but tell EF it's unchanged
-                    db.OrderProes.Attach(orderPro);
-
-                    // Mark only specific properties as modified
-                    var orderEntry = db.Entry(orderPro);
-                    orderEntry.Property(o => o.Status).IsModified = true;
-                    orderEntry.Property(o => o.PaymentStatus).IsModified = true;
-                    orderEntry.Property(o => o.TrackingNumber).IsModified = true;
-                    orderEntry.Property(o => o.DeliveryDate).IsModified = true;
-                    // Add any other properties you want to allow editing
-
+                    existingOrder.Status = orderPro.Status;
+                    db.Entry(existingOrder).State = EntityState.Modified;
                     db.SaveChanges();
-
-                    TempData["Success"] = "Đơn hàng đã được cập nhật thành công";
                     return RedirectToAction("Index", "OrderPro");
                 }
                 catch (Exception ex)

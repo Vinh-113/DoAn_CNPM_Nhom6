@@ -20,29 +20,29 @@
                 <div class="col-md-6">
                     <div class="card h-100">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Thông tin đơn hàng</h5>
+                            <h5 class="mb-0">Chi tiết đơn hàng</h5>
                         </div>
                         <div class="card-body">
-                            <p><strong>@Html.DisplayNameFor(model => model.ID):</strong> @Html.DisplayFor(model => model.ID)</p>
-                            <p><strong>@Html.DisplayNameFor(model => model.DateOrder):</strong> @Html.DisplayFor(model => model.DateOrder)</p>
-                            <p><strong>@Html.DisplayNameFor(model => model.Status):</strong> <span class="badge bg-info">@Html.DisplayFor(model => model.Status)</span></p>
-                            <p><strong>@Html.DisplayNameFor(model => model.TotalAmount):</strong> <span class="text-danger fw-bold">@Html.DisplayFor(model => model.TotalAmount)</span></p>
-                            <p><strong>@Html.DisplayNameFor(model => model.PaymentMethod):</strong> @Html.DisplayFor(model => model.PaymentMethod)</p>
-                            <p><strong>@Html.DisplayNameFor(model => model.PaymentStatus):</strong> @Html.DisplayFor(model => model.PaymentStatus)</p>
+                            <p><strong>Mã đơn hàng:</strong> @Html.DisplayFor(model => model.ID)</p>
+                            <p><strong>Ngày đặt hàng:</strong> @Html.DisplayFor(model => model.DateOrder)</p>
+                            <p><strong>Trạng thái:</strong> <span class="badge bg-info">@Html.DisplayFor(model => model.Status)</span></p>
+                            <p><strong>Tổng tiền:</strong> <span class="text-danger fw-bold">@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", Model.TotalAmount)</span></p>
+                            <p><strong>Phương thức thanh toán:</strong> @Html.DisplayFor(model => model.PaymentMethod)</p>
+                            <p><strong>Trạng thái thanh toán:</strong> @Html.DisplayFor(model => model.PaymentStatus)</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="card h-100">
                         <div class="card-header bg-light">
-                            <h5 class="mb-0">Thông tin giao hàng</h5>
+                            <h5 class="mb-0">Chi tiết giao hàng</h5>
                         </div>
                         <div class="card-body">
-                            <p><strong>@Html.DisplayNameFor(model => model.Customer.NameCus):</strong> @Html.DisplayFor(model => model.Customer.NameCus)</p>
-                            <p><strong>@Html.DisplayNameFor(model => model.AddressDeliverry):</strong> @Html.DisplayFor(model => model.AddressDeliverry)</p>
-                            <p><strong>@Html.DisplayNameFor(model => model.DeliveryDate):</strong> @Html.DisplayFor(model => model.DeliveryDate)</p>
-                            <p><strong>@Html.DisplayNameFor(model => model.TrackingNumber):</strong> @Html.DisplayFor(model => model.TrackingNumber)</p>
-                            <p><strong>@Html.DisplayNameFor(model => model.ShippingCost):</strong> @Html.DisplayFor(model => model.ShippingCost)</p>
+                            <p><strong>Tên khách hàng:</strong> @Html.DisplayFor(model => model.Customer.NameCus)</p>
+                            <p><strong>Địa chỉ giao hàng:</strong> @Html.DisplayFor(model => model.AddressDeliverry)</p>
+                            <p><strong>Ngày giao hàng:</strong> @Html.DisplayFor(model => model.DeliveryDate)</p>
+                            <p><strong>Mã vận đơn:</strong> @Html.DisplayFor(model => model.TrackingNumber)</p>
+                            <p><strong>Phí vận chuyển: </strong>@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", Model.ShippingCost) </p>
                         </div>
                     </div>
                 </div>

@@ -467,7 +467,7 @@
                                                 </td>
                                                 <td>@item.Number</td>
                                                 <td>
-                                                    <strong>@item.Price</strong>
+                                                    <strong>@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.Price)</strong>
                                                     <br><small style="color: #666;">/ sản phẩm</small>
                                                 </td>
                                                 <td>
@@ -481,7 +481,7 @@
 
                             <div class="total-amount">
                                 <div>Tổng thanh toán</div>
-                                <div>@ViewBag.Total</div>
+                                <div>@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", ViewBag.Total)</div>
                             </div>
 
                             <div class="payment-method-select">

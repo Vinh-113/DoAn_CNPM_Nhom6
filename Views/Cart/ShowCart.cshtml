@@ -33,7 +33,7 @@
                             </div>
                         </td>
                         <td style="vertical-align: middle; text-align: center;">
-                            <p style="font-weight: bold;">@item.Price <span style="font-size: 14px;">/ sản phẩm</span></p>
+                            <p style="font-weight: bold;">@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.Price) <span style="font-size: 14px;">/ sản phẩm</span></p>
                         </td>
                         <td style="text-align: center;">
                             @Html.ActionLink("Remove", "RemoveFromCart", new { id = item.ProductID }, htmlAttributes: new { @class = "btn btn-danger btn-sm" })
@@ -44,7 +44,7 @@
         </table>
     </div>
     <div style="text-align: right; margin-top: 20px;">
-        <p style="font-size: 20px; font-weight: bold;">Tổng số tiền thanh toán: <span style="color: red;">@ViewBag.Total VNĐ</span></p>
+        <p style="font-size: 20px; font-weight: bold;">Tổng số tiền thanh toán: <span style="color: red;">@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", ViewBag.Total)</span></p>
         @Html.ActionLink("Thanh toán", "PaymentCart", "Cart", htmlAttributes: new { @class = "btn btn-success btn-lg" })
     </div>
 </div>
