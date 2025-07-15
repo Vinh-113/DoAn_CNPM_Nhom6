@@ -329,26 +329,31 @@
     <!-- Summary Statistics -->
     <div class="summary-stats">
         <div class="summary-item">
-            <div class="summary-value" id="totalRevenue">₫0</div>
+            <div class="summary-value" id="totalRevenue">
+                @(((decimal?)ViewBag.TotalRevenue ?? 0).ToString("C0", new System.Globalization.CultureInfo("vi-VN")))
+            </div>
             <div class="summary-label">Tổng doanh thu</div>
-           @* <div class="summary-change change-positive">
-                <i class="fas fa-arrow-up"></i> +12.5%
-            </div>*@
         </div>
+
         <div class="summary-item">
-            <div class="summary-value" id="totalOrders">0</div>
+            <div class="summary-value" id="totalOrders">
+                @((int?)ViewBag.TotalOrders ?? 0)
+            </div>
             <div class="summary-label">Tổng đơn hàng</div>
-            
         </div>
+
         <div class="summary-item">
-            <div class="summary-value" id="avgRating">0.0</div>
+            <div class="summary-value" id="avgRating">
+                @(((decimal?)ViewBag.AvgRating ?? 0).ToString("0.0"))
+            </div>
             <div class="summary-label">Đánh giá trung bình</div>
-            
         </div>
+
         <div class="summary-item">
-            <div class="summary-value" id="totalCustomers">0</div>
+            <div class="summary-value" id="totalCustomers">
+                @((int?)ViewBag.TotalCustomers ?? 0)
+            </div>
             <div class="summary-label">Khách hàng</div>
-           
         </div>
     </div>
 
@@ -474,10 +479,10 @@ function initializeCharts() {
         new Chart(revenueCtx, {
             type: 'line',
             data: {
-                labels: @Html.Raw(Json.Encode(ViewBag.Labels ?? new string[0])),
+                labels: @Html.Raw(ViewBag.StatsLabels),
                 datasets: [{
                     label: 'Doanh thu (VNĐ)',
-                    data: @Html.Raw(Json.Encode(ViewBag.DataRevenue ?? new decimal[0])),
+                    data: @Html.Raw(ViewBag.StatsData),
                     backgroundColor: 'rgba(102, 126, 234, 0.1)',
                     borderColor: 'rgba(102, 126, 234, 1)',
                     borderWidth: 3,
@@ -556,11 +561,11 @@ function initializeCharts() {
         new Chart(reviewCtx, {
             type: 'bar',
             data: {
-                labels: @Html.Raw(Json.Encode(ViewBag.ReviewLabels)),
+                labels:@Html.Raw(ViewBag.ReviewLabels),
                 datasets: [
                     {
                         label: 'Số lượng đánh giá',
-                        data: @Html.Raw(Json.Encode(ViewBag.ReviewData ?? new int[0])),
+                        data: @Html.Raw(Json.Encode(ViewBag.ReviewData)),
                         backgroundColor: 'rgba(240, 147, 251, 0.8)',
                         borderColor: 'rgba(240, 147, 251, 1)',
                         borderWidth: 2,
@@ -619,10 +624,10 @@ function initializeCharts() {
         new Chart(bestCtx, {
             type: 'doughnut',
             data: {
-                labels: @Html.Raw(Json.Encode(ViewBag.BestSellingLabels ?? new string[0])),
+                labels: @Html.Raw(Json.Encode(ViewBag.BestSellingLabels)),
                 datasets: [{
                     label: 'Số lượng bán',
-                    data: @Html.Raw(Json.Encode(ViewBag.BestSellingData ?? new int[0])),
+                    data: @Html.Raw(Json.Encode(ViewBag.BestSellingData)),
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.8)',
                         'rgba(54, 162, 235, 0.8)',
