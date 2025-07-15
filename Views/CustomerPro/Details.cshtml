@@ -760,11 +760,44 @@
         .related-card img {
             will-change: transform;
         }
+    .enhanced-description {
+        background: #f5f8fa;
+        border-radius: 12px;
+        border-left: 4px solid #667eea;
+        padding: 18px 22px;
+        margin-bottom: 30px;
+        color: #2d3748;
+        font-size: 1.08rem;
+        box-shadow: 0 2px 8px rgba(102,126,234,0.04);
+        transition: box-shadow 0.2s;
+        word-break: break-word;
+    }
+
+        .enhanced-description strong {
+            font-weight: 700;
+            color: #2d3748;
+            display: block;
+            margin-bottom: 8px;
+        }
+    .desc-collapsed {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        max-height: 4.8em;
+        transition: max-height 0.3s;
+    }
+
+    .desc-expanded {
+        display: block;
+        max-height: 1000px;
+        transition: max-height 0.3s;
+    }
 </style>
 
 <div class="container-fluid">
     <!-- Breadcrumb -->
-    <nav class="breadcrumb-modern" data-aos="fade-down">
+    @*<nav class="breadcrumb-modern" data-aos="fade-down">
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
@@ -772,7 +805,7 @@
                 <li class="breadcrumb-item active">@Model.Product.NamePro</li>
             </ol>
         </div>
-    </nav>
+    </nav>*@
 
     <div class="product-detail">
         <!-- Chi tiết sản phẩm -->
@@ -795,16 +828,21 @@
                             @String.Format("{0:#,##0}", @Model.Product.Price) VNĐ
                         </div>
 
-                        <div class="product-description">
+                        <div class="product-description enhanced-description" id="descBox">
                             <strong><i class="fas fa-info-circle"></i> Mô tả sản phẩm:</strong><br>
-                            @Model.Product.DecriptionPro
+                            <span id="descContent" class="desc-collapsed">
+                                @Html.Raw(Model.Product.DecriptionPro.Replace("\n", "<br />"))
+                            </span>
+                            <button type="button" id="toggleDescBtn" class="btn btn-link btn-sm mt-2" style="padding-left:0;">
+                                <span id="toggleDescText">Mở rộng</span> <i class="fas fa-chevron-down"></i>
+                            </button>
                         </div>
 
                         <!-- Selector số lượng -->
-                        <div class="quantity-selector">
+                        <!--<div class="quantity-selector">
                             <label class="quantity-label">Số lượng:</label>
                             <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantityInput">
-                        </div>
+                        </div>-->
 
                         <!-- Nút hành động -->
                         <div class="action-buttons">
@@ -1012,6 +1050,30 @@
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var btn = document.getElementById('toggleDescBtn');
+        var content = document.getElementById('descContent');
+        var text = document.getElementById('toggleDescText');
+        var icon = btn.querySelector('i');
+        var expanded = false;
+
+        btn.addEventListener('click', function () {
+            expanded = !expanded;
+            if (expanded) {
+                content.classList.remove('desc-collapsed');
+                content.classList.add('desc-expanded');
+                text.textContent = 'Thu gọn';
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                content.classList.remove('desc-expanded');
+                content.classList.add('desc-collapsed');
+                text.textContent = 'Mở rộng';
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        });
+    });
     // Khởi tạo AOS Animation
     AOS.init({
         duration: 800,

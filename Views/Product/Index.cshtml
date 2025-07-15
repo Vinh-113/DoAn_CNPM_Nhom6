@@ -30,7 +30,7 @@
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.NamePro)</td>
                     <td>@Html.DisplayFor(modelItem => item.DecriptionPro)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                    <td>@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.Price)</td>
                     <td>
                         <img src="~/Images/@item.ImagePro" style="width: 100px; border-radius: 12px;" />
                     </td>

@@ -102,7 +102,7 @@ namespace TechStore.Controllers
         [HttpGet]
         public ActionResult CatergoryPartial_ipad()
         {
-            string catergory = "Máy tính bảng";
+            string catergory = "Tablet";
             try
             {
                 var cate = dB.Categories.Where(s => s.NameCate == catergory).FirstOrDefault();
