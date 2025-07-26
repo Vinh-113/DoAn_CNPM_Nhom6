@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using TechStore.Models;
 using OtpNet;
 using QRCoder;
+using System.Text;
 
 namespace TechStore.Controllers
 {
@@ -40,6 +41,42 @@ namespace TechStore.Controllers
             {
                 ViewBag.Error = "Đăng ký không thành công";
                 return View();
+            }
+        }
+        [HttpPost]
+        public ActionResult Factor2SetupUser(String user, String pass)
+        {
+           
+            string issuer = "TechStoreWeb-LogIn";
+
+            // Tạo secret dựa trên tên + mật khẩu
+            byte[] key = SHA1Hash(user + pass);
+            var secret = Base32Encoding.ToString(key); //chuyển key do dạng base32 sang string
+
+            // Tạo URL otpauth cho QR
+            string otpUrl = $"otpauth://totp/{issuer}:{user}?secret={secret}&issuer={issuer}&digits=6";
+
+            // Tạo mã QR từ URL
+            var qrGenerator = new QRCodeGenerator();
+            var qrCodeData = qrGenerator.CreateQrCode(otpUrl, QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new Base64QRCode(qrCodeData);
+            string qrCodeImage = qrCode.GetGraphic(10);
+
+            var model = new Face2Factor
+            {
+                Email = user,
+                SecretKey = secret,
+                QrCodeImage = qrCodeImage
+            };
+
+            return Json(new { success = true, factorModel = model });
+        }
+        private static byte[] SHA1Hash(string input)
+        {
+            using (var sha = new System.Security.Cryptography.SHA1Managed())
+            {
+                var bytes = Encoding.UTF8.GetBytes(input);
+                return sha.ComputeHash(bytes);
             }
         }
         [HttpPost]

@@ -2,344 +2,504 @@
     ViewBag.Title = "DangNhap";
     Layout = "~/Views/Shared/_LogSignLayout.cshtml";
 }
-<link rel="stylesheet" href="~/Content/styleLogSign.css" />
+<link rel="stylesheet" href="@Url.Content("~/Content/styleLogSign.css")" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 <style>
     /* Modern Login Page Styles - Optimized for Razor View */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.container {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    padding: 40px;
-    position: relative;
-    overflow: hidden;
-    animation: fadeInUp 0.6s ease;
-}
-
-.container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-}
-
-.header {
-    text-align: center;
-    margin-bottom: 32px;
-}
-
-.header h1 {
-    color: #1a202c;
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.header p {
-    color: #718096;
-    font-size: 16px;
-}
-
-/* Alert Styles */
-#alertContainer {
-    margin-bottom: 24px;
-}
-
-.alert {
-    padding: 16px;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-}
-
-.alert-info {
-    background: #ebf8ff;
-    color: #2a4365;
-    border: 1px solid #bee3f8;
-}
-
-.alert-danger {
-    background: #fed7d7;
-    color: #742a2a;
-    border: 1px solid #feb2b2;
-}
-
-.alert i {
-    margin-right: 8px;
-    font-size: 16px;
-}
-
-/* Form Styles */
-.form-group {
-    margin-bottom: 24px;
-}
-
-.form-group label {
-    display: block;
-    color: #2d3748;
-    font-weight: 600;
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
-.input-wrapper {
-    position: relative;
-}
-
-.form-control {
-    width: 100%;
-    padding: 16px 48px 16px 16px;
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-    background: #ffffff;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.form-control.is-invalid {
-    border-color: #e53e3e;
-    animation: shake 0.5s ease-in-out;
-}
-
-.form-control.is-valid {
-    border-color: #38a169;
-}
-
-.input-icon {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #a0aec0;
-    transition: color 0.3s ease;
-}
-
-.form-control:focus + .input-icon {
-    color: #667eea;
-}
-
-.invalid-feedback {
-    color: #e53e3e;
-    font-size: 14px;
-    margin-top: 6px;
-    display: none;
-}
-
-.invalid-feedback.show {
-    display: block;
-    animation: slideDown 0.3s ease;
-}
-
-/* Button Styles */
-.btn {
-    width: 100%;
-    padding: 16px;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
-}
-
-.btn i {
-    margin-right: 8px;
-}
-
-/* Login Links */
-.login-link {
-    text-align: center;
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid #e2e8f0;
-}
-
-.login-link p {
-    color: #718096;
-    margin-bottom: 12px;
-    font-size: 14px;
-}
-
-.login-link p:last-child {
-    margin-bottom: 0;
-}
-
-.login-link a {
-    color: #667eea;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    display: inline-block;
-    margin: 4px 0;
-}
-
-.login-link a:hover {
-    color: #764ba2;
-    transform: translateY(-1px);
-}
-
-/* Animations */
-@@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-@@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
-
-@@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Loading State */
-.btn.loading {
-    position: relative;
-    color: transparent;
-}
-
-.btn.loading::after {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    top: 50%;
-    left: 50%;
-    margin-left: -10px;
-    margin-top: -10px;
-    border: 2px solid transparent;
-    border-top: 2px solid #ffffff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-}
-
-@@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Responsive Design */
-@@media (max-width: 768px) {
     body {
-        padding: 15px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .otp-card {
+        background: rgba(255,255,255,0.98);
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(102,126,234,0.10);
+        padding: 40px 32px;
+        max-width: 400px;
+        margin: 0 auto;
+        text-align: center;
+        animation: fadeInUp 0.5s;
+    }
+
+    .otp-header {
+        margin-bottom: 24px;
+    }
+
+    .otp-icon {
+        font-size: 2.2rem;
+        color: #667eea;
+        margin-bottom: 8px;
+    }
+
+    .otp-header h3 {
+        font-size: 1.3rem;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #2d3748;
+    }
+
+    .otp-header p {
+        color: #718096;
+        font-size: 0.98rem;
+        margin-bottom: 0;
+    }
+
+    .otp-qr-section {
+        margin-bottom: 24px;
+    }
+
+    .otp-qr-img {
+        width: 160px;
+        height: 160px;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(102,126,234,0.12);
+        background: #f7fafc;
+        object-fit: contain;
+        margin: 0 auto;
+        display: block;
+    }
+
+    .otp-input-section {
+        margin-bottom: 18px;
+        text-align: left;
+    }
+
+    .otp-label {
+        font-weight: 600;
+        color: #4f46e5;
+        text-align: center;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .otp-input {
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        text-align: center;
+    }
+
+    .otp-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        margin-top: 18px;
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #38a169 0%, #2b6cb0 100%);
+        color: #fff;
+        border: none;
+    }
+
+    .otp-card {
+        padding: 18px 8px;
+    }
+
+    .otp-qr-img {
+        width: 120px;
+        height: 120px;
     }
 
     .container {
-        padding: 32px 24px;
-        max-width: 380px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        padding: 40px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease;
     }
 
-    .header h1 {
-        font-size: 24px;
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+    .header {
+        text-align: center;
+        margin-bottom: 32px;
+    }
+
+        .header h1 {
+            color: #1a202c;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 16px;
+        }
+
+    /* Alert Styles */
+    #alertContainer {
+        margin-bottom: 24px;
+    }
+
+    .alert {
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+    }
+
+    .alert-info {
+        background: #ebf8ff;
+        color: #2a4365;
+        border: 1px solid #bee3f8;
+    }
+
+    .alert-danger {
+        background: #fed7d7;
+        color: #742a2a;
+        border: 1px solid #feb2b2;
+    }
+
+    .alert i {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+    /* Form Styles */
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+        .form-group label {
+            display: block;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+    .input-wrapper {
+        position: relative;
     }
 
     .form-control {
-        padding: 14px 44px 14px 14px;
-        font-size: 15px;
+        width: 100%;
+        padding: 16px 48px 16px 16px;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        background: #ffffff;
     }
 
-    .btn {
-        padding: 14px;
-        font-size: 15px;
-    }
-}
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
 
-@@media (max-width: 480px) {
-    body {
-        padding: 10px;
-    }
+        .form-control.is-invalid {
+            border-color: #e53e3e;
+            animation: shake 0.5s ease-in-out;
+        }
 
-    .container {
-        padding: 24px 20px;
-        border-radius: 20px;
-    }
-
-    .header h1 {
-        font-size: 22px;
-    }
-
-    .header p {
-        font-size: 14px;
-    }
-
-    .form-control {
-        padding: 12px 40px 12px 12px;
-        font-size: 14px;
-    }
-
-    .btn {
-        padding: 12px;
-        font-size: 14px;
-    }
+        .form-control.is-valid {
+            border-color: #38a169;
+        }
 
     .input-icon {
-        right: 12px;
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a0aec0;
+        transition: color 0.3s ease;
     }
-}
+
+    .form-control:focus + .input-icon {
+        color: #667eea;
+    }
+
+    .invalid-feedback {
+        color: #e53e3e;
+        font-size: 14px;
+        margin-top: 6px;
+        display: none;
+    }
+
+        .invalid-feedback.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+    /* Button Styles */
+    .btn {
+        width: 100%;
+        padding: 16px;
+        border: none;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+    .btn i {
+        margin-right: 8px;
+    }
+
+    /* Login Links */
+    .login-link {
+        text-align: center;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+        .login-link p {
+            color: #718096;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+            .login-link p:last-child {
+                margin-bottom: 0;
+            }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 4px 0;
+        }
+
+            .login-link a:hover {
+                color: #764ba2;
+                transform: translateY(-1px);
+            }
+
+    /* Animations */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @@keyframes shake {
+        0%, 100% {
+            transform: translateX(0);
+        }
+
+        10%, 30%, 50%, 70%, 90% {
+            transform: translateX(-5px);
+        }
+
+        20%, 40%, 60%, 80% {
+            transform: translateX(5px);
+        }
+    }
+
+    @@keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Loading State */
+    .btn.loading {
+        position: relative;
+        color: transparent;
+    }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            margin-left: -10px;
+            margin-top: -10px;
+            border: 2px solid transparent;
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+    @@keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        body {
+            padding: 15px;
+        }
+
+        .container {
+            padding: 32px 24px;
+            max-width: 380px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .form-control {
+            padding: 14px 44px 14px 14px;
+            font-size: 15px;
+        }
+
+        .btn {
+            padding: 14px;
+            font-size: 15px;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            padding: 24px 20px;
+            border-radius: 20px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+
+        .form-control {
+            padding: 12px 40px 12px 12px;
+            font-size: 14px;
+        }
+
+        .btn {
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        .input-icon {
+            right: 12px;
+        }
+    }
+    /* Thêm style cho alert danger */
+    .alert-danger {
+        background: #fed7d7;
+        color: #742a2a;
+        border: 1px solid #feb2b2;
+    }
+
+    /* Điều chỉnh container cho trang đăng nhập */
+    .container {
+        max-width: 400px;
+    }
+
+    /* Style cho forgot password và register links */
+    .login-link p {
+        margin-bottom: 12px;
+    }
+
+        .login-link p:last-child {
+            margin-bottom: 0;
+        }
+
+    .login-link a {
+        display: inline-block;
+        margin: 4px 0;
+    }
+
+    /* Hover effect cho button */
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    /* Focus effect cho inputs */
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    /* Animation cho form */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .container {
+        animation: fadeInUp 0.6s ease;
+    }
 </style>
 
 <div class="container">
@@ -348,9 +508,9 @@ body {
         <p>Chào mừng bạn quay trở lại</p>
     </div>
 
-    <form class="needs-validation" novalidate method="post" action="/User/DangNhap">
+    <form class="needs-validation" method="post" action="/User/DangNhap">
         @*        Thông báo đăng nhập thành công hay ko thành công
-        *@       
+        *@
         @if (ViewBag.ThongBao != null)
         {
             <div class="alert alert-danger" role="alert">
@@ -358,28 +518,65 @@ body {
                 <span id="errorMessage">@ViewBag.ThongBao</span>
             </div>
         }
-        <div class="form-group">
-            <label for="nameCus">Tên đăng nhập</label>
-            <div class="input-wrapper">
-                <input type="text" class="form-control" id="nameCus" name="NameCus" required placeholder="Nhập tên bạn vào" />
-                <i class="fas fa-user input-icon"></i>
+        <div id="logIn_form" class="form-section" style="display:block">
+            <div class="form-group">
+                <label for="nameCus">Tên đăng nhập</label>
+                <div class="input-wrapper">
+                    <input type="text" class="form-control" id="nameCus" name="NameCus" required placeholder="Nhập tên bạn vào" />
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
             </div>
-            <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
-        </div>
 
-        <div class="form-group">
-            <label for="passCus">Mật khẩu</label>
-            <div class="input-wrapper">
-                <input type="password" class="form-control" id="passCus" name="PassCus" required placeholder="Nhập mật khẩu bạn vào" />
-                <i class="fas fa-lock input-icon"></i>
+            <div class="form-group">
+                <label for="passCus">Mật khẩu</label>
+                <div class="input-wrapper">
+                    <input type="password" class="form-control" id="passCus" name="PassCus" required placeholder="Nhập mật khẩu bạn vào" />
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
             </div>
-            <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+            <button class="btn btn-primary" onclick="show2Factor()">
+                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+                Tiếp theo
+            </button>
         </div>
-
-        <button type="submit" class="btn btn-primary">
-            <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
-            Đăng nhập
-        </button>
+        @* <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+                Đăng nhập
+            </button>*@
+        <!--Phần 2: Xác thực OTP để đăng nhập-->
+        <div id="2factorform" class="form-sectionm" style="display:none">
+            <div class="otp-card">
+                <div class="otp-header">
+                    <i class="fas fa-shield-alt otp-icon"></i>
+                    <h3>Xác thực hai lớp (2FA)</h3>
+                    <p>Quét mã QR bằng ứng dụng Google Authenticator hoặc Microsoft Authenticator để lấy mã OTP.</p>
+                </div>
+                <div class="otp-qr-section">
+                    <img id="imgQR" alt="QR Code ứng dụng" class="otp-qr-img" />
+                </div>
+                <div class="otp-input-section">
+                    <label for="otpCode" class="otp-label">Nhập mã OTP từ ứng dụng</label>
+                    <div class="input-wrapper">
+                        <input type="number" class="form-control otp-input" id="otpCode" required placeholder="Nhập mã OTP" />
+                        <i class="fas fa-key input-icon"></i>
+                    </div>
+                    <div class="invalid-feedback" id="invalid-otp" style="display:none">Vui lòng nhập đủ mã OTP gồm 6 số.</div>
+                </div>
+                <div class="otp-actions">
+                    <button type="button" class="btn btn-primary" id="otpSubmit" onclick="verifyOTP()">
+                        <i class="fas fa-check-circle"></i> Xác thực OTP
+                    </button>
+                    <button type="submit" style="display:none" class="btn btn-primary" id="okSubmit" >
+                        <i class="fas fa-check-circle"></i> Đăng nhập
+                    </button>
+                    <button type="button" class="btn btn-primary"  onclick="showLogForm()">
+                        Quay lại
+                    </button>
+                </div>
+            </div>
+        </div>
     </form>
 
     <div class="login-link">
@@ -388,64 +585,85 @@ body {
     </div>
 </div>
 
-<style>
-/* Thêm style cho alert danger */
-.alert-danger {
-    background: #fed7d7;
-    color: #742a2a;
-    border: 1px solid #feb2b2;
-}
-
-/* Điều chỉnh container cho trang đăng nhập */
-.container {
-    max-width: 400px;
-}
-
-/* Style cho forgot password và register links */
-.login-link p {
-    margin-bottom: 12px;
-}
-
-.login-link p:last-child {
-    margin-bottom: 0;
-}
-
-.login-link a {
-    display: inline-block;
-    margin: 4px 0;
-}
-
-/* Hover effect cho button */
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-}
-
-/* Focus effect cho inputs */
-.form-control:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-/* Animation cho form */
-@@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.container {
-    animation: fadeInUp 0.6s ease;
-}
-</style>
-
 <script>
+let modelOTP = null;
+function show2Factor() {
+    if (isValid()) {
+        document.getElementById("logIn_form").style.display = "none";
+        document.getElementById("2factorform").style.display = "block";
+        setupOTP();
+    }
+}
+function showLogForm() {
+    document.getElementById("logIn_form").style.display = "block";
+    document.getElementById("2factorform").style.display = "none";
+}
+function isValid() {
+        let user = document.getElementById("nameCus").value;
+        let pass = document.getElementById("passCus").value;
+        if (user === null || pass === null) return false;
+        return true;
+}
+function setupOTP() {
+    const user = document.getElementById("nameCus").value;
+    const pass = document.getElementById("passCus").value;
+    fetch('@Url.Action("Factor2SetupUser", "User")', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({user: user, pass: pass})
+    }).then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                //Hiện QR code lên để quét
+                const img = document.getElementById("imgQR");
+                img.src = "data:image/png;base64," + data.factorModel.QrCodeImage;
+                modelOTP = data.factorModel; //Set modelOTP
+            }
+        }
+        ).catch(error => alert("Có lỗi khi setup OTP " + error));
+}
+function verifyOTP() {
+        const feedback = document.getElementById("invalid-otp");
+        //Reset thông báo lại
+        if (feedback.style.display === "block") {
+            feedback.style.display = "none"
+        }
+        //Lấy otpcode sau khi nhập
+        const input = document.getElementById("otpCode").value;
+        const regrex = /^[0-9]+$/
+
+        if (regrex.test(input)) {
+            fetch('@Url.Action("VerifyOTP", "User")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ model: modelOTP, OtpCode: input })
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById("okSubmit").style.display = "block" //hiện nút đăng nhập
+                        document.getElementById("otpSubmit").style.display = "none" //ẩn nút xác thực đi nếu đúng
+                    }
+                    else {
+                        document.getElementById("okSubmit").style.display = "none" //hiện nút đăng nhập
+                        document.getElementById("otpSubmit").style.display = "block" //ẩn nút xác thực đi nếu đúng
+                        if (feedback.style.display === "none") {
+                            feedback.style.display = "block" //hiện lên thông báo lỗi otp nhập sai hay đúng
+                        }
+                        alert("Nhập OTP không chính xác, vui lòng nhập lại");
+                    }
+                }
+            ).catch(error => alert("Có lỗi khi gửi mã OTP lên server" + error));
+        }
+        else {
+            if (feedback.style.display === "none") {
+                feedback.style.display = "block" //hiện lên thông báo lỗi otp nhập sai hay đúng
+            }
+        }
+}
 // Form validation
 document.querySelectorAll("input").forEach(input => {
     input.addEventListener("input", function () {
