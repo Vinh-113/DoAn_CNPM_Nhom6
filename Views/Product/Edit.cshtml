@@ -42,8 +42,13 @@
                         </div>
                         <div class="form-group">
                             <p>Thuộc phân loại</p>
-                            @Html.EditorFor(model => model.Category1.NameCate, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.Category1.NameCate, "", new { @class = "text-danger" })
+                            @Html.DropDownListFor(model => model.Category1, (SelectList)ViewBag.Categories, "-- Chọn phân loại --", new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Category1, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group">
+                            <p>Mã giảm giá</p>
+                            @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
                         </div>
                         <div class="form-group">
                             <label>Chọn hình</label>

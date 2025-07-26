@@ -164,6 +164,7 @@
     <Compile Include="Models\OrderDetail.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OrderDetails_model.cs" />
     <Compile Include="Models\OrderPro.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -432,6 +433,7 @@
     <Content Include="Views\User\DangNhap.cshtml" />
     <Content Include="Views\OrderPro\Index_KH.cshtml" />
     <Content Include="Views\OrderPro\Delete_KH.cshtml" />
+    <Content Include="Views\OrderPro\Details_KH.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

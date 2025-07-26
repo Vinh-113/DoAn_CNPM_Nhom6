@@ -73,15 +73,17 @@ namespace TechStore.Controllers
         public ActionResult SetVIP(int id, String membership, String message)
         {
             System.Diagnostics.Debug.WriteLine(message);
+            bool success_bool = false;
             var customer = dbO_Cus.Customers.FirstOrDefault(c => c.IDCus == id);
             if (customer != null)
             {
                 customer.IsVIP = true;
-                customer.MembershipLevel = membership != null ? membership : "Thường";
+                customer.MembershipLevel = membership ;
                 dbO_Cus.SaveChanges();
-                return Json(new { success = true });
+                success_bool = true;
+                return Json(new { success = success_bool });
             }
-            return Json(new { success = false });
+            return Json(new { success = success_bool });
         }
         [HttpGet]
         public ActionResult DangNhap()

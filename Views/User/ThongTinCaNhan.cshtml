@@ -572,32 +572,32 @@
                 decimal muctoida = 0;
                 string membershipClass = "";
                 string memberShip = "";
+                decimal progressPercent = 0;
 
                 /*  switch (Model.MembershipLevel)
                   {
                       case not null: //Có vip*/
                 // Ngưỡng tiếp theo để lên hạng mới là 5 triệu(hạng đồng).
-                if (totalSpent <= 5000000)
+                if (Model.MembershipLevel == "Đồng")
                 {
                     muctoida = Convert.ToDecimal(5 * Math.Pow(10, 6));
                     ViewBag.Color = "vip-progress-bar-inner-bronze";
                     membershipClass = "membership-bronze";
-                    memberShip = "VIP 1";
+                    memberShip = "VIP đồng";
                 }
-                else if (totalSpent <= 15000000)
+                else if (Model.MembershipLevel == "Bạc")
                 {
                     //Hạng bạc
-                    muctoida = Convert.ToDecimal(15 * Math.Pow(10, 6));
+                    muctoida = Convert.ToDecimal(5 * Math.Pow(10, 7));
                     ViewBag.Color = "vip-progress-bar-inner-sliver";
                     membershipClass = "membership-sliver";
-                    memberShip = "VIP 2";
+                    memberShip = "VIP Bạc ";
                 }
-                else if (totalSpent > 15000000)
+                else if (Model.MembershipLevel == "Vàng")
                 { //Hạng vàn
-                    muctoida = Convert.ToDecimal(5 * Math.Pow(10, 9));
                     ViewBag.Color = "vip-progress-bar-inner-gold";
                     membershipClass = "membership-gold";
-                    memberShip = "VIP MAX";
+                    memberShip = "VIP Vàng";
 
                 }
                 else
@@ -608,11 +608,15 @@
                     memberShip = "Chưa phải là VIP";
                 }
 
-
-
-                decimal progressPercent = totalSpent >= muctoida
+                if (memberShip != "VIP Vàng")
+                {
+                    progressPercent = totalSpent >= muctoida
                         ? 100
                         : (totalSpent / muctoida) * 100;
+                }
+                else {
+                    progressPercent = 0;
+                }
             }
             <!-- Tiến độ VIP -->
             <div class="membership-level @membershipClass">@memberShip</div>
@@ -625,10 +629,17 @@
                 <div class="progress-info">
                     Tổng đơn: <strong>@totalOrders</strong> &middot; Đã chi: <strong>@totalSpent.ToString("n0")₫</strong>
                 </div>
-                <div class="vip-progress-bar-outer">
-                    <div class="@ViewBag.Color" style="width:@progressPercent%"></div>
-                </div>
-                <small>@progressPercent.ToString("0.0")% đến mức VIP kế tiếp</small>
+                @*Kiểm tra điều kiện*@
+                @if (memberShip == "VIP Vàng")
+                {
+                    <small>Bạn đã đạt đến mức VIP cao nhất</small>
+                }
+                else
+                {
+                    <div class="vip-progress-bar-outer">
+                        <div class="@ViewBag.Color" style="width:@progressPercent%"></div>
+                    </div>
+                    <small>@progressPercent.ToString("0.0")% đến mức VIP kế tiếp</small>}
             </div>
         </div>
 
@@ -670,36 +681,43 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var progressPercent = @progressPercent;
-        var customerId = @Model.IDCus;
-        var totalSpent = @totalSpent; // đảm bảo @totalSpent là số
-        let memberShip_set = "";
-
-        if (totalSpent > 1000000 && totalSpent < 15000000) {
-            memberShip_set = "Đồng";
-        } else if (totalSpent >= 15000000 && totalSpent < 5000000000) {
-            memberShip_set = "Bạc";
-        } else {
-            memberShip_set = "Vàng";
-        }
-
-        if (progressPercent >= 100) {
-            // Gọi AJAX để set VIP
-            fetch('@Url.Action("SetVIP", "Customer")', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ id: customerId , membership: memberShip_set, message: "Đang cập nhật" })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log("Đã cập nhật VIP thành công!");
-                }
-            })
-        }
-    });
+document.addEventListener("DOMContentLoaded", function () {
+    const progressBar = document.querySelector('.vip-progress-bar-outer > div');
+    var current_progress = parseFloat(progressBar.style.width);
+    if (current_progress >= 100) updateVIP();
+});
+function updateVIP() {
+    var totalSpent = @totalSpent;
+    let memberShip_set = "";
+    if (totalSpent > 1000000 && totalSpent < 15000000) {
+        memberShip_set = "Đồng";
+    } else if (totalSpent >= 15000000 && totalSpent < 50000000) {
+        memberShip_set = "Bạc";
+    } else {
+        memberShip_set = "Vàng";
+    }
+    if (memberShip_set) {
+        fetch('@Url.Action("SetVIP", "User")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: @Model.IDCus, membership: memberShip_set, message: "Đang cập nhật VIP" })
+        })
+        .then(response =>
+            response.json())
+        .then(data => {
+            if (data.success) {
+                if (confirm("Đã cập nhật VIP thành công!")) window.location.href = "@Url.Action("ThongTinCaNhan","User")";
+                else return;
+            } else {
+                alert("Không cập nhật thành công");
+            }
+        })
+        .catch(error => {
+            alert('Đã bị lỗi khi gửi lên server: ' + error);
+        });
+    }
+}
 </script>
 

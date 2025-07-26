@@ -31,12 +31,20 @@ namespace TechStore.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var orderPro = db.OrderProes.Include("Customer").Where(s => s.ID == id).FirstOrDefault();
-            if (orderPro == null)
+            var order = db.OrderProes
+        .Include(o => o.Customer)
+        .Include(o => o.OrderDetails.Select(od => od.Product))
+        .FirstOrDefault(o => o.ID == id);
+            if (order == null)
             {
                 return HttpNotFound();
             }
-            return View(orderPro);
+            OrderDetails_model orderDetails_Model = new OrderDetails_model
+            {
+                OrderDetail = order.OrderDetails.ToList(),
+                OrderPro = order
+            };
+            return View(orderDetails_Model);
         }
         [HttpGet]
         public ActionResult Edit(int? id)
@@ -175,6 +183,24 @@ namespace TechStore.Controllers
             }
             return Json(new { success = true });
         }
-
+        [HttpGet]
+        public ActionResult Details_KH(int ? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var orderPro = db.OrderProes.Include("Customer").Where(s => s.ID == id).FirstOrDefault();
+            var orderDetails = db.OrderDetails.Include("Product").Where(s => s.IDOrder == id).ToList();
+            if (orderPro == null && orderDetails == null)
+            {
+                return HttpNotFound();
+            }
+            OrderDetails_model orderDetails_Model = new OrderDetails_model { 
+                OrderDetail = orderDetails,
+                OrderPro = orderPro
+            };
+            return View(orderDetails_Model);
+        }
     }
 }

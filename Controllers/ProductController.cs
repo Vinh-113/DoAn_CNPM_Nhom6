@@ -54,6 +54,7 @@ namespace TechStore.Controllers
         {
             ViewData["Category"] = new SelectList(db.Categories, "IDCate", "NameCate");
             var item = db.Products.Where(s => s.ProductID == id).FirstOrDefault();
+            ViewBag.Categories = new SelectList(db.Categories, "IDCate", "NameCate", item.Category1); 
             return View(item);
         }
         [HttpPost, ActionName("Edit")]
