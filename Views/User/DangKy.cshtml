@@ -21,6 +21,82 @@
         justify-content: center;
         padding: 20px;
     }
+    .otp-card {
+    background: rgba(255,255,255,0.98);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(102,126,234,0.10);
+    padding: 40px 32px;
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+    animation: fadeInUp 0.5s;
+}
+.otp-header {
+    margin-bottom: 24px;
+}
+.otp-icon {
+    font-size: 2.2rem;
+    color: #667eea;
+    margin-bottom: 8px;
+}
+.otp-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #2d3748;
+}
+.otp-header p {
+    color: #718096;
+    font-size: 0.98rem;
+    margin-bottom: 0;
+}
+.otp-qr-section {
+    margin-bottom: 24px;
+}
+.otp-qr-img {
+    width: 160px;
+    height: 160px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(102,126,234,0.12);
+    background: #f7fafc;
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+}
+.otp-input-section {
+    margin-bottom: 18px;
+    text-align: left;
+}
+.otp-label {
+    font-weight: 600;
+    color: #4f46e5;
+    text-align:center;
+    margin-bottom: 8px;
+    display: block;
+}
+.otp-input {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    text-align: center;
+}
+.otp-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 18px;
+}
+.btn-success {
+    background: linear-gradient(135deg, #38a169 0%, #2b6cb0 100%);
+    color: #fff;
+    border: none;
+}
+    .otp-card {
+        padding: 18px 8px;
+    }
+    .otp-qr-img {
+        width: 120px;
+        height: 120px;
+   }
 
     .container {
         background: rgba(255, 255, 255, 0.95);
@@ -425,7 +501,7 @@
 
     <!-- Phần 2: Thông tin địa chỉ -->
     <label for="streetAddress" style="margin-left: -4px; font-weight: bold;">Địa chỉ nhà</label>
-    <div id="addressInfo" class="form-section">
+     <div id="addressInfo" class="form-section">
         <div class="form-group">
 
             <div class="input-wrapper">
@@ -466,9 +542,38 @@
             <button type="button" class="btn btn-secondary" onclick="showAccountInfo()">
                 <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Quay lại
             </button>
-            <input type="submit" class="btn btn-primary" value="Xác nhận" />
+            <button type="button" class="btn btn-secondary" onclick="show2Factor()">
+                <i class="fas fa-arrow-right" style="margin-right: 8px;"></i> Tiếp theo
+            </button>
         </div>
     </div>
+    <!--Phần 3 Form nhập mã OTP(dùng trên App để lấy mã)-->
+     <div id="2factorform" class="form-section">
+         <div class="otp-card">
+             <div class="otp-header">
+                 <i class="fas fa-shield-alt otp-icon"></i>
+                 <h3>Xác thực hai lớp (2FA)</h3>
+                 <p>Quét mã QR bằng ứng dụng Google Authenticator hoặc Microsoft Authenticator để lấy mã OTP.</p>
+             </div>
+             <div class="otp-qr-section">
+                 <img id="imgQR" alt="QR Code ứng dụng" class="otp-qr-img" />
+             </div>
+             <div class="otp-input-section">
+                 <label for="otpCode" class="otp-label">Nhập mã OTP từ ứng dụng</label>
+                 <div class="input-wrapper">
+                     <input type="number" class="form-control otp-input" id="otpCode" required placeholder="Nhập mã OTP" />
+                     <i class="fas fa-key input-icon"></i>
+                 </div>
+                 <div class="invalid-feedback" id="invalid-otp" style="display:none">Vui lòng nhập đủ mã OTP gồm 6 số.</div>
+             </div>
+             <div class="otp-actions">
+                 <button type="button" class="btn btn-primary" id="otpSubmit" onclick="verifyOTP()">
+                     <i class="fas fa-check-circle"></i> Xác thực OTP
+                 </button>
+                 <input type="submit" id="btnSubmit" class="btn btn-success" value="Hoàn tất đăng ký" style="display: none" />
+             </div>
+         </div>
+     </div>
 </form>
     }
 
@@ -480,6 +585,8 @@
 
 <script>
     let currentStep = 1;
+    let modelOTP = null;
+    //Tạo nút otpSubmit
 
     function showAddressInfo() {
         if (validateCurrentStep()) {
@@ -488,6 +595,73 @@
             document.getElementById("addressInfo").classList.add("active");
             updateProgress();
         }
+    }
+    function show2Factor() {
+        if (validateCurrentAdreessStep()) {
+            document.getElementById("addressInfo").classList.remove("active");
+            document.getElementById("2factorform").classList.add("active");
+            setupOTP();
+        }
+    }
+    function setupOTP() {
+        const email = document.getElementById("emailCus").value;
+        fetch('@Url.Action("Factor2Setup", "User")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({cus_email: email})
+        }).then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    //Hiện QR code lên để quét
+                    const img = document.getElementById("imgQR");
+                    img.src = "data:image/png;base64," + data.factorModel.QrCodeImage;
+                    modelOTP = data.factorModel; //Set modelOTP
+                }
+            }
+            ).catch(error => alert("Có lỗi khi setup OTP " + error));
+    }
+    function verifyOTP() {
+            const feedback = document.getElementById("invalid-otp");
+            //Reset thông báo lại
+            if (feedback.style.display === "block") {
+                feedback.style.display = "none"
+            }
+            //Lấy otpcode sau khi nhập
+            const input = document.getElementById("otpCode").value;
+            const regrex = /^[0-9]+$/
+
+            if (regrex.test(input)) {
+                fetch('@Url.Action("VerifyOTP", "User")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ model: modelOTP, OtpCode: input })
+                }).then(response => response.json())
+                    .then(data => {
+                        const submit = document.getElementById("btnSubmit");
+                        if (data.success) {
+                            submit.style.display = "block"
+                        }
+                        else {
+                            if (submit.style.display === "block") {
+                                submit.style.display ="none" //ẩn lại nút xác nhận khi nhập mã otp sai
+                            }
+                            if (feedback.style.display === "none") {
+                                feedback.style.display = "block" //hiện lên thông báo lỗi otp nhập sai hay đúng
+                            }
+                            alert("Nhập OTP không chính xác, vui lòng nhập lại");
+                        }
+                    }
+                ).catch(error => alert("Có lỗi khi gửi mã OTP lên server" + error));
+            }
+            else {
+                if (feedback.style.display === "none") {
+                    feedback.style.display = "block" //hiện lên thông báo lỗi otp nhập sai hay đúng
+                }
+            }
     }
 
     function showAccountInfo() {
@@ -504,6 +678,32 @@
 
     function validateCurrentStep() {
         const currentSection = document.getElementById("accountInfo");
+        const inputs = currentSection.querySelectorAll("input[required]");
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                input.classList.add("is-invalid");
+                const feedback = input.parentElement.nextElementSibling;
+                if (feedback && feedback.classList.contains("invalid-feedback")) {
+                    feedback.classList.add("show");
+                }
+                isValid = false;
+            } else {
+                input.classList.remove("is-invalid");
+                input.classList.add("is-valid");
+                const feedback = input.parentElement.nextElementSibling;
+                if (feedback && feedback.classList.contains("invalid-feedback")) {
+                    feedback.classList.remove("show");
+                }
+            }
+        });
+
+        return isValid;
+    }
+    function validateCurrentAdreessStep()
+    {
+        const currentSection = document.getElementById("addressInfo");
         const inputs = currentSection.querySelectorAll("input[required]");
         let isValid = true;
 

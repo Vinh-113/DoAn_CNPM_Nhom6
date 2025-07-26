@@ -3,6 +3,8 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web.Mvc;
 using TechStore.Models;
+using OtpNet;
+using QRCoder;
 
 namespace TechStore.Controllers
 {
@@ -39,6 +41,44 @@ namespace TechStore.Controllers
                 ViewBag.Error = "Đăng ký không thành công";
                 return View();
             }
+        }
+        [HttpPost]
+        public ActionResult Factor2Setup(String cus_email)
+        {
+            string email = cus_email;
+            string issuer = "TechStoreWeb";
+
+            // Tạo secret ngẫu nhiên
+            var key = KeyGeneration.GenerateRandomKey(20);
+            var secret = Base32Encoding.ToString(key); //chuyển key do dạng base32 sang string
+
+            // Tạo URL otpauth cho QR
+            string otpUrl = $"otpauth://totp/{issuer}:{email}?secret={secret}&issuer={issuer}&digits=6";
+
+            // Tạo mã QR từ URL
+            var qrGenerator = new QRCodeGenerator();
+            var qrCodeData = qrGenerator.CreateQrCode(otpUrl, QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new Base64QRCode(qrCodeData);
+            string qrCodeImage = qrCode.GetGraphic(10);
+
+            var model = new Face2Factor
+            {
+                Email = email,
+                SecretKey = secret,
+                QrCodeImage = qrCodeImage
+            };
+
+            return Json(new {success = true, factorModel = model});
+        }
+        [HttpPost]
+        public ActionResult VerifyOTP(Face2Factor model, String OtpCode)
+        {
+            var totp = new Totp(Base32Encoding.ToBytes(model.SecretKey));
+            bool isValid = totp.VerifyTotp(OtpCode, out long timeWindowUsed, new VerificationWindow(2, 2));
+            //Nếu sai thì báo lỗi
+            if (!isValid) return Json(new { success = false, message = "Sai mã OTP" });
+            //Ngược lại
+            return Json(new { success = true});
         }
         public ActionResult ThongTinCaNhan()
         {
