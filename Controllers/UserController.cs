@@ -6,12 +6,14 @@ using TechStore.Models;
 using OtpNet;
 using QRCoder;
 using System.Text;
+using Microsoft.Ajax.Utilities;
 
 namespace TechStore.Controllers
 {
     public class UserController : Controller
     {
         DBTechStoreEntities dbO_Cus = new DBTechStoreEntities();
+        
         // GET: User
         [HttpGet]
         public ActionResult DangKy()
@@ -43,34 +45,7 @@ namespace TechStore.Controllers
                 return View();
             }
         }
-        [HttpPost]
-        public ActionResult Factor2SetupUser(String user, String pass)
-        {
-           
-            string issuer = "TechStoreWeb-LogIn";
-
-            // Tạo secret dựa trên tên + mật khẩu
-            byte[] key = SHA1Hash(user + pass);
-            var secret = Base32Encoding.ToString(key); //chuyển key do dạng base32 sang string
-
-            // Tạo URL otpauth cho QR
-            string otpUrl = $"otpauth://totp/{issuer}:{user}?secret={secret}&issuer={issuer}&digits=6";
-
-            // Tạo mã QR từ URL
-            var qrGenerator = new QRCodeGenerator();
-            var qrCodeData = qrGenerator.CreateQrCode(otpUrl, QRCodeGenerator.ECCLevel.Q);
-            var qrCode = new Base64QRCode(qrCodeData);
-            string qrCodeImage = qrCode.GetGraphic(10);
-
-            var model = new Face2Factor
-            {
-                Email = user,
-                SecretKey = secret,
-                QrCodeImage = qrCodeImage
-            };
-
-            return Json(new { success = true, factorModel = model });
-        }
+       
         private static byte[] SHA1Hash(string input)
         {
             using (var sha = new System.Security.Cryptography.SHA1Managed())
@@ -80,27 +55,26 @@ namespace TechStore.Controllers
             }
         }
         [HttpPost]
-        public ActionResult Factor2Setup(String cus_email)
+        public ActionResult Factor2Setup(String cus_name,String pass)
         {
-            string email = cus_email;
+            string user = cus_name + pass;
             string issuer = "TechStoreWeb";
 
             // Tạo secret ngẫu nhiên
-            var key = KeyGeneration.GenerateRandomKey(20);
-            var secret = Base32Encoding.ToString(key); //chuyển key do dạng base32 sang string
+            var key = SHA1Hash(user);
+            var secret = Base32Encoding.ToString(key); //chuyển key do dạng base32(SHA1) sang string
 
             // Tạo URL otpauth cho QR
-            string otpUrl = $"otpauth://totp/{issuer}:{email}?secret={secret}&issuer={issuer}&digits=6";
-
+            string otpUrl = $"otpauth://totp/{issuer}:{cus_name}?secret={secret}&issuer={issuer}&digits=6";
             // Tạo mã QR từ URL
             var qrGenerator = new QRCodeGenerator();
-            var qrCodeData = qrGenerator.CreateQrCode(otpUrl, QRCodeGenerator.ECCLevel.Q);
-            var qrCode = new Base64QRCode(qrCodeData);
+            var qrCodeData = qrGenerator.CreateQrCode(otpUrl, QRCodeGenerator.ECCLevel.Q); //Tạo dữ liệu qrcode
+            var qrCode = new Base64QRCode(qrCodeData); //tạo qrcode
             string qrCodeImage = qrCode.GetGraphic(10);
 
             var model = new Face2Factor
             {
-                Email = email,
+                Email = user,
                 SecretKey = secret,
                 QrCodeImage = qrCodeImage
             };
@@ -108,15 +82,17 @@ namespace TechStore.Controllers
             return Json(new {success = true, factorModel = model});
         }
         [HttpPost]
-        public ActionResult VerifyOTP(Face2Factor model, String OtpCode)
+        public ActionResult VerifyOTP(Face2Factor model, String OtpCode) 
         {
-            var totp = new Totp(Base32Encoding.ToBytes(model.SecretKey));
-            bool isValid = totp.VerifyTotp(OtpCode, out long timeWindowUsed, new VerificationWindow(2, 2));
+            //Khởi tạo đối tượng
+            var totp = new Totp(Base32Encoding.ToBytes(model.SecretKey)); //(từ base32 sang byte , step: thời gian hiệu lực otp)
             //Nếu sai thì báo lỗi
+            bool isValid = totp.VerifyTotp(OtpCode, out long timeWindowUsed, new VerificationWindow(2, 2));
             if (!isValid) return Json(new { success = false, message = "Sai mã OTP" });
             //Ngược lại
             return Json(new { success = true});
         }
+       
         public ActionResult ThongTinCaNhan()
         {
             if (Session["DaDangNhap"] == null)

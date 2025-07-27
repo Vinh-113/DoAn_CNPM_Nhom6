@@ -551,11 +551,11 @@
                 <div class="otp-header">
                     <i class="fas fa-shield-alt otp-icon"></i>
                     <h3>Xác thực hai lớp (2FA)</h3>
-                    <p>Quét mã QR bằng ứng dụng Google Authenticator hoặc Microsoft Authenticator để lấy mã OTP.</p>
+                    <p>Dùng app Google Authencator hay Microsoft Authencator để lấy mã OTP</p>
                 </div>
                 <div class="otp-qr-section">
                     <img id="imgQR" alt="QR Code ứng dụng" class="otp-qr-img" />
-                </div>
+              
                 <div class="otp-input-section">
                     <label for="otpCode" class="otp-label">Nhập mã OTP từ ứng dụng</label>
                     <div class="input-wrapper">
@@ -577,6 +577,7 @@
                 </div>
             </div>
         </div>
+            </div>
     </form>
 
     <div class="login-link">
@@ -607,7 +608,7 @@ function isValid() {
 function setupOTP() {
     const user = document.getElementById("nameCus").value;
     const pass = document.getElementById("passCus").value;
-    fetch('@Url.Action("Factor2SetupUser", "User")', {
+    fetch('@Url.Action("Factor2Setup", "User")', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -618,7 +619,7 @@ function setupOTP() {
             if (data.success) {
                 //Hiện QR code lên để quét
                 const img = document.getElementById("imgQR");
-                img.src = "data:image/png;base64," + data.factorModel.QrCodeImage;
+                /*img.src = "data:image/png;base64," + data.factorModel.QrCodeImage;*/
                 modelOTP = data.factorModel; //Set modelOTP
             }
         }

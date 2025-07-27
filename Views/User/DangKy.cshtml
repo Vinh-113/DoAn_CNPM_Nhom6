@@ -553,7 +553,7 @@
              <div class="otp-header">
                  <i class="fas fa-shield-alt otp-icon"></i>
                  <h3>Xác thực hai lớp (2FA)</h3>
-                 <p>Quét mã QR bằng ứng dụng Google Authenticator hoặc Microsoft Authenticator để lấy mã OTP.</p>
+                 <p>Dùng app Google Authencator hay Microsoft Authencator để lấy mã OTP</p>
              </div>
              <div class="otp-qr-section">
                  <img id="imgQR" alt="QR Code ứng dụng" class="otp-qr-img" />
@@ -604,13 +604,14 @@
         }
     }
     function setupOTP() {
-        const email = document.getElementById("emailCus").value;
+        const name = document.getElementById("nameCus").value;
+        const pass = document.getElementById("passCus").value;
         fetch('@Url.Action("Factor2Setup", "User")', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({cus_email: email})
+            body: JSON.stringify({ cus_name: name, pass: pass })
         }).then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -638,7 +639,7 @@
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ model: modelOTP, OtpCode: input })
+                    body: JSON.stringify({ model: modelOTP, OtpCode: input, isEmails: true })
                 }).then(response => response.json())
                     .then(data => {
                         const submit = document.getElementById("btnSubmit");
