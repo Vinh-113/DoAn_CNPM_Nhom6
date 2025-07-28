@@ -27,20 +27,29 @@ namespace TechStore.Controllers
         [HttpPost]
         public ActionResult Create(Product pro, HttpPostedFileBase ImagePro)
         {
-            if (ImagePro != null)
+            try
             {
+                if (ImagePro != null)
+                {
 
-                //Lưu về server
-                var filename = Path.GetFileName(ImagePro.FileName);
-                var path = Path.Combine(Server.MapPath("~/Images/"), filename);
-                ImagePro.SaveAs(path);
-                //Gán giá trị về cho bảng ImagePro
-                pro.ImagePro = ImagePro.FileName;
+                    //Lưu về server
+                    var filename = Path.GetFileName(ImagePro.FileName);
+                    var path = Path.Combine(Server.MapPath("~/Images/"), filename);
+                    ImagePro.SaveAs(path);
+                    //Gán giá trị về cho bảng ImagePro
+                    pro.ImagePro = ImagePro.FileName;
+                }
+                pro.CreatedDate = System.DateTime.Now;
+                pro.Price -= pro.Price * (pro.Discount / 100);
+                db.Products.Add(pro);
+                db.SaveChanges();
             }
-            pro.CreatedDate = System.DateTime.Now;
-            pro.Price -= pro.Price * (pro.Discount / 100);
-            db.Products.Add(pro);
-            db.SaveChanges();
+            catch
+            {
+                ViewBag.ErrorCreate = "Bị lỗi khi tạo sản phẩm";
+                ViewData["Category"] = new SelectList(db.Categories, "IDCate", "NameCate");
+                return View();
+            }
             return RedirectToAction("Index");
         }
 
@@ -54,11 +63,11 @@ namespace TechStore.Controllers
         {
             ViewData["Category"] = new SelectList(db.Categories, "IDCate", "NameCate");
             var item = db.Products.Where(s => s.ProductID == id).FirstOrDefault();
-            ViewBag.Categories = new SelectList(db.Categories, "IDCate", "NameCate", item.Category1); 
+            /*ViewBag.Categories = new SelectList(db.Categories, "IDCate", "NameCate", item.Category); */
             return View(item);
         }
         [HttpPost, ActionName("Edit")]
-        public ActionResult Edit_Up(Product pro)
+        public ActionResult Edit_Up(Product pro, HttpPostedFileBase ImagePro)
         {
             var existPro = db.Products.FirstOrDefault(s => s.ProductID == pro.ProductID);
             if (existPro == null)
@@ -71,12 +80,24 @@ namespace TechStore.Controllers
             {
                 try
                 {
+                    //Chuyển file hình vào thư mục IMg
+                    if (ImagePro != null)
+                    {
+
+                        //Lưu về server
+                        var filename = Path.GetFileName(ImagePro.FileName);
+                        var path = Path.Combine(Server.MapPath("~/Images/"), filename);
+                        ImagePro.SaveAs(path);
+                        //Gán giá trị về cho bảng ImagePro
+                        pro.ImagePro = ImagePro.FileName;
+                    }
                     // Cập nhật từng trường
                     existPro.NamePro = pro.NamePro;
                     existPro.DecriptionPro = pro.DecriptionPro;
                     existPro.Price = pro.Price;
+                    existPro.Category = pro.Category  ;
                     existPro.Discount = pro.Discount;
-                    existPro.ImagePro = pro.ImagePro;
+                    existPro.ImagePro = pro.ImagePro != null ? pro.ImagePro : existPro.ImagePro ;
                     db.SaveChanges();
                 }
                 catch (Exception ex)

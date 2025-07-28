@@ -14,6 +14,12 @@
                         <i class="fas fa-folder-plus me-2"></i>Tạo danh mục mới
                     </h3>
                 </div>
+                @if (ViewBag.Loi != null)
+                {
+                    <div class="alert alert-warning text-center mb-3">
+                        @ViewBag.Loi
+                    </div>
+                }
                 <div class="card-body">
                     @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "needs-validation" }))
                     {
@@ -23,7 +29,7 @@
                         <div class="mb-4">
                             <div class="form-floating">
                                 @Html.EditorFor(model => model.IDCate, new { htmlAttributes = new { @class = "form-control", placeholder = "Mã danh mục" } })
-                                @Html.LabelFor(model => model.IDCate, "Mã danh mục",new { @class = "control-label" })
+                                @Html.LabelFor(model => model.IDCate, "Mã danh mục", new { @class = "control-label" })
                                 @Html.ValidationMessageFor(model => model.IDCate, "", new { @class = "text-danger" })
                             </div>
                             <small class="text-muted">Nhập mã danh mục duy nhất</small>
@@ -32,7 +38,7 @@
                         <div class="mb-4">
                             <div class="form-floating">
                                 @Html.EditorFor(model => model.NameCate, new { htmlAttributes = new { @class = "form-control", placeholder = "Tên danh mục" } })
-                                @Html.LabelFor(model => model.NameCate, "Tên danh mục",new { @class = "control-label" })
+                                @Html.LabelFor(model => model.NameCate, "Tên danh mục", new { @class = "control-label" })
                                 @Html.ValidationMessageFor(model => model.NameCate, "", new { @class = "text-danger" })
                             </div>
                             <small class="text-muted">Nhập tên danh mục sản phẩm</small>

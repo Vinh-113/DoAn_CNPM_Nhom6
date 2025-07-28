@@ -45,14 +45,19 @@ namespace TechStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,IDCate,NameCate")] Category category)
         {
-            if (ModelState.IsValid)
+            try
             {
                 db.Categories.Add(category);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                
+            }
+            catch
+            {
+                ViewBag.Loi = "Bị lỗi khi tạo danh mục";
+                return View(category);
             }
 
-            return View(category);
+            return RedirectToAction("Index");
         }
 
         // GET: Categories/Edit/5

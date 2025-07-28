@@ -7,6 +7,12 @@
 
 <div class="container" style="max-width: 900px; margin: 40px auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05);">
     <h2 style="text-align: center; font-weight: 700; margin-bottom: 30px; color: #4f46e5;">Tạo sản phẩm mới</h2>
+    @if (ViewBag.ErrorCreate != null)
+    {
+        <div class="alert alert-warning text-center mb-3">
+            @ViewBag.ErrorCreate
+        </div>
+    }
     <div class="row">
         <div class="col-md-4 d-flex align-items-start justify-content-center">
             <img id="imagePreview" class="img-fluid" style="max-width: 100%; border-radius: 12px; display: none;" alt="Preview" />
@@ -17,41 +23,41 @@
                 @Html.AntiForgeryToken()
 
                 @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
-            <div class="form-group mb-3">
-                <p>Tên sản phẩm</p>
-                @Html.EditorFor(model => model.NamePro, new { htmlAttributes = new { @class = "form-control rounded-pill px-4 py-2" } })
-                @Html.ValidationMessageFor(model => model.NamePro, "", new { @class = "text-danger" })
-            </div>
+                <div class="form-group mb-3">
+                    <p>Tên sản phẩm</p>
+                    @Html.EditorFor(model => model.NamePro, new { htmlAttributes = new { @class = "form-control rounded-pill px-4 py-2" } })
+                    @Html.ValidationMessageFor(model => model.NamePro, "", new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group mb-3">
-                <p>Mô tả sản phẩm</p>
-                @Html.TextAreaFor(model => model.DecriptionPro, new { @class = "form-control rounded-4 px-4 py-2", rows = "4" })
-                @Html.ValidationMessageFor(model => model.DecriptionPro, "", new { @class = "text-danger" })
-            </div>
+                <div class="form-group mb-3">
+                    <p>Mô tả sản phẩm</p>
+                    @Html.TextAreaFor(model => model.DecriptionPro, new { @class = "form-control rounded-4 px-4 py-2", rows = "4" })
+                    @Html.ValidationMessageFor(model => model.DecriptionPro, "", new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group mb-3">
-                <p>Phân loại sản phẩm</p>
-                @Html.DropDownList("Category", null, htmlAttributes: new { @class = "form-control rounded-pill px-4 py-2" })
-                @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
-            </div>
+                <div class="form-group mb-3">
+                    <p>Phân loại sản phẩm</p>
+                    @Html.DropDownList("Category", null, htmlAttributes: new { @class = "form-control rounded-pill px-4 py-2" })
+                    @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group mb-3">
-                <p>Gía thành sản phẩm</p>
-                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control rounded-pill px-4 py-2" } })
-                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
-            </div>
+                <div class="form-group mb-3">
+                    <p>Gía thành sản phẩm</p>
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control rounded-pill px-4 py-2" } })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group mb-3">
-                <p>Mã giảm giá sản phẩm</p>
-                @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control rounded-pill px-4 py-2" } })
-                @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
-            </div>
+                <div class="form-group mb-3">
+                    <p>Mã giảm giá sản phẩm</p>
+                    @Html.EditorFor(model => model.Discount, new { htmlAttributes = new { @class = "form-control rounded-pill px-4 py-2", } })
+                    @Html.ValidationMessageFor(model => model.Discount, "", new { @class = "text-danger" })
+                </div>
 
-            <div class="form-group mb-4">
-                <p>Chọn hình cho sản phẩm</p>
-                <input type="file" name="ImagePro" class="form-control rounded-pill px-4 py-2" accept="image/*" onchange="previewImage(event)" />
-                @Html.ValidationMessageFor(model => model.ImagePro, "", new { @class = "text-danger" })
-            </div>
+                <div class="form-group mb-4">
+                    <p>Chọn hình cho sản phẩm</p>
+                    <input type="file" name="ImagePro" class="form-control rounded-pill px-4 py-2" accept="image/*" onchange="previewImage(event)" required />
+                    @Html.ValidationMessageFor(model => model.ImagePro, "", new { @class = "text-danger" })
+                </div>
 
                 <div class="d-grid gap-2">
                     <input type="submit" value="Tạo sản phẩm" class="btn btn-primary rounded-pill px-4 py-2" style="background: #4f46e5; border: none;" />
