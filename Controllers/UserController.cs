@@ -87,7 +87,7 @@ namespace TechStore.Controllers
             //Khởi tạo đối tượng
             var totp = new Totp(Base32Encoding.ToBytes(model.SecretKey)); //(từ base32 sang byte , step: thời gian hiệu lực otp)
             //Nếu sai thì báo lỗi
-            bool isValid = totp.VerifyTotp(OtpCode, out long timeWindowUsed, new VerificationWindow(2, 2));
+            bool isValid = totp.VerifyTotp(OtpCode, out long timeWindowUsed, new VerificationWindow(1, 1));
             if (!isValid) return Json(new { success = false, message = "Sai mã OTP" });
             //Ngược lại
             return Json(new { success = true});

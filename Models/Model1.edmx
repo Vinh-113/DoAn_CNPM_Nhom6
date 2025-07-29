@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DBTechStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DBTechStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AdminUser">
           <Key>
             <PropertyRef Name="ID" />
@@ -44,6 +44,15 @@
           <Property Name="MembershipLevel" Type="nvarchar" MaxLength="50" />
           <Property Name="IsBanned" Type="bit" />
           <Property Name="ReasonBanned" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="LoveProduct">
+          <Key>
+            <PropertyRef Name="ProductID" />
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="CustomerID" Type="int" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -101,6 +110,30 @@
           <Property Name="IsHidden" Type="bit" />
           <Property Name="IsBanned" Type="bit" />
         </EntityType>
+        <Association Name="FK__LoveProdu__Custo__395884C4">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="LoveProduct" Type="Self.LoveProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="IDCus" />
+            </Principal>
+            <Dependent Role="LoveProduct">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__LoveProdu__Produ__3864608B">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="LoveProduct" Type="Self.LoveProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="LoveProduct">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__OrderDeta__IDOrd__787EE5A0">
           <End Role="OrderPro" Type="Self.OrderPro" Multiplicity="0..1" />
           <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
@@ -177,10 +210,19 @@
           <EntitySet Name="AdminUser" EntityType="Self.AdminUser" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LoveProduct" EntityType="Self.LoveProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderDetail" EntityType="Self.OrderDetail" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrderPro" EntityType="Self.OrderPro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Reviews" EntityType="Self.Reviews" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__LoveProdu__Custo__395884C4" Association="Self.FK__LoveProdu__Custo__395884C4">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="LoveProduct" EntitySet="LoveProduct" />
+          </AssociationSet>
+          <AssociationSet Name="FK__LoveProdu__Produ__3864608B" Association="Self.FK__LoveProdu__Produ__3864608B">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="LoveProduct" EntitySet="LoveProduct" />
+          </AssociationSet>
           <AssociationSet Name="FK__OrderDeta__IDOrd__787EE5A0" Association="Self.FK__OrderDeta__IDOrd__787EE5A0">
             <End Role="OrderPro" EntitySet="OrderPro" />
             <End Role="OrderDetail" EntitySet="OrderDetail" />
@@ -206,7 +248,8 @@
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DBTechStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -248,10 +291,22 @@
           <Property Name="RegisteredDate" Type="DateTime" Precision="3" />
           <Property Name="IsVIP" Type="Boolean" />
           <Property Name="MembershipLevel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="OrderProes" Relationship="Self.FK__OrderPro__IDCus__59063A47" FromRole="Customer" ToRole="OrderPro" />
-          <NavigationProperty Name="Reviews" Relationship="Self.FK__Reviews__Custome__628FA481" FromRole="Customer" ToRole="Reviews" />
           <Property Name="IsBanned" Type="Boolean" />
           <Property Name="ReasonBanned" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LoveProducts" Relationship="Self.FK__LoveProdu__Custo__395884C4" FromRole="Customer" ToRole="LoveProduct" />
+          <NavigationProperty Name="OrderProes" Relationship="Self.FK__OrderPro__IDCus__73BA3083" FromRole="Customer" ToRole="OrderPro" />
+          <NavigationProperty Name="Reviews" Relationship="Self.FK__Reviews__Custome__628FA481" FromRole="Customer" ToRole="Reviews" />
+        </EntityType>
+        <EntityType Name="LoveProduct">
+          <Key>
+            <PropertyRef Name="ProductID" />
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="CustomerID" Type="Int32" Nullable="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__LoveProdu__Custo__395884C4" FromRole="LoveProduct" ToRole="Customer" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__LoveProdu__Produ__3864608B" FromRole="LoveProduct" ToRole="Products" />
         </EntityType>
         <EntityType Name="OrderDetail">
           <Key>
@@ -265,8 +320,8 @@
           <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="Subtotal" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="OrderPro" Relationship="Self.FK__OrderDeta__IDOrd__5DCAEF64" FromRole="OrderDetail" ToRole="OrderPro" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__OrderDeta__IDPro__5CD6CB2B" FromRole="OrderDetail" ToRole="Products" />
+          <NavigationProperty Name="OrderPro" Relationship="Self.FK__OrderDeta__IDOrd__787EE5A0" FromRole="OrderDetail" ToRole="OrderPro" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__OrderDeta__IDPro__778AC167" FromRole="OrderDetail" ToRole="Products" />
         </EntityType>
         <EntityType Name="OrderPro">
           <Key>
@@ -283,8 +338,8 @@
           <Property Name="TrackingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PaymentStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ShippingCost" Type="Decimal" Precision="18" Scale="2" />
-          <NavigationProperty Name="Customer" Relationship="Self.FK__OrderPro__IDCus__59063A47" FromRole="OrderPro" ToRole="Customer" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__IDOrd__5DCAEF64" FromRole="OrderPro" ToRole="OrderDetail" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__OrderPro__IDCus__73BA3083" FromRole="OrderPro" ToRole="Customer" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__IDOrd__787EE5A0" FromRole="OrderPro" ToRole="OrderDetail" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -299,7 +354,8 @@
           <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Category1" Relationship="Self.FK_Pro_Category" FromRole="Products" ToRole="Category" />
-          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__IDPro__5CD6CB2B" FromRole="Products" ToRole="OrderDetail" />
+          <NavigationProperty Name="LoveProducts" Relationship="Self.FK__LoveProdu__Produ__3864608B" FromRole="Products" ToRole="LoveProduct" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__IDPro__778AC167" FromRole="Products" ToRole="OrderDetail" />
           <NavigationProperty Name="Reviews" Relationship="Self.FK__Reviews__Product__619B8048" FromRole="Products" ToRole="Reviews" />
         </EntityType>
         <EntityType Name="Review">
@@ -312,11 +368,11 @@
           <Property Name="Rating" Type="Decimal" Precision="2" Scale="1" Nullable="false" />
           <Property Name="ReviewContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ReviewDate" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Customer" Relationship="Self.FK__Reviews__Custome__628FA481" FromRole="Reviews" ToRole="Customer" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__Reviews__Product__619B8048" FromRole="Reviews" ToRole="Products" />
-          <Property Name="ReviewerName" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ReviewerName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IsHidden" Type="Boolean" />
           <Property Name="IsBanned" Type="Boolean" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK__Reviews__Custome__628FA481" FromRole="Reviews" ToRole="Customer" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Reviews__Product__619B8048" FromRole="Reviews" ToRole="Products" />
         </EntityType>
         <Association Name="FK_Pro_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
@@ -330,7 +386,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderPro__IDCus__59063A47">
+        <Association Name="FK__LoveProdu__Custo__395884C4">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="LoveProduct" Type="Self.LoveProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="IDCus" />
+            </Principal>
+            <Dependent Role="LoveProduct">
+              <PropertyRef Name="CustomerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderPro__IDCus__73BA3083">
           <End Role="Customer" Type="Self.Customer" Multiplicity="0..1" />
           <End Role="OrderPro" Type="Self.OrderPro" Multiplicity="*" />
           <ReferentialConstraint>
@@ -354,7 +422,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderDeta__IDOrd__5DCAEF64">
+        <Association Name="FK__LoveProdu__Produ__3864608B">
+          <End Role="Products" Type="Self.Product" Multiplicity="1" />
+          <End Role="LoveProduct" Type="Self.LoveProduct" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="LoveProduct">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__IDOrd__787EE5A0">
           <End Role="OrderPro" Type="Self.OrderPro" Multiplicity="0..1" />
           <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -366,7 +446,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__OrderDeta__IDPro__5CD6CB2B">
+        <Association Name="FK__OrderDeta__IDPro__778AC167">
           <End Role="Products" Type="Self.Product" Multiplicity="0..1" />
           <End Role="OrderDetail" Type="Self.OrderDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -394,6 +474,7 @@
           <EntitySet Name="AdminUsers" EntityType="Self.AdminUser" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="LoveProducts" EntityType="Self.LoveProduct" />
           <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
           <EntitySet Name="OrderProes" EntityType="Self.OrderPro" />
           <EntitySet Name="Products" EntityType="Self.Product" />
@@ -402,7 +483,11 @@
             <End Role="Category" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderPro__IDCus__59063A47" Association="Self.FK__OrderPro__IDCus__59063A47">
+          <AssociationSet Name="FK__LoveProdu__Custo__395884C4" Association="Self.FK__LoveProdu__Custo__395884C4">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="LoveProduct" EntitySet="LoveProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderPro__IDCus__73BA3083" Association="Self.FK__OrderPro__IDCus__73BA3083">
             <End Role="Customer" EntitySet="Customers" />
             <End Role="OrderPro" EntitySet="OrderProes" />
           </AssociationSet>
@@ -410,11 +495,15 @@
             <End Role="Customer" EntitySet="Customers" />
             <End Role="Reviews" EntitySet="Reviews" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__IDOrd__5DCAEF64" Association="Self.FK__OrderDeta__IDOrd__5DCAEF64">
+          <AssociationSet Name="FK__LoveProdu__Produ__3864608B" Association="Self.FK__LoveProdu__Produ__3864608B">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="LoveProduct" EntitySet="LoveProducts" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__IDOrd__787EE5A0" Association="Self.FK__OrderDeta__IDOrd__787EE5A0">
             <End Role="OrderPro" EntitySet="OrderProes" />
             <End Role="OrderDetail" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__OrderDeta__IDPro__5CD6CB2B" Association="Self.FK__OrderDeta__IDPro__5CD6CB2B">
+          <AssociationSet Name="FK__OrderDeta__IDPro__778AC167" Association="Self.FK__OrderDeta__IDPro__778AC167">
             <End Role="Products" EntitySet="Products" />
             <End Role="OrderDetail" EntitySet="OrderDetails" />
           </AssociationSet>
@@ -454,8 +543,6 @@
           <EntitySetMapping Name="Customers">
             <EntityTypeMapping TypeName="DBTechStoreModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
-                <ScalarProperty Name="ReasonBanned" ColumnName="ReasonBanned" />
-                <ScalarProperty Name="IsBanned" ColumnName="IsBanned" />
                 <ScalarProperty Name="IDCus" ColumnName="IDCus" />
                 <ScalarProperty Name="NameCus" ColumnName="NameCus" />
                 <ScalarProperty Name="PhoneCus" ColumnName="PhoneCus" />
@@ -469,6 +556,17 @@
                 <ScalarProperty Name="RegisteredDate" ColumnName="RegisteredDate" />
                 <ScalarProperty Name="IsVIP" ColumnName="IsVIP" />
                 <ScalarProperty Name="MembershipLevel" ColumnName="MembershipLevel" />
+                <ScalarProperty Name="IsBanned" ColumnName="IsBanned" />
+                <ScalarProperty Name="ReasonBanned" ColumnName="ReasonBanned" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LoveProducts">
+            <EntityTypeMapping TypeName="DBTechStoreModel.LoveProduct">
+              <MappingFragment StoreEntitySet="LoveProduct">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -520,15 +618,15 @@
           <EntitySetMapping Name="Reviews">
             <EntityTypeMapping TypeName="DBTechStoreModel.Review">
               <MappingFragment StoreEntitySet="Reviews">
-                <ScalarProperty Name="IsBanned" ColumnName="IsBanned" />
-                <ScalarProperty Name="IsHidden" ColumnName="IsHidden" />
-                <ScalarProperty Name="ReviewerName" ColumnName="ReviewerName" />
                 <ScalarProperty Name="ReviewID" ColumnName="ReviewID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="Rating" ColumnName="Rating" />
                 <ScalarProperty Name="ReviewContent" ColumnName="ReviewContent" />
                 <ScalarProperty Name="ReviewDate" ColumnName="ReviewDate" />
+                <ScalarProperty Name="ReviewerName" ColumnName="ReviewerName" />
+                <ScalarProperty Name="IsHidden" ColumnName="IsHidden" />
+                <ScalarProperty Name="IsBanned" ColumnName="IsBanned" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

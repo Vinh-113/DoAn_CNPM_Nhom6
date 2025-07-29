@@ -31,6 +31,24 @@
         color: var(--text-dark);
         background: var(--bg-light);
     }
+    /* Đã bán styling */
+    .product-sold {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+        .product-sold i {
+            color: #ff6b9d;
+            font-size: 0.9rem;
+        }
+
+    .sold-count {
+        font-weight: 600;
+    }
 
     /* ===== MAIN CONTAINER ===== */
     .homepage-container {
@@ -1027,7 +1045,7 @@
 
                            <!-- Nút yêu thích ở góc phải dưới -->
                            <button class="wishlist-btn"
-                                   onclick="event.stopPropagation(); addToWishlist(@item.ProductID, this)"
+                                   onclick="event.stopPropagation(); wishlistController.toggleWishlist(@item.ProductID, this)"
                                    aria-label="Thả tim">
                                <i class="wishlist-icon fas fa-heart"></i>
                                <span class="wishlist-count" id="wishlist-count-@item.ProductID">0</span>
@@ -1036,6 +1054,11 @@
 
                        <div class="product-info">
                            <h3 class="product-name">@item.NamePro</h3>
+                           <!-- Đã bán-->
+                           <div class="product-sold">
+                               <i class="fas fa-shopping-cart"></i>
+                               <span class="sold-count">Đã bán: @ViewBag.SoldQuantities[item.ProductID]</span>
+                           </div>
 
                            <!-- Rating stars - Thêm phần này -->
                            <div class="product-rating">
@@ -1402,131 +1425,78 @@
     //Thêm vô đánh giá sao
     // ===== WISHLIST FUNCTIONALITY - PHIÊN BẢN CẬP NHẬT =====
     const wishlistController = {
-        likeCounts: JSON.parse(localStorage.getItem('likeCounts') || '{}'),
-        likedProducts: JSON.parse(localStorage.getItem('likedProducts') || '{}'), // Thêm mới: theo dõi sản phẩm đã like
+        likedProducts: {},
 
         init() {
-            this.updateAllWishlistUI();
+            this.fetchWishlistFromServer();
             this.initializeRatings();
         },
 
-        // HÀM MỚI: Toggle wishlist thay vì chỉ thêm
+        fetchWishlistFromServer() {
+            $.get('@Url.Action("GetWishlist", "Home")', (data) => {
+                this.likedProducts = {};
+                data.forEach(item => {
+                    this.likedProducts[item.ProductId] = true;
+                });
+                this.updateAllWishlistUI();
+            });
+        },
+
         toggleWishlist(productId, buttonElement) {
             const isCurrentlyLiked = this.likedProducts[productId] || false;
+            var productName = $(buttonElement).closest('.product-card').find('.product-name').text().trim();
 
             if (isCurrentlyLiked) {
-                // Nếu đã like thì bỏ like (giảm xuống)
                 this.removeFromWishlist(productId, buttonElement);
             } else {
-                // Nếu chưa like thì thêm like (tăng lên)
-                this.addToWishlist(productId, buttonElement);
+                this.addToWishlist(productId, productName, buttonElement);
             }
         },
 
-        addToWishlist(productId, buttonElement) {
-            // Đánh dấu sản phẩm đã được like
-            this.likedProducts[productId] = true;
-
-            // Tăng số lượng like
-            if (!this.likeCounts[productId]) {
-                this.likeCounts[productId] = 0;
-            }
-            this.likeCounts[productId]++;
-
-            // Animation effect khi thêm
-            buttonElement.classList.add('pulse');
-            setTimeout(() => {
-                buttonElement.classList.remove('pulse');
-            }, 600);
-
-            // Cập nhật UI
-            this.updateWishlistUI(productId, buttonElement);
-            this.saveLikeCounts();
-
-            // Show notification
-            this.showNotification(`Đã thả tim! ❤️ (${this.likeCounts[productId]} lượt thích)`, 'success');
+        addToWishlist(productId, productName, buttonElement) {
+            $.post('@Url.Action("AddToWishlist", "Home")', { productId, productName }, (res) => {
+                if (res.success) {
+                    this.likedProducts[productId] = true;
+                    this.updateWishlistUI(productId, buttonElement);
+                }
+                this.showNotification(res.message, res.success ? 'success' : 'info');
+            });
         },
 
-        // HÀM MỚI: Xóa khỏi wishlist
         removeFromWishlist(productId, buttonElement) {
-            // Bỏ đánh dấu sản phẩm đã like
-            this.likedProducts[productId] = false;
-
-            // Giảm số lượng like (không cho xuống dưới 0)
-            if (this.likeCounts[productId] && this.likeCounts[productId] > 0) {
-                this.likeCounts[productId]--;
-            }
-
-            // Animation effect khi xóa
-            buttonElement.classList.add('pulse');
-            setTimeout(() => {
-                buttonElement.classList.remove('pulse');
-            }, 600);
-
-            // Cập nhật UI
-            this.updateWishlistUI(productId, buttonElement);
-            this.saveLikeCounts();
-
-            // Show notification
-            this.showNotification(`Đã bỏ tim! 💔 (${this.likeCounts[productId]} lượt thích)`, 'info');
+            $.post('@Url.Action("RemoveFromWishlist", "Home")', { productId }, (res) => {
+                if (res.success) {
+                    this.likedProducts[productId] = false;
+                    this.updateWishlistUI(productId, buttonElement);
+                }
+                this.showNotification(res.message, res.success ? 'info' : 'error');
+            });
         },
 
         updateWishlistUI(productId, buttonElement) {
-            const countElement = buttonElement.querySelector('.wishlist-count');
-            const currentCount = this.likeCounts[productId] || 0;
             const isLiked = this.likedProducts[productId] || false;
-
-            // Cập nhật số lượng hiển thị
-            countElement.textContent = currentCount;
-
-            // Cập nhật trạng thái nút dựa trên việc user đã like hay chưa
             if (isLiked) {
                 buttonElement.classList.add('active');
-                buttonElement.setAttribute('aria-label', `Đã thích - ${currentCount} lượt thích`);
+                buttonElement.setAttribute('aria-label', `Đã thích`);
             } else {
                 buttonElement.classList.remove('active');
-                buttonElement.setAttribute('aria-label', `Thả tim - ${currentCount} lượt thích`);
-            }
-
-            // Hiển thị số đếm nếu > 0
-            if (currentCount > 0) {
-                countElement.style.display = 'flex';
-            } else {
-                countElement.style.display = 'none';
+                buttonElement.setAttribute('aria-label', `Thả tim`);
             }
         },
 
         updateAllWishlistUI() {
-            // Cập nhật tất cả các nút wishlist khi tải trang
             document.querySelectorAll('[id^="wishlist-count-"]').forEach(countElement => {
                 const productId = countElement.id.replace('wishlist-count-', '');
                 const buttonElement = countElement.closest('.wishlist-btn');
-                const currentCount = this.likeCounts[productId] || 0;
                 const isLiked = this.likedProducts[productId] || false;
-
-                countElement.textContent = currentCount;
-
-                // Cập nhật trạng thái nút
                 if (isLiked) {
                     buttonElement.classList.add('active');
-                    buttonElement.setAttribute('aria-label', `Đã thích - ${currentCount} lượt thích`);
+                    buttonElement.setAttribute('aria-label', `Đã thích`);
                 } else {
                     buttonElement.classList.remove('active');
-                    buttonElement.setAttribute('aria-label', `Thả tim - ${currentCount} lượt thích`);
-                }
-
-                // Hiển thị số đếm
-                if (currentCount > 0) {
-                    countElement.style.display = 'flex';
-                } else {
-                    countElement.style.display = 'none';
+                    buttonElement.setAttribute('aria-label', `Thả tim`);
                 }
             });
-        },
-
-        saveLikeCounts() {
-            localStorage.setItem('likeCounts', JSON.stringify(this.likeCounts));
-            localStorage.setItem('likedProducts', JSON.stringify(this.likedProducts)); // Lưu trạng thái like
         },
 
         initializeRatings() {
@@ -1543,7 +1513,6 @@
 
             stars.forEach((star, index) => {
                 star.classList.remove('filled', 'half-filled');
-
                 if (index < fullStars) {
                     star.classList.add('filled');
                 } else if (index === fullStars && hasHalfStar) {
@@ -1553,52 +1522,11 @@
         },
 
         showNotification(message, type = 'info') {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.className = `notification notification-${type}`;
-            notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${type === 'success' ? '#10b981' : type === 'info' ? '#3b82f6' : '#ef4444'};
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            z-index: 1000;
-            font-weight: 600;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        `;
-            notification.textContent = message;
-
-            document.body.appendChild(notification);
-
-            // Show notification
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 100);
-
-            // Hide notification
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
+            // ... giữ nguyên code thông báo ...
         }
     };
-
     // HÀM GLOBAL MỚI: Sử dụng toggle thay vì add
-    function addToWishlist(productId, buttonElement) {
-        if (isUserLogged()) {
-            wishlistController.toggleWishlist(productId, buttonElement);
-        }
-        else { 
-            window.location.href='@Url.Action("DangNhap","User")'
-        }
-            
-    }
+
     //Kiểm tra phần đăng nhập
     function isUserLogged() {
         return window.userIsLoggedIn = @(Session["DaDangNhap"] != null ? "true" : "false");

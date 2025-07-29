@@ -24,7 +24,24 @@
         --shadow-hover: 0 15px 50px rgba(0,0,0,0.15);
         --border-radius: 15px;
     }
+    /* Đã bán styling */
+    .product-sold {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
 
+        .product-sold i {
+            color: #ff6b9d;
+            font-size: 0.9rem;
+        }
+
+    .sold-count {
+        font-weight: 600;
+    }
     body {
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -818,7 +835,11 @@
                         <div class="product-badge">HOT</div>
                     </div>
                 </div>
-
+                <!-- Đã bán-->
+                <div class="product-sold">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="sold-count">Đã bán: @ViewBag.SoldQuantities[Model.Product.ProductID]</span>
+                </div>
                 <!-- Thông tin sản phẩm -->
                 <div class="col-lg-6">
                     <div class="product-info">
@@ -840,10 +861,9 @@
 
                         <!-- Selector số lượng -->
                         <!--<div class="quantity-selector">
-                            <label class="quantity-label">Số lượng:</label>
-                            <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantityInput">
-                        </div>-->
-
+                <label class="quantity-label">Số lượng:</label>
+                <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantityInput">
+            </div>-->
                         <!-- Nút hành động -->
                         <div class="action-buttons">
                             <a class="btn-modern btn-primary-modern" href="@Url.Action("AddToCart", "Cart", new { id = @Model.Product.ProductID })">
@@ -1031,6 +1051,11 @@
                         <div class="related-card-body">
                             <div class="related-card-content">
                                 <h5 class="related-card-title">@rePro.NamePro</h5>
+                                <!-- Đã bán-->
+                                <div class="product-sold">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span class="sold-count">Đã bán: @ViewBag.SoldQuantities[rePro.ProductID]</span>
+                                </div>
                                 <p class="related-card-text">
                                     @(rePro.DecriptionPro.Length > 80 ? rePro.DecriptionPro.Substring(0, 80) + "..." : rePro.DecriptionPro)
                                 </p>

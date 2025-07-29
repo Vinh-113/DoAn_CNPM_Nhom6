@@ -17,6 +17,7 @@ namespace TechStore.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Customer()
         {
+            this.LoveProducts = new HashSet<LoveProduct>();
             this.OrderProes = new HashSet<OrderPro>();
             this.Reviews = new HashSet<Review>();
         }
@@ -37,6 +38,8 @@ namespace TechStore.Models
         public Nullable<bool> IsBanned { get; set; }
         public string ReasonBanned { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<LoveProduct> LoveProducts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderPro> OrderProes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -619,7 +619,7 @@ function setupOTP() {
             if (data.success) {
                 //Hiện QR code lên để quét
                 const img = document.getElementById("imgQR");
-                /*img.src = "data:image/png;base64," + data.factorModel.QrCodeImage;*/
+                img.src = "data:image/png;base64," + data.factorModel.QrCodeImage;
                 modelOTP = data.factorModel; //Set modelOTP
             }
         }
