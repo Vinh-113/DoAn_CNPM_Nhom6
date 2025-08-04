@@ -6,6 +6,78 @@
 }
 
 <div class="container-fluid mt-4">
+    @if (ViewBag.ThongBao != null || ViewBag.RefundStatus != null)
+    {
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                @if (ViewBag.ThongBao != null)
+                {
+                    <div class="alert alert-warning " role="alert">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <strong>Thông báo!</strong>
+                                <span>@ViewBag.ThongBao</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (ViewBag.RefundStatus != null)
+                {
+                    //Tách chữ ra để lấy status
+                    string re = (string)ViewBag.RefundStatus;
+                    string[] refund = re.Split('|').ToArray(); string stat = refund.Length > 0 ? refund[0].ToLower().Trim() : "";
+                    string message = refund.Length > 0 ? refund[1].ToLower().Trim() : "";
+                    if (stat == "chấp nhận")
+                    {
+                        <div class="alert alert-success alert-dismissible fade show notification-alert refund-accepted" role="alert">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <strong>Yêu cầu hoàn tiền hay bảo hành được chấp nhận!</strong>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    }
+                    else if (stat == "từ chối")
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show notification-alert refund-rejected" role="alert">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <i class="fas fa-times-circle"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <strong>Yêu cầu hoàn tiền hay bảo hành bị từ chối</strong>
+                                    <span>@message</span>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    }
+                    else if (stat == "đang xử lý")
+                    {
+                        <div class="alert alert-info alert-dismissible fade show notification-alert refund-processing" role="alert">
+                            <div class="d-flex align-items-center">
+                                <div class="alert-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="alert-content">
+                                    <strong>Yêu cầu hoàn tiền hay bảo hành đang được xử lý</strong>
+                                    <span>@message</span>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    }
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow-sm">
@@ -79,11 +151,11 @@
                                         <div class="col-md-6">
                                             <p class="mb-1">
                                                 <strong>Mã đơn hàng:</strong>
-                                                <span >@Html.DisplayFor(model => model.OrderPro.TrackingNumber)</span>
+                                                <span>@Html.DisplayFor(model => model.OrderPro.TrackingNumber)</span>
                                             </p>
                                             <p class="mb-1">
                                                 <strong>Trạng thái giao hàng:</strong>
-                                                <span >@Html.DisplayFor(model => model.OrderPro.Status)</span>
+                                                <span>@Html.DisplayFor(model => model.OrderPro.Status)</span>
                                             </p>
                                         </div>
                                     </div>
@@ -194,14 +266,17 @@
                 <div class="card-footer bg-light d-flex justify-content-between">
                     <div>
                         <div class="btn-group ml-2">
-                            <a class="btn btn-danger" href="@Url.Action("Delete", new { id = Model.OrderPro.ID })">Hủy đơn</a>
-                            
-                            <a class="btn btn-dark" id="idSupport" href="@Url.Action("IndexSupport", "Contact", new { idOrder = Model.OrderPro.ID ,
-                                   namecus = Model.OrderPro.Customer.NameCus
-                               , email = Model.OrderPro.Customer.EmailCus,
-                                   phone = Model.OrderPro.Customer.PhoneCus,
-                                   trackingNumber = Model.OrderPro.TrackingNumber
-                               })">Yêu cầu hỗ trợ</a>
+@*                            <a class="btn btn-danger" href="@Url.Action("Delete", new { id = Model.OrderPro.ID, action ="Details_KH" })">Hủy đơn</a>
+*@
+                            @if (Model.OrderPro.Status == "Đã giao")
+                            {
+                                <a class="btn btn-dark" id="idSupport" href="@Url.Action("IndexSupport", "Contact", new { idOrder = Model.OrderPro.ID ,
+        namecus = Model.OrderPro.Customer.NameCus
+    , email = Model.OrderPro.Customer.EmailCus,
+        phone = Model.OrderPro.Customer.PhoneCus,
+        trackingNumber = Model.OrderPro.TrackingNumber
+    })">Yêu cầu hỗ trợ</a>
+                            }
                         </div>
                     </div>
                 </div>

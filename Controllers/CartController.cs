@@ -65,7 +65,7 @@ namespace TechStore.Controllers
                     IDCus = model.Customers.IDCus,
                     DateOrder = DateTime.Now,
                     TotalAmount = TotalMoney() + shipping_cost,
-                    Status = "Đã tiếp nhận thành công, đang xử lý",
+                    Status = "Đang xử lý",
                     PaymentMethod = paymentmethod,
                     TrackingNumber = GenerateTrackingNumber(),
                     AddressDeliverry = model.Customers.StreetAddress + "," + model.Customers.Ward + "," + model.Customers.District + "," + model.Customers.City,

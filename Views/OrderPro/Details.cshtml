@@ -6,6 +6,27 @@
 }
 
 <div class="container-fluid mt-4">
+    @if (ViewBag.Error != null || TempData["Error"] != null || ViewBag.ThongBao != null || ViewBag.Success != null)
+    {
+        <div class="row mb-4">
+            <div class="col-lg-12">
+                @if (ViewBag.ThongBao != null)
+                {
+                    <div class="alert alert-warning " role="alert">
+                        <div class="d-flex align-items-center">
+                            <div class="alert-icon">
+                                <i class="fas fa-info-circle"></i>
+                            </div>
+                            <div class="alert-content">
+                                <strong>Thông báo!</strong>
+                                <span>@ViewBag.ThongBao</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
     <div class="row">
         <div class="col-lg-12">
             <div class="card shadow-sm">
@@ -197,8 +218,11 @@
                                 <i class="fa fa-cog"></i> Thao tác
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item text-danger" href="@Url.Action("Delete", new { id = Model.OrderPro.ID})"><i class="fa fa-times"></i> Hủy đơn</a>
-                                <div class="dropdown-divider"></div>
+                                @if (Model.OrderPro.Status == "Đang xử lý" )
+                                {
+                                    <a class="dropdown-item text-danger" href="@Url.Action("Delete", new { id = Model.OrderPro.ID})"><i class="fa fa-times"></i> Hủy đơn</a>
+                                    <div class="dropdown-divider"></div>
+                                }
                                 <a class="dropdown-item text-primary" href="@Url.Action("Edit", new { id = Model.OrderPro.ID })">
                                     <i class="fa fa-edit"></i> Cập nhật đơn hàng này
                                 </a>
@@ -269,4 +293,179 @@
         height: 100%;
         background-color: #e3e6f0;
     }
+    /* Enhanced Notification Styles */
+    .notification-alert {
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+        animation: slideInFromTop 0.5s ease-out;
+    }
+
+    .notification-alert::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, currentColor, transparent);
+    }
+
+    .notification-alert .d-flex {
+        align-items: flex-start;
+    }
+
+    .alert-icon {
+        font-size: 24px;
+        margin-right: 15px;
+        margin-top: 2px;
+        min-width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .alert-content {
+        flex: 1;
+        line-height: 1.5;
+    }
+
+    .alert-content strong {
+        display: block;
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+
+    .alert-content span {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    /* Error Alert */
+    .alert-danger {
+        background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+        color: #742a2a;
+        border-left: 5px solid #e53e3e;
+    }
+
+    .alert-danger .alert-icon {
+        color: #e53e3e;
+    }
+
+    /* Warning Alert */
+    .alert-warning {
+        background: linear-gradient(135deg, #fffaf0 0%, #feebc8 100%);
+        color: #7c2d12;
+        border-left: 5px solid #f56500;
+    }
+
+    .alert-warning .alert-icon {
+        color: #f56500;
+    }
+
+    /* Success Alert */
+    .alert-success {
+        background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+        color: #1a202c;
+        border-left: 5px solid #38a169;
+    }
+
+    .alert-success .alert-icon {
+        color: #38a169;
+    }
+
+    /* Close Button Enhancement */
+    .notification-alert .close {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 0;
+        margin: 0;
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 1;
+        color: inherit;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+        background: none;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .notification-alert .close:hover {
+        opacity: 1;
+        background: rgba(0,0,0,0.1);
+        transform: scale(1.1);
+    }
+
+    /* Auto dismiss animation */
+    .notification-alert.fade-out {
+        animation: fadeOut 0.5s ease-out forwards;
+    }
+
+   
+
+    /* Existing styles */
+    .border-left-warning {
+        border-left: 4px solid #f6c23e;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,0,0,.02);
+    }
+
+    .border-left-primary {
+        border-left: 4px solid #4e73df;
+    }
+
+    .border-left-success {
+        border-left: 4px solid #1cc88a;
+    }
+
+    .border-left-info {
+        border-left: 4px solid #36b9cc;
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+    }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+    .timeline-marker {
+        position: absolute;
+        left: -30px;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-top: 5px;
+    }
+
+    .timeline-item:not(:last-child):before {
+        content: '';
+        position: absolute;
+        left: -23px;
+        width: 2px;
+        height: 100%;
+        background-color: #e3e6f0;
+    }
+
+   
 </style>

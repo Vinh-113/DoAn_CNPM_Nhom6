@@ -518,35 +518,38 @@
                 <span id="errorMessage">@ViewBag.ThongBao</span>
             </div>
         }
-        <div id="logIn_form" class="form-section" style="display:block">
-            <div class="form-group">
-                <label for="nameCus">Tên đăng nhập</label>
-                <div class="input-wrapper">
-                    <input type="text" class="form-control" id="nameCus" name="NameCus" required placeholder="Nhập tên bạn vào" />
-                    <i class="fas fa-user input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
+    <div id="logIn_form" class="form-section" style="display:block">
+        <div class="form-group">
+            <label for="nameCus">Tên đăng nhập</label>
+            <div class="input-wrapper">
+                <input type="text" class="form-control" id="nameCus" name="NameCus" required placeholder="Nhập tên bạn vào" />
+                <i class="fas fa-user input-icon"></i>
             </div>
-
-            <div class="form-group">
-                <label for="passCus">Mật khẩu</label>
-                <div class="input-wrapper">
-                    <input type="password" class="form-control" id="passCus" name="PassCus" required placeholder="Nhập mật khẩu bạn vào" />
-                    <i class="fas fa-lock input-icon"></i>
-                </div>
-                <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
-            </div>
-            <button class="btn btn-primary" onclick="show2Factor()">
-                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
-                Tiếp theo
-            </button>
+            <div class="invalid-feedback">Vui lòng nhập tên đăng nhập.</div>
         </div>
+
+        <div class="form-group">
+            <label for="passCus">Mật khẩu</label>
+            <div class="input-wrapper">
+                <input type="password" class="form-control" id="passCus" name="PassCus" required placeholder="Nhập mật khẩu bạn vào" />
+                <i class="fas fa-lock input-icon"></i>
+            </div>
+            <div class="invalid-feedback">Vui lòng nhập mật khẩu.</div>
+        </div>
+        @*<button class="btn btn-primary" onclick="show2Factor()">
+            <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
+            Tiếp theo
+        </button>*@
+    <button type="submit"  class="btn btn-primary" id="okSubmit">
+        <i class="fas fa-check-circle"></i> Đăng nhập
+    </button>
+    </div>
         @* <button type="submit" class="btn btn-primary">
                 <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>
                 Đăng nhập
             </button>*@
         <!--Phần 2: Xác thực OTP để đăng nhập-->
-        <div id="2factorform" class="form-sectionm" style="display:none">
+        @*<div id="2factorform" class="form-sectionm" style="display:none">
             <div class="otp-card">
                 <div class="otp-header">
                     <i class="fas fa-shield-alt otp-icon"></i>
@@ -577,7 +580,7 @@
                 </div>
             </div>
         </div>
-            </div>
+            </div>*@
     </form>
 
     <div class="login-link">

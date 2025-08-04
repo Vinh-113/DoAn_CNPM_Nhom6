@@ -235,7 +235,7 @@ namespace TechStore.Controllers
 
                 if (action == "approve")
                 {
-                    statusMessage = $"Yêu cầu đã được phê duyệt bởi {adminName} vào {DateTime.Now:dd/MM/yyyy HH:mm}";
+                    statusMessage = $"Chấp nhận|Yêu cầu đã được phê duyệt bởi {adminName} vào {DateTime.Now:dd/MM/yyyy HH:mm}";
                     if (!string.IsNullOrEmpty(reason))
                     {
                         statusMessage += $". Ghi chú: {reason}";
@@ -243,7 +243,7 @@ namespace TechStore.Controllers
                 }
                 else if (action == "reject")
                 {
-                    statusMessage = $"Yêu cầu đã bị từ chối bởi {adminName} vào {DateTime.Now:dd/MM/yyyy HH:mm}";
+                    statusMessage = $"Từ chối|Yêu cầu đã bị từ chối bởi {adminName} vào {DateTime.Now:dd/MM/yyyy HH:mm}";
                     if (!string.IsNullOrEmpty(reason))
                     {
                         statusMessage += $". Lý do: {reason}";
@@ -251,7 +251,8 @@ namespace TechStore.Controllers
                 }
 
                 // Update the request description to include status
-                request.Description += $"\n\n--- TRẠNG THÁI ---\n{statusMessage}";
+                request.Description = statusMessage ;
+                
                 
                 dbO.SaveChanges();
 

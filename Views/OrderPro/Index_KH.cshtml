@@ -443,7 +443,7 @@
                                             @Html.DisplayFor(modelItem => item.Status)
                                         </span>
                                     </td>
-                                    <td class="amount-cell">@Html.DisplayFor(modelItem => item.TotalAmount)</td>
+                                    <td class="amount-cell">@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.TotalAmount)</td>
                                     <td>@Html.DisplayFor(modelItem => item.PaymentMethod)</td>
                                     <td>@Html.DisplayFor(modelItem => item.DeliveryDate)</td>
                                     <td>
@@ -451,11 +451,15 @@
                                             @Html.DisplayFor(modelItem => item.PaymentStatus)
                                         </span>
                                     </td>
-                                    <td>@Html.DisplayFor(modelItem => item.ShippingCost)</td>
+                                    <td>@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.ShippingCost)</td>
                                     <td class="customer-name">@Html.DisplayFor(modelItem => item.Customer.NameCus)</td>
                                     <td>
-                                        <span class="cancel-btn" data-tracking="@item.TrackingNumber">Hủy đơn</span>
-                                        <a class="details-btn" href="@Url.Action("Details_KH",new {id = item.ID})" >Chi tiết ĐH</a>
+                                        @if (item.Status == "Đang xử lý")
+                                        {
+                                            <span class="cancel-btn" data-tracking="@item.TrackingNumber">Hủy đơn</span>
+                                        }
+                                        
+                                        <a class="details-btn" href="@Url.Action("Details_KH",new {id = item.ID})">Chi tiết ĐH</a>
                                     </td>
                                 </tr>
                             }

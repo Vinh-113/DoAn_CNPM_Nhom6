@@ -104,10 +104,10 @@
                                             <a class="dropdown-item d-flex align-items-center py-2" href="@Url.Action("Edit", new { id = item.ID })">
                                                 <span>Chỉnh sửa</span>
                                             </a>
-                                            <a class="dropdown-item d-flex align-items-center py-2 text-danger" href="@Url.Action("Delete", new { id = item.ID })"
+                                            @*<a class="dropdown-item d-flex align-items-center py-2 text-danger" href="@Url.Action("Delete", new { id = item.ID })"
                                                onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng #@item.ID?');">
                                                 <span>Hủy đơn hàng</span>
-                                            </a>
+                                            </a>*@
                                         </div>
                                     </div>
                                 </td>

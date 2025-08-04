@@ -92,7 +92,7 @@ namespace TechStore.Controllers
 
             return RedirectToAction("Index", "OrderPro");
         }
-        [HttpGet]
+        [HttpGet] //Huy don cua trong trang chi tiet đh
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -106,7 +106,7 @@ namespace TechStore.Controllers
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult ActionDelete(int id)
+        public ActionResult ActionDelete(int id, string action)
         {
             System.Diagnostics.Debug.WriteLine("Đã tìm thấy " + id);
             
@@ -125,12 +125,20 @@ namespace TechStore.Controllers
                 }
                 else
                 {
+                    ViewBag.ThongBao = "Không hủy được do đang giao hay đã giao";
                     return RedirectToAction("Details", "OrderPro", id);
                 }
             }
             else
             {
                 System.Diagnostics.Debug.WriteLine("Không có ID" + id);
+                if (action != null)
+                {
+                    ViewBag.ThongBao = "Lỗi ko xác định";
+                    return RedirectToAction(action, "OrderPro", id);
+                }
+                ViewBag.ThongBao = "Lỗi ko xác định";
+                return RedirectToAction("Details", "OrderPro", id);
             }
 
             return RedirectToAction("Index", "OrderPro");
@@ -162,7 +170,8 @@ namespace TechStore.Controllers
           }
           [HttpPost, ActionName("Delete_KH")]
           [ValidateAntiForgeryToken]*/
-        [HttpPost]
+
+        [HttpPost] //ThongTinCaNhan_Index
         public ActionResult Delete_KH(string id)
         {
             System.Diagnostics.Debug.WriteLine("Đã tìm thấy " + id);
@@ -183,7 +192,7 @@ namespace TechStore.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Details_KH", "OrderPro", id);
+                        return Json(new { success = false, message = "Không hủy đơn được do đang giao hay đã giao" });
                     }
                 }
                 else
@@ -212,6 +221,12 @@ namespace TechStore.Controllers
             {
                 return HttpNotFound();
             }
+            //Thêm thông báo tình trạng hoàn tiền hay bảo hành nếu có
+            string refundStatus = db.SupportRequests
+                .Where(s => s.IdRequest == orderPro.TrackingNumber)
+                .Select(s => s.Description)
+                .FirstOrDefault();
+            ViewBag.RefundStatus = refundStatus != null ? refundStatus : null;
             OrderDetails_model orderDetails_Model = new OrderDetails_model { 
                 OrderDetail = orderDetails,
                 OrderPro = orderPro

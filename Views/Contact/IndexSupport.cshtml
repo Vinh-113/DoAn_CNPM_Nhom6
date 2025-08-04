@@ -226,6 +226,7 @@
                         @using (Html.BeginForm("SendSupport", "Contact", FormMethod.Post))
                         {
                             @Html.AntiForgeryToken()
+                            @Html.HiddenFor(m => m.IdRequest)
                             @Html.HiddenFor(m => m.RequestType, new { Value = "Refund" })
                             @Html.HiddenFor(m => m.CustomerName)
                             @Html.HiddenFor(m => m.Email)
