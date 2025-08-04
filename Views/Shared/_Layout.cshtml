@@ -664,32 +664,32 @@
                     </button>
                     <ul class="dropdown-menu" id="categoryDropdownMenu">
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial", "Home")" style="color:#000 !important;">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial", "Home", new {catergory = "Laptop"})" style="color:#000 !important;">
                                 <i class="fas fa-laptop"></i>Laptop
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_dt", "Home")" style="color:#000 !important;">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial", "Home", new {catergory = "Smartphone"})" style="color:#000 !important;">
                                 <i class="fas fa-mobile-alt"></i>Điện thoại
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_ipad", "Home")" style="color:#000 !important;">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial", "Home", new {catergory = "Tablet"})" style="color:#000 !important;">
                                 <i class="fas fa-tablet-alt"></i>Máy tính bảng
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_PC", "Home")" style="color:#000 !important;">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial", "Home", new {catergory = "PC"})" style="color:#000 !important;">
                                 <i class="fas fa-desktop"></i>PC & Workstation
                             </a>
                         </li>
-                        @*<li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_Sounds", "Home")" style="color:#000 !important;">
+                        <li>
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial", "Home", new {catergory = "Tai nghe"})" style="color:#000 !important;">
                                 <i class="fas fa-headphones"></i>Âm thanh
                             </a>
-                        </li>*@
+                        </li>
                         <li>
-                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial_pk", "Home")" style="color:#000 !important;">
+                            <a class="dropdown-item" href="@Url.Action("CatergoryPartial", "Home", new {catergory = "Phụ kiện"})" style="color:#000 !important;">
                                 <i class="fas fa-plug"></i>Phụ kiện
                             </a>
                         </li>

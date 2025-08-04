@@ -714,6 +714,12 @@ document.querySelector("form").addEventListener("submit", function (e) {
         e.stopPropagation();
     }
 });
+    document.querySelector('form').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            return false;
+        }
+    });
 
 // Hiển thị thông báo (có thể được gọi từ server-side)
 function showAlert(type, message) {

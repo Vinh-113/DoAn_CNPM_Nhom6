@@ -5,45 +5,286 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="container" style="max-width: 1200px; margin: 40px auto; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05);">
-    <h2 class="text-center mb-4" style="font-weight: 700; color: #4f46e5;">📦 Danh sách sản phẩm</h2>
+<style>
+    .product-container {
+        max-width: 1400px;
+        margin: 20px auto;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2px;
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
 
-    <div class="text-center mb-4">
-        @Html.ActionLink("Tạo sản phẩm mới", "Create", "", htmlAttributes: new { @class = "btn btn-primary rounded-pill px-4 py-2", style = "background: #4f46e5; border: none;" })
-    </div>
+    .product-content {
+        background: #fff;
+        border-radius: 23px;
+        padding: 40px;
+    }
 
-    <table class="table table-hover table-bordered text-center align-middle" style="border-radius: 15px; overflow: hidden;">
-        <thead style="background: #4f46e5; color: #fff;">
-            <tr>
-                <th>Tên sản phẩm</th>
-                <th>Mô tả sản phẩm</th>
-                <th>Giá sản phẩm</th>
-                <th>Hình ảnh</th>
-                <th>Phân loại</th>
-                <th>Giảm giá</th>
-                <th>Hành động</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 10px;
+    }
+
+    .page-subtitle {
+        color: #6c757d;
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
+
+    .create-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+        .create-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            color: white;
+            text-decoration: none;
+        }
+
+    .products-table {
+        background: #fff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border: none;
+    }
+
+    .table-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+        .table-header th {
+            font-weight: 600;
+            padding: 20px 15px;
+            border: none;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+    .products-table tbody tr {
+        transition: all 0.3s ease;
+        border: none;
+    }
+
+        .products-table tbody tr:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+            transform: scale(1.01);
+        }
+
+    .products-table tbody td {
+        padding: 20px 15px;
+        vertical-align: middle;
+        border: none;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .product-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+        .product-image:hover {
+            transform: scale(1.1);
+        }
+
+    .product-name {
+        font-weight: 600;
+        color: #2d3748;
+        font-size: 1rem;
+    }
+
+    .product-description {
+        color: #6c757d;
+        font-size: 0.9rem;
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .product-price {
+        font-weight: 700;
+        color: #e53e3e;
+        font-size: 1.1rem;
+    }
+
+    .category-badge {
+        background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .discount-badge {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        color: white;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-edit:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 25px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-delete:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(245, 101, 101, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+    .stats-bar {
+        background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+        padding: 15px 25px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .stats-text {
+        color: #4a5568;
+        font-weight: 500;
+        margin: 0;
+    }
+</style>
+
+<div class="product-container">
+    <div class="product-content">
+        <div class="page-header">
+            <h1 class="page-title">📦 Quản lý sản phẩm</h1>
+            <p class="page-subtitle">Danh sách tất cả sản phẩm trong hệ thống</p>
+        </div>
+
+        <div class="stats-bar">
+            <p class="stats-text">
+                <strong>Tổng số sản phẩm:</strong> @Model.Count() sản phẩm
+            </p>
+        </div>
+
+        <div class="text-center mb-4">
+            @Html.ActionLink("✨ Tạo sản phẩm mới", "Create", "", htmlAttributes: new { @class = "create-btn" })
+        </div>
+
+        <table class="table products-table">
+            <thead class="table-header">
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.NamePro)</td>
-                    <td>@Html.DisplayFor(modelItem => item.DecriptionPro)</td>
-                    <td>@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.Price)</td>
-                    <td>
-                        <img src="~/Images/@item.ImagePro" style="width: 100px; border-radius: 12px;" />
-                    </td>
-                    <td>@Html.DisplayFor(modelItem => item.Category1.NameCate)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Discount)</td>
-                    <td>
-                        <div class="d-flex justify-content-center gap-2">
-                            @Html.ActionLink("Sửa", "Edit", new { id = item.ProductID }, htmlAttributes: new { @class = "btn btn-success rounded-pill px-3 py-1" })
-                            @Html.ActionLink("Xóa", "Delete", new { id = item.ProductID }, htmlAttributes: new { @class = "btn btn-danger rounded-pill px-3 py-1" })
-                        </div>
-                    </td>
+                    <th>🏷️ Tên sản phẩm</th>
+                    <th>📝 Mô tả</th>
+                    <th>💰 Giá bán</th>
+                    <th>🖼️ Hình ảnh</th>
+                    <th>📂 Phân loại</th>
+                    <th>🏷️ Giảm giá</th>
+                    <th>⚙️ Thao tác</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="product-name">@Html.DisplayFor(modelItem => item.NamePro)</div>
+                        </td>
+                        <td>
+                            <div class="product-description" title="@item.DecriptionPro">
+                                @Html.DisplayFor(modelItem => item.DecriptionPro)
+                            </div>
+                        </td>
+                        <td>
+                            <span class="product-price">
+                                @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.Price)
+                            </span>
+                        </td>
+                        <td>
+                            <img src="~/Images/@item.ImagePro" class="product-image" alt="@item.NamePro" />
+                        </td>
+                        <td>
+                            <span class="category-badge">
+                                @Html.DisplayFor(modelItem => item.Category1.NameCate)
+                            </span>
+                        </td>
+                        <td>
+                            @if (item.Discount > 0)
+                            {
+                                <span class="discount-badge">-@item.Discount%</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Không có</span>
+                            }
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                @Html.ActionLink("✏️ Sửa", "Edit", new { id = item.ProductID }, htmlAttributes: new { @class = "btn-edit" })
+                                @Html.ActionLink("🗑️ Xóa", "Delete", new { id = item.ProductID }, htmlAttributes: new { @class = "btn-delete" })
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

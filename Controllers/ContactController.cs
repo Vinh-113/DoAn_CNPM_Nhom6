@@ -68,15 +68,10 @@ namespace TechStore.Controllers
         {
             //Ngẫu nhiên 5 chữ cái từ A-Z
             const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var result = new char[5];
-           
-                for (int i = 0; i < result.Length; i++)
-                {
-                    result[i] = letters[new Random().Next(0,letters.Length)];
-                }
-            
+            var random = new Random();
+            var result = new String(Enumerable.Repeat(letters,3).Select(s => s[random.Next(s.Length)]).ToArray());
             // REQ + RandomNumber + Chữ cái + DateTime.Now
-            return "REQ" + new Random().Next(1,999).ToString() + new String(result);
+            return "REQ" + new Random().Next(1,999).ToString() + result;
         }
     }
 }

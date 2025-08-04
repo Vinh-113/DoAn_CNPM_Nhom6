@@ -682,9 +682,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-    const progressBar = document.querySelector('.vip-progress-bar-outer > div');
-    var current_progress = parseFloat(progressBar.style.width);
-    if (current_progress >= 100) updateVIP();
+    updateVIP();
 });
 function updateVIP() {
     var totalSpent = @totalSpent;
@@ -708,8 +706,8 @@ function updateVIP() {
             response.json())
         .then(data => {
             if (data.success) {
-                if (confirm("Đã cập nhật VIP thành công!")) window.location.href = "@Url.Action("ThongTinCaNhan","User")";
-                else return;
+               @* if (confirm("Đã cập nhật VIP thành công!")) window.location.href = "@Url.Action("ThongTinCaNhan","User")";
+                else return;*@
             } else {
                 alert("Không cập nhật thành công");
             }

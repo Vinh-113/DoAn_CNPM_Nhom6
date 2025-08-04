@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.DynamicData;
 using System.Web.Mvc;
 using TechStore.Models;
 
@@ -64,47 +65,49 @@ namespace TechStore.Controllers
             catch
             {
                 ViewBag.Error = "Không tìm thấy sản phẩm";
-                return View();
+                return new HttpNotFoundResult();
             }
         }
 
         [HttpGet]
-        public ActionResult CatergoryPartial()
+        public ActionResult CatergoryPartial(String catergory)
         {
-            string catergory = "Laptop";
             try
             {
                 var cate = dB.Categories.Where(s => s.NameCate == catergory).FirstOrDefault();
                 if (cate != null)
                 {
                     var pro = dB.Products.Where(p => p.Category == cate.IDCate).ToList();
+                    if (pro.Count() < 1)  return View(new List<Product>()); 
                     return View(pro);
                 }
             }
             catch
             {
                 ViewBag.Error = "Không tìm thấy sản phẩm";
-                return View();
+                return new HttpNotFoundResult();
             }
             return View();
         }
-        [HttpGet]
+      /*  [HttpGet]
         public ActionResult CatergoryPartial_dt()
         {
-            string catergory = "Điện thoại";
+            string catergory = "Smartphone";
             try
             {
                 var cate = dB.Categories.Where(s => s.NameCate == catergory).FirstOrDefault();
                 if (cate != null)
                 {
                     var pro = dB.Products.Where(p => p.Category == cate.IDCate).ToList();
+                    if (pro.Count() < 1) return View(new List<Product>());
                     return View(pro);
                 }
             }
             catch
             {
                 ViewBag.Error = "Không tìm thấy sản phẩm";
-                return View();
+                return new HttpNotFoundResult();
+                
             }
             return View();
         }
@@ -118,13 +121,14 @@ namespace TechStore.Controllers
                 if (cate != null)
                 {
                     var pro = dB.Products.Where(p => p.Category == cate.IDCate).ToList();
+                    if (pro.Count() < 1) return View(new List<Product>());
                     return View(pro);
                 }
             }
             catch
             {
                 ViewBag.Error = "Không tìm thấy sản phẩm";
-                return View();
+                return new HttpNotFoundResult();
             }
             return View();
         }
@@ -138,13 +142,15 @@ namespace TechStore.Controllers
                 if (cate != null)
                 {
                     var pro = dB.Products.Where(p => p.Category == cate.IDCate).ToList();
+                    if (pro.Count() < 1) return View(new List<Product>());
+
                     return View(pro);
                 }
             }
             catch
             {
                 ViewBag.Error = "Không tìm thấy sản phẩm";
-                return View();
+                return new HttpNotFoundResult();
             }
             return View();
         }
@@ -158,13 +164,14 @@ namespace TechStore.Controllers
                 if (cate != null)
                 {
                     var pro = dB.Products.Where(p => p.Category == cate.IDCate).ToList();
+                    if (pro.Count() < 1) return View(new List<Product>());
                     return View(pro);
                 }
             }
             catch
             {
                 ViewBag.Error = "Không tìm thấy sản phẩm";
-                return View();
+                return new HttpNotFoundResult();
             }
             return View();
         }
@@ -178,6 +185,8 @@ namespace TechStore.Controllers
                 if (cate != null)
                 {
                     var pro = dB.Products.Where(p => p.Category == cate.IDCate).ToList();
+                    if (pro.Count() < 1) return View(new List<Product>());
+
                     return View(pro);
                 }
             }
@@ -187,7 +196,7 @@ namespace TechStore.Controllers
                 return View();
             }
             return View();
-        }
+        }*/
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

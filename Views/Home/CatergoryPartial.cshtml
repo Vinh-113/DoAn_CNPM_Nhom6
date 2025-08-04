@@ -21,7 +21,7 @@ else
                 }
                 <img src="~/Images/@item.ImagePro" alt="tech-pro" class="product-image">
                 <h1 class="product-name">@item.NamePro</h1>
-                <p class="price">@item.Price</p>
+                <p class="price">@string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:C0}", item.Price)</p>
             </div>
 
         }

@@ -59,18 +59,18 @@ namespace TechStore.Controllers
                     paymentmethod = "Thanh toán khi nhận hàng";
                 }
 
-                decimal sum = TotalMoney() + TotalMoney() * 0.10m;
+                decimal shipping_cost = TotalMoney() * 0.05m;
                 var order = new OrderPro
                 {
                     IDCus = model.Customers.IDCus,
                     DateOrder = DateTime.Now,
-                    TotalAmount = TotalMoney(),
+                    TotalAmount = TotalMoney() + shipping_cost,
                     Status = "Đã tiếp nhận thành công, đang xử lý",
                     PaymentMethod = paymentmethod,
                     TrackingNumber = GenerateTrackingNumber(),
                     AddressDeliverry = model.Customers.StreetAddress + "," + model.Customers.Ward + "," + model.Customers.District + "," + model.Customers.City,
                     DeliveryDate = DateTime.Now.AddDays(8),
-                    ShippingCost = sum,
+                    ShippingCost = shipping_cost,
                     PaymentStatus = paymentstat
                 };
 

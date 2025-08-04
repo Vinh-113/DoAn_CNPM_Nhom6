@@ -114,11 +114,19 @@ namespace TechStore.Controllers
             var or_detals = db.OrderDetails.FirstOrDefault(s => s.IDOrder == item.ID);
             if (item != null && or_detals != null)
             {
-                //Gỡ OrderDetails trước
-                db.OrderDetails.Remove(or_detals);
-                //Mói gỡ thằng này sau
-                db.OrderProes.Remove(item);
-                db.SaveChanges();
+               //Nếu trong trường hợp đơn đang giao hay đã giao thì ko hủy được 
+                if(item.Status != "Đang giao" || item.Status != "Đã giao")
+                {
+                    //Gỡ OrderDetails trước
+                    db.OrderDetails.Remove(or_detals);
+                    //Mói gỡ thằng này sau
+                    db.OrderProes.Remove(item);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    return RedirectToAction("Details", "OrderPro", id);
+                }
             }
             else
             {
@@ -164,11 +172,19 @@ namespace TechStore.Controllers
                 var or_detals = db.OrderDetails.FirstOrDefault(s => s.IDOrder == item.ID);
                 if (item != null && or_detals != null)
                 {
-                    //Gỡ OrderDetails trước
-                    db.OrderDetails.Remove(or_detals);
-                    //Mói gỡ thằng này sau
-                    db.OrderProes.Remove(item);
-                    db.SaveChanges();
+                    //Nếu trong trường hợp đơn đang giao hay đã giao thì ko hủy được 
+                    if (item.Status != "Đang giao" || item.Status != "Đã giao")
+                    {
+                        //Gỡ OrderDetails trước
+                        db.OrderDetails.Remove(or_detals);
+                        //Mói gỡ thằng này sau
+                        db.OrderProes.Remove(item);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        return RedirectToAction("Details_KH", "OrderPro", id);
+                    }
                 }
                 else
                     System.Diagnostics.Debug.WriteLine("Không có ID" + id);

@@ -24,30 +24,52 @@
         --shadow-hover: 0 15px 50px rgba(0,0,0,0.15);
         --border-radius: 15px;
     }
-    /* Đã bán styling */
-    .product-sold {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        margin-bottom: 8px;
-        color: var(--text-muted);
-        font-size: 0.85rem;
-    }
 
-        .product-sold i {
-            color: #ff6b9d;
-            font-size: 0.9rem;
-        }
-
-    .sold-count {
-        font-weight: 600;
-    }
     body {
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         line-height: 1.6;
     }
+    /* CSS cho tính năng Load More Review */
+.review-hidden {
+    display: none !important;
+}
 
+.review-item {
+    opacity: 1;
+    transform: translateY(0);
+    transition: all 0.3s ease;
+}
+
+.review-item.show-animation {
+    animation: slideInUp 0.5s ease forwards;
+}
+
+
+
+#loadMoreBtn, #showLessBtn {
+    min-width: 200px;
+}
+
+.no-reviews {
+    text-align: center;
+    padding: 60px 20px;
+    color: #718096;
+    background: #f8fafc;
+    border-radius: 15px;
+    margin: 20px 0;
+}
+
+.no-reviews i {
+    font-size: 4rem;
+    color: #cbd5e0;
+    margin-bottom: 20px;
+}
+
+.no-reviews h5 {
+    color: #4a5568;
+    margin-bottom: 10px;
+}
     .product-detail {
         max-width: 1200px;
         margin: 0 auto;
@@ -777,44 +799,11 @@
         .related-card img {
             will-change: transform;
         }
-    .enhanced-description {
-        background: #f5f8fa;
-        border-radius: 12px;
-        border-left: 4px solid #667eea;
-        padding: 18px 22px;
-        margin-bottom: 30px;
-        color: #2d3748;
-        font-size: 1.08rem;
-        box-shadow: 0 2px 8px rgba(102,126,234,0.04);
-        transition: box-shadow 0.2s;
-        word-break: break-word;
-    }
-
-        .enhanced-description strong {
-            font-weight: 700;
-            color: #2d3748;
-            display: block;
-            margin-bottom: 8px;
-        }
-    .desc-collapsed {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        max-height: 4.8em;
-        transition: max-height 0.3s;
-    }
-
-    .desc-expanded {
-        display: block;
-        max-height: 1000px;
-        transition: max-height 0.3s;
-    }
 </style>
 
 <div class="container-fluid">
     <!-- Breadcrumb -->
-    @*<nav class="breadcrumb-modern" data-aos="fade-down">
+    <nav class="breadcrumb-modern" data-aos="fade-down">
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Trang chủ</a></li>
@@ -822,7 +811,7 @@
                 <li class="breadcrumb-item active">@Model.Product.NamePro</li>
             </ol>
         </div>
-    </nav>*@
+    </nav>
 
     <div class="product-detail">
         <!-- Chi tiết sản phẩm -->
@@ -835,11 +824,7 @@
                         <div class="product-badge">HOT</div>
                     </div>
                 </div>
-                <!-- Đã bán-->
-                <div class="product-sold">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="sold-count">Đã bán: @Model.SoldItem[Model.Product.ProductID]</span>
-                </div>
+
                 <!-- Thông tin sản phẩm -->
                 <div class="col-lg-6">
                     <div class="product-info">
@@ -849,21 +834,17 @@
                             @String.Format("{0:#,##0}", @Model.Product.Price) VNĐ
                         </div>
 
-                        <div class="product-description enhanced-description" id="descBox">
+                        <div class="product-description">
                             <strong><i class="fas fa-info-circle"></i> Mô tả sản phẩm:</strong><br>
-                            <span id="descContent" class="desc-collapsed">
-                                @Html.Raw(Model.Product.DecriptionPro.Replace("\n", "<br />"))
-                            </span>
-                            <button type="button" id="toggleDescBtn" class="btn btn-link btn-sm mt-2" style="padding-left:0;">
-                                <span id="toggleDescText">Mở rộng</span> <i class="fas fa-chevron-down"></i>
-                            </button>
+                            @Model.Product.DecriptionPro
                         </div>
 
                         <!-- Selector số lượng -->
-                        <!--<div class="quantity-selector">
-                <label class="quantity-label">Số lượng:</label>
-                <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantityInput">
-            </div>-->
+                        <div class="quantity-selector">
+                            <label class="quantity-label">Số lượng:</label>
+                            <input type="number" class="quantity-input" value="1" min="1" max="10" id="quantityInput">
+                        </div>
+
                         <!-- Nút hành động -->
                         <div class="action-buttons">
                             <a class="btn-modern btn-primary-modern" href="@Url.Action("AddToCart", "Cart", new { id = @Model.Product.ProductID })">
@@ -978,7 +959,7 @@
                         <label class="form-label" for="reviewContent">Nội dung đánh giá</label>
                         <textarea id="reviewContent" class="form-input form-textarea" placeholder="Chia sẻ cảm nhận của bạn về sản phẩm..." required></textarea>
                     </div>
-                    @{ 
+                    @{
                         var reviewerName = (string)Session["DaDangNhap"];
                     }
 
@@ -994,117 +975,191 @@
                     <i class="fas fa-comments"></i> Đánh giá từ khách hàng
                 </h4>
 
-                <!-- Review Item -->
-                @foreach (var item in Model.RelatedReviews)
-                {
-                    <div class="review-item">
-                        <div class="review-header">
-                            <div class="reviewer-info">
-                                <div class="reviewer-avatar">@item.ReviewerName.ToCharArray()[0]</div>
-                                <div class="reviewer-details">
-                                    <h6>@item.ReviewerName</h6>
-                                    <span class="review-date">@item.ReviewDate</span>
+                <!-- Container chứa tất cả review -->
+                <div id="reviewContainer">
+                    @{
+                        var reviewsToShow = 3; // Số review hiển thị ban đầu
+                    }
+
+                    @for (int i = 0; i < Model.RelatedReviews.Count(); i++)
+                    {
+                        var item = Model.RelatedReviews.ElementAt(i);
+                        string hideClass = i >= reviewsToShow ? "review-hidden" : "";
+
+                        <div class="review-item @hideClass" data-review-index="@i">
+                            <div class="review-header">
+                                <div class="reviewer-info">
+                                    <div class="reviewer-avatar">@item.ReviewerName.ToCharArray()[0]</div>
+                                    <div class="reviewer-details">
+                                        <h6>@item.ReviewerName</h6>
+                                        <span class="review-date">@item.ReviewDate</span>
+                                    </div>
+                                </div>
+                                <div class="review-rating">
+                                    @for (decimal j = 0; j < item.Rating; j++)
+                                    {
+                                        <i class="fas fa-star"></i>
+                                    }
                                 </div>
                             </div>
-                            <div class="review-rating">
-                                @for (decimal i = 0; i < item.Rating; i++)
-                                {
-                                    <i class="fas fa-star"></i>
-                                }
+                            <div class="review-content">
+                                @item.ReviewContent
+                            </div>
+                            <div class="review-actions">
+                                <button class="review-action-btn">
+                                    <i class="fas fa-thumbs-up"></i> Hữu ích (12)
+                                </button>
+                                <button class="review-action-btn">
+                                    <i class="fas fa-reply"></i> Trả lời
+                                </button>
                             </div>
                         </div>
-                        <div class="review-content">
-                            @item.ReviewContent
-                        </div>
-                        <div class="review-actions">
-                            <button class="review-action-btn">
-                                <i class="fas fa-thumbs-up"></i> Hữu ích (12)
-                            </button>
-                            <button class="review-action-btn">
-                                <i class="fas fa-reply"></i> Trả lời
-                            </button>
-                        </div>
+                    }
+                </div>
+
+                <!-- Load more button - chỉ hiển thị nếu có nhiều hơn số review ban đầu -->
+                @if (Model.RelatedReviews.Count() > reviewsToShow)
+                {
+                    <div class="text-center" style="margin-top: 30px;" id="loadMoreContainer">
+                        <button class="btn-modern btn-secondary-modern" id="loadMoreBtn">
+                            <i class="fas fa-chevron-down"></i> Xem thêm đánh giá (<span id="remainingCount">@(Model.RelatedReviews.Count() - reviewsToShow)</span>)
+                        </button>
+                    </div>
+
+                    <div class="text-center" style="margin-top: 30px; display: none;" id="showLessContainer">
+                        <button class="btn-modern btn-secondary-modern" id="showLessBtn">
+                            <i class="fas fa-chevron-up"></i> Thu gọn đánh giá
+                        </button>
                     </div>
                 }
 
-                <!-- Review Item 2 -->
-                <!-- Load more button -->
-                <div class="text-center" style="margin-top: 30px;">
-                    <button class="btn-modern btn-secondary-modern">
-                        <i class="fas fa-chevron-down"></i> Xem thêm đánh giá
-                    </button>
+                @if (Model.RelatedReviews.Count() == 0)
+                {
+                    <div class="no-reviews">
+                        <i class="fas fa-comment-slash"></i>
+                        <h5>Chưa có đánh giá nào</h5>
+                        <p>Hãy là người đầu tiên đánh giá sản phẩm này!</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Sản phẩm liên quan -->
+            <div class="related-products" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="section-title">
+                    <i class="fas fa-cube"></i> Sản phẩm liên quan
+                </h2>
+
+                <div class="product-grid">
+                    @foreach (var rePro in Model.RelatedProducts)
+                    {
+                        <div class="related-card" data-aos="zoom-in" data-aos-delay="@(100 + Model.RelatedProducts.ToList().IndexOf(rePro) * 50)">
+                            <img src="~/Images/@rePro.ImagePro" alt="@rePro.NamePro" />
+                            <div class="related-card-body">
+                                <div class="related-card-content">
+                                    <h5 class="related-card-title">@rePro.NamePro</h5>
+                                    <p class="related-card-text">
+                                        @(rePro.DecriptionPro.Length > 80 ? rePro.DecriptionPro.Substring(0, 80) + "..." : rePro.DecriptionPro)
+                                    </p>
+                                </div>
+                                <div class="related-card-price">
+                                    @String.Format("{0:#,##0}", @rePro.Price) VNĐ
+                                </div>
+                                <a href="@Url.Action("Details", "CustomerPro", new { id = rePro.ProductID })" class="btn-view-detail">
+                                    <i class="fas fa-eye"></i> Xem chi tiết
+                                </a>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-
-        <!-- Sản phẩm liên quan -->
-        <div class="related-products" data-aos="fade-up" data-aos-delay="200">
-            <h2 class="section-title">
-                <i class="fas fa-cube"></i> Sản phẩm liên quan
-            </h2>
-
-            <div class="product-grid">
-                @foreach (var rePro in Model.RelatedProducts)
-                {
-                    <div class="related-card" data-aos="zoom-in" data-aos-delay="@(100 + Model.RelatedProducts.ToList().IndexOf(rePro) * 50)">
-                        <img src="~/Images/@rePro.ImagePro" alt="@rePro.NamePro" />
-                        <div class="related-card-body">
-                            <div class="related-card-content">
-                                <h5 class="related-card-title">@rePro.NamePro</h5>
-                                <!-- Đã bán-->
-                                <div class="product-sold">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <span class="sold-count">Đã bán: @Model.SoldItem[rePro.ProductID]</span>
-                                </div>
-                                <p class="related-card-text">
-                                    @(rePro.DecriptionPro.Length > 80 ? rePro.DecriptionPro.Substring(0, 80) + "..." : rePro.DecriptionPro)
-                                </p>
-                            </div>
-                            <div class="related-card-price">
-                                @String.Format("{0:#,##0}", @rePro.Price) VNĐ
-                            </div>
-                            <a href="@Url.Action("Details", "CustomerPro", new { id = rePro.ProductID })" class="btn-view-detail">
-                                <i class="fas fa-eye"></i> Xem chi tiết
-                            </a>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
 </div>
-
+    </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var btn = document.getElementById('toggleDescBtn');
-        var content = document.getElementById('descContent');
-        var text = document.getElementById('toggleDescText');
-        var icon = btn.querySelector('i');
-        var expanded = false;
-
-        btn.addEventListener('click', function () {
-            expanded = !expanded;
-            if (expanded) {
-                content.classList.remove('desc-collapsed');
-                content.classList.add('desc-expanded');
-                text.textContent = 'Thu gọn';
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
-            } else {
-                content.classList.remove('desc-expanded');
-                content.classList.add('desc-collapsed');
-                text.textContent = 'Mở rộng';
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
-            }
-        });
-    });
     // Khởi tạo AOS Animation
     AOS.init({
         duration: 800,
         easing: 'ease-in-out',
         once: true
     });
+    // JavaScript xử lý Load More Review
+document.addEventListener('DOMContentLoaded', function() {
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    const showLessBtn = document.getElementById('showLessBtn');
+    const loadMoreContainer = document.getElementById('loadMoreContainer');
+    const showLessContainer = document.getElementById('showLessContainer');
+    const remainingCountSpan = document.getElementById('remainingCount');
+
+    let currentlyVisible = 3; // Số review hiển thị ban đầu
+    const totalReviews = @Model.RelatedReviews.Count();
+    const reviewsPerLoad = 5; // Số review load thêm mỗi lần
+
+    // Xử lý nút "Xem thêm"
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function() {
+            const reviewsToShow = Math.min(reviewsPerLoad, totalReviews - currentlyVisible);
+
+            // Hiển thị các review tiếp theo
+            for (let i = currentlyVisible; i < currentlyVisible + reviewsToShow; i++) {
+                const review = document.querySelector(`[data-review-index="${i}"]`);
+                if (review) {
+                    review.classList.remove('review-hidden');
+                    review.classList.add('show-animation');
+
+                    // Scroll smooth đến review mới
+                    setTimeout(() => {
+                        review.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }, i * 100); // Delay để tạo hiệu ứng cascade
+                }
+            }
+
+            currentlyVisible += reviewsToShow;
+
+            // Cập nhật số lượng còn lại
+            const remaining = totalReviews - currentlyVisible;
+            remainingCountSpan.textContent = remaining;
+
+            // Ẩn nút "Xem thêm" nếu đã hiển thị hết
+            if (remaining <= 0) {
+                loadMoreContainer.style.display = 'none';
+            }
+
+            // Hiển thị nút "Thu gọn"
+            showLessContainer.style.display = 'block';
+        });
+    }
+
+    // Xử lý nút "Thu gọn"
+    if (showLessBtn) {
+        showLessBtn.addEventListener('click', function() {
+            // Ẩn tất cả review trừ 3 cái đầu
+            for (let i = 3; i < totalReviews; i++) {
+                const review = document.querySelector(`[data-review-index="${i}"]`);
+                if (review) {
+                    review.classList.add('review-hidden');
+                    review.classList.remove('show-animation');
+                }
+            }
+
+            // Reset về trạng thái ban đầu
+            currentlyVisible = 3;
+            remainingCountSpan.textContent = totalReviews - 3;
+
+            // Hiển thị lại nút "Xem thêm"
+            loadMoreContainer.style.display = 'block';
+            showLessContainer.style.display = 'none';
+
+            // Scroll về đầu danh sách review
+            document.querySelector('.review-list h4').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        });
+    }
+});
 
     // Xử lý thay đổi số lượng
     document.getElementById('quantityInput').addEventListener('change', function () {
@@ -1195,10 +1250,12 @@
                             }
                         }
                         else {
-                            if (confirm("Đánh giá không thành công, nhấn ok để reload và đánh giá lại")) {
-                            }
-                            else {
-                                return;
+                            if (data.message) {
+                                if (confirm("Đánh giá không thành công, nhấn ok để reload và đánh giá lại " + data.message)) {
+                                }
+                                else {
+                                    return;
+                                }
                             }
                         }
                     }

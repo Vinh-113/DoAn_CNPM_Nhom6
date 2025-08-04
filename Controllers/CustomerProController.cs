@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using TechStore.Models;
 
 namespace TechStore.Controllers
@@ -58,20 +59,39 @@ namespace TechStore.Controllers
         [HttpPost]
         public ActionResult CreateReview(decimal score , string content, int productID)
         {
+            //Nếu chưa đăng nhập thì buộc không báo lỗi 
+            if (ViewBag["DaDangNhap"] == null)
+            {
+                return Json(new { success = false, message = "Bạn phải đăng nhập mới ĐG sản phẩm này mới được" });
+            }
             var user = (string)Session["DaDangNhap"];
             var cus = _context.Customers.FirstOrDefault(s => s.NameCus == user);
+            // Kiểm tra khách hàng đã mua sản phẩm này chưa
+            var customerHasPurchased = db.OrderProes
+                .Where(op => op.Status == "Đã giao" && op.IDCus == cus.IDCus)
+                .Join(db.OrderDetails,
+                    op => op.ID,
+                    od => od.IDOrder,
+                    (op, od) => od.IDProduct)
+                .Any(productId => productId == productID);
             try { 
-            var re = new Review()
-            {
-                ProductID =productID,
-                CustomerID = cus.IDCus,
-                Rating = score,
-                ReviewContent = content,
-                ReviewDate = DateTime.Now,
-                ReviewerName = cus.NameCus
-            };
-                db.Reviews.Add(re);
-                db.SaveChanges();
+           //Kiểm tra số lượng sản phẩm đã mua nếu mua rôi thì cho review 
+                 if (customerHasPurchased)
+                {
+                    var re = new Review()
+                    {
+                        ProductID = productID,
+                        CustomerID = cus.IDCus,
+                        Rating = score,
+                        ReviewContent = content,
+                        ReviewDate = DateTime.Now,
+                        ReviewerName = cus.NameCus,
+                        IsHidden = false //Mặc định 
+                    };
+                    db.Reviews.Add(re);
+                    db.SaveChanges();
+                }
+                else return Json(new { success = false, message = "Bạn phải hoàn thành đơn có sản phẩm này mới được" });
             }
             catch(Exception ex)
             {
