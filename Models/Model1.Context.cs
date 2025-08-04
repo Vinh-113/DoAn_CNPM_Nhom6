@@ -33,5 +33,6 @@ namespace TechStore.Models
         public virtual DbSet<OrderPro> OrderProes { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
+        public virtual DbSet<SupportRequest> SupportRequests { get; set; }
     }
 }

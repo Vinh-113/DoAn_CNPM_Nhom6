@@ -1,0 +1,466 @@
+﻿@model TechStore.Models.SupportRequest
+@{
+    ViewBag.Title = "Yêu cầu hỗ trợ thành công";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .success-container {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        min-height: 100vh;
+        padding: 60px 0;
+        display: flex;
+        align-items: center;
+    }
+    
+    .success-card {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        padding: 60px 40px;
+        text-align: center;
+        max-width: 700px;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .success-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, #28a745, #20c997, #17a2b8);
+    }
+    
+    .success-icon {
+        font-size: 5rem;
+        color: #28a745;
+        margin-bottom: 30px;
+        animation: bounceIn 1s ease-out;
+    }
+    
+    .success-title {
+        color: #2c3e50;
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin-bottom: 20px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .success-subtitle {
+        color: #6c757d;
+        font-size: 1.2rem;
+        margin-bottom: 40px;
+        line-height: 1.6;
+    }
+    
+    .notification {
+        border-radius: 10px;
+        padding: 15px 20px;
+        margin-bottom: 30px;
+        border: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: slideDown 0.5s ease-out;
+    }
+    
+    .notification.success {
+        background: linear-gradient(45deg, #d4edda, #c3e6cb);
+        color: #155724;
+        border-left: 4px solid #28a745;
+    }
+    
+    .notification i {
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+    
+    .request-info {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 30px;
+        margin: 40px 0;
+        border-left: 5px solid #28a745;
+        text-align: left;
+    }
+    
+    .request-info h4 {
+        color: #495057;
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+        font-weight: 600;
+        text-align: center;
+    }
+    
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .info-item:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label {
+        font-weight: 600;
+        color: #495057;
+        display: flex;
+        align-items: center;
+        flex: 1;
+    }
+    
+    .info-label i {
+        margin-right: 8px;
+        color: #28a745;
+        width: 20px;
+    }
+    
+    .info-value {
+        color: #2c3e50;
+        font-weight: 500;
+        background: #e9ecef;
+        padding: 8px 15px;
+        border-radius: 20px;
+        max-width: 60%;
+        text-align: center;
+        word-break: break-word;
+    }
+    
+    .description-section {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px 0;
+    }
+    
+    .description-section h5 {
+        color: #856404;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .description-content {
+        color: #6c5500;
+        line-height: 1.6;
+        font-style: italic;
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 3px solid #ffc107;
+    }
+    
+    .next-steps {
+        background: linear-gradient(45deg, #e3f2fd, #f3e5f5);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 30px 0;
+        border: 1px solid #e1f5fe;
+    }
+    
+    .next-steps h5 {
+        color: #1976d2;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .next-steps h5 i {
+        margin-right: 10px;
+        font-size: 1.3rem;
+    }
+    
+    .step-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .step-list li {
+        padding: 10px 0;
+        color: #495057;
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .step-list li i {
+        color: #28a745;
+        margin-right: 10px;
+        margin-top: 3px;
+        font-size: 0.9rem;
+    }
+    
+    .action-buttons {
+        margin-top: 40px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn-primary-custom {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        font-size: 1rem;
+        font-weight: 500;
+        border-radius: 50px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+    }
+    
+    .btn-primary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .btn-secondary-custom {
+        background: linear-gradient(45deg, #6c757d, #495057);
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        font-size: 1rem;
+        font-weight: 500;
+        border-radius: 50px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(108,117,125,0.3);
+    }
+    
+    .btn-secondary-custom:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(108,117,125,0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .btn-custom i {
+        margin-right: 8px;
+    }
+    
+   
+        .success-container {
+            padding: 30px 15px;
+        }
+        
+        .success-card {
+            padding: 40px 25px;
+        }
+        
+        .success-title {
+            font-size: 2rem;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-primary-custom,
+        .btn-secondary-custom {
+            width: 100%;
+            max-width: 300px;
+            justify-content: center;
+        }
+        
+        .info-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        
+        .info-value {
+            align-self: flex-end;
+            max-width: 100%;
+        }
+    
+</style>
+
+<div class="success-container">
+    <div class="container">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h1 class="success-title">Yêu cầu đã được gửi thành công!</h1>
+            <p class="success-subtitle">
+                Cảm ơn bạn đã gửi yêu cầu hỗ trợ. Chúng tôi đã nhận được thông tin và sẽ xử lý trong thời gian sớm nhất có thể.
+            </p>
+            
+            @* Display notification from ViewBag *@
+            @if (ViewBag.Notify != null)
+            {
+                var notifyParts = ViewBag.Notify.ToString().Split('|');
+                var notifyType = notifyParts.Length > 1 ? notifyParts[0].ToLower() : "info";
+                var notifyMessage = notifyParts.Length > 1 ? notifyParts[1] : ViewBag.Notify.ToString();
+                
+                <div class="notification @notifyType">
+                    <i class="fas fa-check-circle"></i>
+                    @notifyMessage
+                </div>
+            }
+            
+            @* Display all information from support model *@
+            <div class="request-info">
+                <h4><i class="fas fa-clipboard-list"></i> Thông tin yêu cầu của bạn</h4>
+                
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-hashtag"></i>
+                        Mã yêu cầu
+                    </span>
+                    <span class="info-value">@Model.IdRequest</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-user"></i>
+                        Tên khách hàng
+                    </span>
+                    <span class="info-value">@Model.CustomerName</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-envelope"></i>
+                        Email
+                    </span>
+                    <span class="info-value">@Model.Email</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-phone"></i>
+                        Số điện thoại
+                    </span>
+                    <span class="info-value">@Model.PhoneNumber</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-receipt"></i>
+                        Số đơn hàng
+                    </span>
+                    <span class="info-value">@Model.OrderNumber</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-tags"></i>
+                        Loại yêu cầu
+                    </span>
+                    <span class="info-value">
+                        @if (Model.RequestType == "Refund")
+                        {
+                            <text>Hoàn tiền</text>
+                        }
+                        else if (Model.RequestType == "Warranty")
+                        {
+                            <text>Bảo hành</text>
+                        }
+                        else
+                        {
+                            @Model.RequestType
+                        }
+                    </span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-box"></i>
+                        Sản phẩm
+                    </span>
+                    <span class="info-value">@Model.ProductName</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-calendar-alt"></i>
+                        Ngày mua
+                    </span>
+                    <span class="info-value">@Model.PurchaseDate</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="info-label">
+                        <i class="fas fa-clock"></i>
+                        Thời gian gửi yêu cầu
+                    </span>
+                    <span class="info-value">@Model.RequestDate.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+            </div>
+            
+            @* Display description separately for better readability *@
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <div class="description-section">
+                    <h5><i class="fas fa-comment-alt"></i> Nội dung yêu cầu:</h5>
+                    <div class="description-content">
+                        "@Model.Description"
+                    </div>
+                </div>
+            }
+            
+            <div class="next-steps">
+                <h5><i class="fas fa-list-ol"></i> Các bước tiếp theo</h5>
+                <ul class="step-list">
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Chúng tôi sẽ xem xét yêu cầu của bạn trong vòng <strong> 24-48 giờ</strong>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Bộ phận chăm sóc khách hàng sẽ liên hệ với bạn qua <strong> email hoặc điện thoại</strong>
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Vui lòng giữ <strong> mã yêu cầu: @Model.IdRequest</strong> để theo dõi trạng thái xử lý
+                    </li>
+                    <li>
+                        <i class="fas fa-check"></i>
+                        Kiểm tra email (bao gồm thư mục spam) để nhận thông báo cập nhật
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="@Url.Action("Index", "Home")" class="btn-primary-custom">
+                    <i class="fas fa-home"></i>
+                    Về trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        // Add a subtle animation when the page loads
+        $('.success-card').hide().fadeIn(800);
+        
+        // Auto-scroll to top when page loads
+        $('html, body').animate({
+            scrollTop: 0
+        }, 300);
+    });
+</script>

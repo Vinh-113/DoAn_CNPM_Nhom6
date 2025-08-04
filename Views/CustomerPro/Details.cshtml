@@ -838,7 +838,7 @@
                 <!-- Đã bán-->
                 <div class="product-sold">
                     <i class="fas fa-shopping-cart"></i>
-                    <span class="sold-count">Đã bán: @ViewBag.SoldQuantities[Model.Product.ProductID]</span>
+                    <span class="sold-count">Đã bán: @Model.SoldItem[Model.Product.ProductID]</span>
                 </div>
                 <!-- Thông tin sản phẩm -->
                 <div class="col-lg-6">
@@ -1054,7 +1054,7 @@
                                 <!-- Đã bán-->
                                 <div class="product-sold">
                                     <i class="fas fa-shopping-cart"></i>
-                                    <span class="sold-count">Đã bán: @ViewBag.SoldQuantities[rePro.ProductID]</span>
+                                    <span class="sold-count">Đã bán: @Model.SoldItem[rePro.ProductID]</span>
                                 </div>
                                 <p class="related-card-text">
                                     @(rePro.DecriptionPro.Length > 80 ? rePro.DecriptionPro.Substring(0, 80) + "..." : rePro.DecriptionPro)

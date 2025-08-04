@@ -195,16 +195,13 @@
                     <div>
                         <div class="btn-group ml-2">
                             <a class="btn btn-danger" href="@Url.Action("Delete", new { id = Model.OrderPro.ID })">Hủy đơn</a>
-                            <!--<button type="button" class="btn btn-outline-dark dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-cog"></i> Thao tác
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right">-->
-                                @*<a class="dropdown-item" href="#"><i class="fa fa-print"></i> Print Invoice</a>
-                                    <a class="dropdown-item" href="#"><i class="fa fa-envelope"></i> Email Customer</a>
-                                    <div class="dropdown-divider"></div>*@
-                                <!--<a class="dropdown-item text-danger" href="@Url.Action("Delete", new { id = Model.OrderPro.ID })"><i class="fa fa-times"></i> Hủy đơn</a>
-                                <div class="dropdown-divider"></div>
-                            </div>-->
+                            
+                            <a class="btn btn-dark" id="idSupport" href="@Url.Action("IndexSupport", "Contact", new { idOrder = Model.OrderPro.ID ,
+                                   namecus = Model.OrderPro.Customer.NameCus
+                               , email = Model.OrderPro.Customer.EmailCus,
+                                   phone = Model.OrderPro.Customer.PhoneCus,
+                                   trackingNumber = Model.OrderPro.TrackingNumber
+                               })">Yêu cầu hỗ trợ</a>
                         </div>
                     </div>
                 </div>
@@ -265,3 +262,6 @@
         background-color: #e3e6f0;
     }
 </style>
+<script>
+    
+</script>

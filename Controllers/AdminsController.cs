@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Web.Mvc;
 using TechStore.Models;
+using System;
+using System.Collections.Generic;
 
 namespace TechStore.Controllers
 {
@@ -134,6 +136,164 @@ namespace TechStore.Controllers
         public ActionResult OderManagement()
         {
             return View();
+        }
+
+        // Support Request Management Actions
+        public ActionResult SupportRequestManagement(string filter = "all", string search = "")
+        {
+            if (Session["admin"] == null)
+            {
+                return RedirectToAction("Login", "Admins");
+            }
+
+            var requests = dbO.SupportRequests.AsQueryable();
+
+            // Apply search filter
+            if (!string.IsNullOrEmpty(search))
+            {
+                requests = requests.Where(r => r.IdRequest.Contains(search) ||
+                                             r.CustomerName.Contains(search) ||
+                                             r.Email.Contains(search) ||
+                                             r.OrderNumber.Contains(search));
+            }
+
+            // Apply status filter
+            switch (filter.ToLower())
+            {
+                case "refund":
+                    requests = requests.Where(r => r.RequestType == "Refund");
+                    break;
+                case "warranty":
+                    requests = requests.Where(r => r.RequestType == "Warranty");
+                    break;
+                case "recent":
+                    DateTime sevenDay_ago = DateTime.Now.AddDays(-7);
+                    requests = requests.Where(r => r.RequestDate >= sevenDay_ago);
+                    break;
+                default:
+                    // Show all
+                    break;
+            }
+
+            var supportRequests = requests.OrderByDescending(r => r.RequestDate).ToList();
+            
+            ViewBag.Filter = filter;
+            ViewBag.Search = search;
+            ViewBag.TotalRequests = dbO.SupportRequests.Count();
+            ViewBag.RefundRequests = dbO.SupportRequests.Count(r => r.RequestType == "Refund");
+            ViewBag.WarrantyRequests = dbO.SupportRequests.Count(r => r.RequestType == "Warranty");
+            //Thêm biến datetime 
+            DateTime sevenDaysAgo = DateTime.Now.AddDays(-7);
+            var recentRequests = dbO.SupportRequests
+                .Where(r => r.RequestDate >= sevenDaysAgo)
+                .ToList();
+            ViewBag.RecentRequests = recentRequests.Count() ;
+
+            return View(supportRequests);
+        }
+
+        public ActionResult SupportRequestDetails(string id)
+        {
+            if (Session["admin"] == null)
+            {
+                return RedirectToAction("Login", "Admins");
+            }
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("SupportRequestManagement");
+            }
+
+            var request = dbO.SupportRequests.FirstOrDefault(r => r.IdRequest == id);
+            if (request == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy yêu cầu hỗ trợ.";
+                return RedirectToAction("SupportRequestManagement");
+            }
+
+            return View(request);
+        }
+
+        [HttpPost]
+        public ActionResult ProcessSupportRequest(string requestId, string action, string reason = "")
+        {
+            if (Session["admin"] == null)
+            {
+                return Json(new { success = false, message = "Unauthorized" });
+            }
+
+            try
+            {
+                var request = dbO.SupportRequests.FirstOrDefault(r => r.IdRequest == requestId);
+                if (request == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy yêu cầu." });
+                }
+
+                string adminName = Session["admin"].ToString();
+                string statusMessage = "";
+
+                if (action == "approve")
+                {
+                    statusMessage = $"Yêu cầu đã được phê duyệt bởi {adminName} vào {DateTime.Now:dd/MM/yyyy HH:mm}";
+                    if (!string.IsNullOrEmpty(reason))
+                    {
+                        statusMessage += $". Ghi chú: {reason}";
+                    }
+                }
+                else if (action == "reject")
+                {
+                    statusMessage = $"Yêu cầu đã bị từ chối bởi {adminName} vào {DateTime.Now:dd/MM/yyyy HH:mm}";
+                    if (!string.IsNullOrEmpty(reason))
+                    {
+                        statusMessage += $". Lý do: {reason}";
+                    }
+                }
+
+                // Update the request description to include status
+                request.Description += $"\n\n--- TRẠNG THÁI ---\n{statusMessage}";
+                
+                dbO.SaveChanges();
+
+                return Json(new { 
+                    success = true, 
+                    message = action == "approve" ? "Đã phê duyệt yêu cầu thành công!" : "Đã từ chối yêu cầu thành công!",
+                    action = action,
+                    processedAt = DateTime.Now.ToString("dd/MM/yyyy HH:mm"),
+                    processedBy = adminName
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DeleteSupportRequest(string requestId)
+        {
+            if (Session["admin"] == null)
+            {
+                return Json(new { success = false, message = "Unauthorized" });
+            }
+
+            try
+            {
+                var request = dbO.SupportRequests.FirstOrDefault(r => r.IdRequest == requestId);
+                if (request == null)
+                {
+                    return Json(new { success = false, message = "Không tìm thấy yêu cầu." });
+                }
+
+                dbO.SupportRequests.Remove(request);
+                dbO.SaveChanges();
+
+                return Json(new { success = true, message = "Đã xóa yêu cầu thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra: " + ex.Message });
+            }
         }
     }
 }

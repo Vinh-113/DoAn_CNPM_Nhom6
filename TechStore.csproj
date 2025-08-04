@@ -136,6 +136,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\ContactController.cs" />
     <Compile Include="Controllers\CustomerController.cs" />
     <Compile Include="Controllers\CustomerProController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -197,6 +198,10 @@
     </Compile>
     <Compile Include="Models\ReviewViewModel.cs" />
     <Compile Include="Models\StatisticModel.cs" />
+    <Compile Include="Models\SupportModel.cs" />
+    <Compile Include="Models\SupportRequest.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -407,6 +412,7 @@
     <Content Include="Views\User\ThongTinCaNhan.cshtml" />
     <Content Include="Views\Cart\AddToCart.cshtml" />
     <Content Include="Views\Admins\Statistics.cshtml" />
+    <Content Include="Views\Admins\SupportRequestManagement.cshtml" />
     <None Include="Views\Cart\AddToCart_backup.cshtml.bak" />
     <Content Include="Views\Cart\PaymentCart.cshtml" />
     <Content Include="Views\Cart\PaymentSuccess.cshtml" />
@@ -454,6 +460,8 @@
     <Content Include="Views\Product\edit_backup.cshtml" />
     <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Print\OrderInvoice.cshtml" />
+    <Content Include="Views\Contact\IndexSupport.cshtml" />
+    <Content Include="Views\Contact\SendSupport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

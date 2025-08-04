@@ -1,0 +1,427 @@
+﻿@model TechStore.Models.SupportRequest
+@{
+    ViewBag.Title = "Hỗ trợ về đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var productNames = ViewData["ProductNames"] as List<string>;
+}
+
+<style>
+    .support-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 40px 0;
+    }
+
+    .support-header {
+        text-align: center;
+        color: white;
+        margin-bottom: 40px;
+    }
+
+    .support-header h1 {
+        font-size: 2.5rem;
+        font-weight: 300;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .support-header p {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .support-tabs {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        overflow: hidden;
+        margin: 0 auto;
+        max-width: 900px;
+    }
+
+    .nav-tabs {
+        border-bottom: none;
+        background: #f8f9fa;
+        padding: 0;
+    }
+
+    .nav-tabs .nav-item {
+        flex: 1;
+    }
+
+    .nav-tabs .nav-link {
+        border: none;
+        background: transparent;
+        color: #6c757d;
+        font-weight: 500;
+        padding: 20px;
+        text-align: center;
+        transition: all 0.3s ease;
+        border-radius: 0;
+    }
+
+    .nav-tabs .nav-link:hover {
+        background: #e9ecef;
+        color: #495057;
+    }
+
+    .nav-tabs .nav-link.active {
+        background: #007bff;
+        color: white;
+        border-color: transparent;
+    }
+
+    .tab-content {
+        padding: 0;
+    }
+
+    .support-card {
+        border: none;
+        background: white;
+        padding: 40px;
+    }
+
+    .support-card .card-title {
+        color: #333;
+        font-size: 1.8rem;
+        font-weight: 300;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-group label {
+        color: #555;
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        padding: 12px 15px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+    }
+
+    .form-control[readonly] {
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
+    }
+
+    .btn-submit {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+        border: none;
+        color: white;
+        padding: 15px 40px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+        display: block;
+        margin: 30px auto 0;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        color: white;
+    }
+
+    .info-display {
+        background: #f8f9fa;
+        padding: 12px 15px;
+        border-radius: 8px;
+        border-left: 4px solid #007bff;
+        color: #495057;
+        font-weight: 500;
+    }
+
+    .icon-tab {
+        margin-right: 8px;
+    }
+
+   
+        .support-container {
+            padding: 20px 15px;
+        }
+
+        .support-header h1 {
+            font-size: 2rem;
+        }
+
+        .support-card {
+            padding: 25px 20px;
+        }
+
+        .nav-tabs .nav-link {
+            padding: 15px 10px;
+            font-size: 0.9rem;
+        }
+    
+</style>
+
+<div class="support-container">
+    <div class="container">
+        <div class="support-header">
+            <h1><i class="fas fa-headset"></i>Hỗ trợ về đơn hàng</h1>
+            <h>
+                Nếu bạn gặp vấn đề về sản phẩm, bạn hãy gửi yêu cầu cho chúng tôi.
+                Chúng tôi sẵn sàng hỗ trợ bạn hết mọi nỗ lực
+            </h>
+        </div>
+        @if (ViewBag.Notify != null)
+        {
+            var notifyParts = ViewBag.Notify.ToString().Split('|');
+            var notifyType = notifyParts.Length > 1 ? notifyParts[0].Trim() : "info";
+            var notifyMessage = notifyParts.Length > 1 ? notifyParts[1] : ViewBag.Notify.ToString();
+
+            <div class="notification @notifyType">
+                @if (notifyType == "success")
+                {
+                    <i class="fas fa-check-circle"></i>
+                }
+                else if (notifyType == "error")
+                {
+                    <i class="fas fa-exclamation-triangle"></i>
+                }
+                else
+                {
+                    <i class="fas fa-info-circle"></i>
+                }
+                @notifyMessage
+            </div>
+        }
+        <div class="support-tabs">
+            <ul class="nav nav-tabs" id="supportTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="refund-tab" data-toggle="tab" href="#refund" role="tab">
+                        <i class="fas fa-undo-alt icon-tab"></i>Yêu cầu hoàn tiền
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="warranty-tab" data-toggle="tab" href="#warranty" role="tab">
+                        <i class="fas fa-shield-alt icon-tab"></i>Bảo hành
+                    </a>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="supportTabContent">
+                <div class="tab-pane fade show active" id="refund" role="tabpanel">
+                    <div class="support-card">
+                        <h4 class="card-title">
+                            <i class="fas fa-money-bill-wave" style="color: #28a745; margin-right: 10px;"></i>
+                            Form yêu cầu hoàn tiền
+                        </h4>
+                        @using (Html.BeginForm("SendSupport", "Contact", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(m => m.RequestType, new { Value = "Refund" })
+                            @Html.HiddenFor(m => m.CustomerName)
+                            @Html.HiddenFor(m => m.Email)
+                            @Html.HiddenFor(m => m.PhoneNumber)
+                            @Html.HiddenFor(m => m.OrderNumber)
+                            @Html.HiddenFor(m => m.PurchaseDate)
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-user"></i>Tên bạn</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.CustomerName)</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-envelope"></i> Email</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.Email)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-phone"></i>Số điện thoại</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.PhoneNumber)</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-receipt"></i>Mã đơn hàng</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.OrderNumber)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-calendar-alt"></i> Ngày mua</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.PurchaseDate)</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-box"></i> Chọn sản phẩm để yêu cầu hoàn tiền</label>
+                                        <select id="productSelect" name="ProductName" class="form-control" required>
+                                            <option value="">Chọn một sản phẩm...</option>
+                                            @if (productNames != null)
+                                            {
+                                                foreach (var product in productNames)
+                                                {
+                                                    <option value="@product">@product</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-comment-alt"></i> Lý do hoàn tiền</label>
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = "4", placeholder = "Nếu bạn không hài lòng về sản phẩm, đừng ngần ngại mà không đưa ra lý do hoàn tiền tới chúng tôi...", required = "required" })
+                            </div>
+
+                            <button type="submit" class="btn btn-submit">
+                                <i class="fas fa-paper-plane"></i> Gửi yêu cầu
+                            </button>
+                        }
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="warranty" role="tabpanel">
+                    <div class="support-card">
+                        <h4 class="card-title">
+                            <i class="fas fa-tools" style="color: #ffc107; margin-right: 10px;"></i>
+                            Form yêu cầu bảo hành
+                        </h4>
+                        @using (Html.BeginForm("SendSupport", "Contact", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.HiddenFor(m => m.RequestType, new { Value = "Warranty" })
+                            @Html.HiddenFor(m => m.CustomerName)
+                            @Html.HiddenFor(m => m.Email)
+                            @Html.HiddenFor(m => m.PhoneNumber)
+                            @Html.HiddenFor(m => m.OrderNumber)
+                            @Html.HiddenFor(m => m.PurchaseDate)
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-user"></i> Tên bạn</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.CustomerName)</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-envelope"></i> Email</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.Email)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-phone"></i>Số điện thoại</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.PhoneNumber)</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-receipt"></i>Mã đơn hàng</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.OrderNumber)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-calendar-alt"></i>Ngày mua</label>
+                                        <div class="info-display">@Html.DisplayFor(model => model.PurchaseDate)</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label><i class="fas fa-box"></i>Chọn sản phẩm để bảo hành</label>
+                                        <select id="productSelectWarranty" name="ProductName" class="form-control" required>
+                                            <option value="">Chọn một sản phẩm</option>
+                                            @if (productNames != null)
+                                            {
+                                                foreach (var product in productNames)
+                                                {
+                                                    <option value="@product">@product</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label><i class="fas fa-wrench"></i>Lý do bảo hành</label>
+                                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = "4", placeholder = "Sản phẩm này có gặp những vấn đề cần được bảo hành, vui lòng nhập vào đây...", required = "required" })
+                            </div>
+
+                            <button type="submit" class="btn btn-submit">
+                                <i class="fas fa-paper-plane"></i> Gửi yêu cầu
+                            </button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Handle tab clicks manually with smooth transitions
+        $('#refund-tab').click(function (e) {
+            e.preventDefault();
+            switchTab('refund', 'warranty', $(this), $('#warranty-tab'));
+        });
+
+        $('#warranty-tab').click(function (e) {
+            e.preventDefault();
+            switchTab('warranty', 'refund', $(this), $('#refund-tab'));
+        });
+
+        function switchTab(activeTab, inactiveTab, activeElement, inactiveElement) {
+            // Set active tab
+            activeElement.addClass('active');
+            inactiveElement.removeClass('active');
+
+            // Show/hide content with fade effect
+            $('#' + inactiveTab).removeClass('show active');
+            setTimeout(function () {
+                $('#' + activeTab).addClass('show active');
+            }, 150);
+        }
+
+        // Add loading state to submit buttons
+        /*$('.btn-submit').click(function () {
+            var $btn = $(this);
+            var originalText = $btn.html();
+            $btn.html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+            $btn.prop('disabled', true);
+
+            // Re-enable after form validation (if validation fails)
+            setTimeout(function () {
+                if ($btn.closest('form').find(':invalid').length > 0) {
+                    $btn.html(originalText);
+                    $btn.prop('disabled', false);
+                }
+            }, 100);
+        });*/
+    });
+</script>

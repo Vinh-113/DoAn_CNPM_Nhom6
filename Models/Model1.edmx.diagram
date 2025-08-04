@@ -21,6 +21,7 @@
         <AssociationConnector Association="DBTechStoreModel.FK__OrderDeta__IDOrd__787EE5A0" ManuallyRouted="false" />
         <AssociationConnector Association="DBTechStoreModel.FK__OrderDeta__IDPro__778AC167" ManuallyRouted="false" />
         <AssociationConnector Association="DBTechStoreModel.FK__Reviews__Product__619B8048" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DBTechStoreModel.SupportRequest" Width="1.5" PointX="7.75" PointY="0.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
